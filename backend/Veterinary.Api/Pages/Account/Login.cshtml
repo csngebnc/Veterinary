@@ -1,0 +1,35 @@
+﻿@page
+@using Microsoft.AspNetCore.Http.Extensions
+@model LoginModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="container bg">
+    <div class="stack align-center">
+        <h1 class="title">UNDERSEA</h1>
+        <form class="blurry-panel stack align-center w-461px" method="post">
+            <input type="hidden" asp-for="ReturnUrl" />
+
+            <h2 class="login-title">Belépés</h2>
+
+            <input type="text" placeholder="Felhasználónév" class="text-input" asp-for="Username" required minlength="3"
+                    />
+            <input type="password" placeholder="Jelszó" class="text-input" asp-for="Password" required minlength="6"
+                   />
+            @if (Model.Errors.Count > 0)
+            {
+                <div class="alert alert-danger">
+                    @foreach (var error in Model.Errors)
+                    {
+                        <p class="m-0">@error</p>
+                    }
+                </div>
+            }
+            <button name="action" value="login" class="gradient-button">
+                Belépés
+            </button> 
+            <a href="@Url.Page("/Account/Register", new { returnUrl = Request.GetEncodedUrl() })" class="link mt-2">Regisztráció</a>
+        </form>
+    </div>
+</div>

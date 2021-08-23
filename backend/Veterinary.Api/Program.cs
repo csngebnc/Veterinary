@@ -6,14 +6,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Veterinary.Api.Extensions;
+using Veterinary.Dal.Data;
 
 namespace Veterinary.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args)
+                .Build()
+                .MigrateDatabase<VeterinaryDbContext>();
+
+            await host.SeedDatabase();
+
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

@@ -1,15 +1,25 @@
+using IdentityModel;
+using IdentityServer4.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Veterinary.Api.Services;
+using Veterinary.Dal.Data;
+using Veterinary.Model.Entities;
 
 namespace Veterinary.Api
 {
@@ -25,7 +35,82 @@ namespace Veterinary.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                });
+            });
 
+            services.AddDbContext<VeterinaryDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDefaultIdentity<VeterinaryUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole<Guid>>()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<VeterinaryDbContext>();
+
+            services.AddIdentityServer(options =>
+            {
+                options.UserInteraction = new UserInteractionOptions()
+                {
+                    LogoutUrl = "/Account/Logout",
+                    LoginUrl = "/Account/Login",
+
+                    LoginReturnUrlParameter = "returnUrl"
+                };
+                options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
+            })
+                .AddDeveloperSigningCredential()
+                .AddInMemoryPersistedGrants()
+                .AddInMemoryIdentityResources(Configuration.GetSection("IdentityServer:IdentityResources"))
+                .AddInMemoryApiResources(Configuration.GetSection("IdentityServer:ApiResources"))
+                .AddInMemoryApiScopes(Configuration.GetSection("IdentityServer:ApiScopes"))
+                .AddInMemoryClients(Configuration.GetSection("IdentityServer:Clients"))
+                .AddAspNetIdentity<VeterinaryUser>()
+                .AddProfileService<ProfileService>();
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = Configuration.GetValue<string>("Authentication:Authority");
+                    options.Audience = Configuration.GetValue<string>("Authentication:Audience");
+                    options.RequireHttpsMetadata = false;
+                }
+            );
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("api-openid", policy => policy.RequireAuthenticatedUser()
+                    .RequireClaim("scope", "api-openid")
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
+
+                options.AddPolicy("Manager", policy => policy.RequireAuthenticatedUser()
+                    .RequireClaim(JwtClaimTypes.Role, "ManagerDoctor")
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
+
+                options.AddPolicy("Doctor", policy => policy.RequireAuthenticatedUser()
+                    .RequireClaim(JwtClaimTypes.Role, "ManagerDoctor", "NormalDoctor")
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
+
+                options.AddPolicy("User", policy => policy.RequireAuthenticatedUser()
+                    .RequireClaim(JwtClaimTypes.Role, "ManagerDoctor", "NormalDoctor", "User")
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
+
+                options.DefaultPolicy = options.GetPolicy("api-openid");
+            });
+
+            services.AddHttpContextAccessor();
+            services.AddRazorPages();
             services.AddControllers();
         }
 
@@ -37,15 +122,20 @@ namespace Veterinary.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("CorsPolicy");
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseIdentityServer();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
         }
     }
