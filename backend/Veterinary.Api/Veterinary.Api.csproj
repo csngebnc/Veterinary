@@ -24,6 +24,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Veterinary.Dal\Veterinary.Dal.csproj" />
+		<ProjectReference Include="..\Veterinary.Domain\Veterinary.Domain.csproj" />
 	</ItemGroup>
 
 	<Target Name="NSwag" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Debug' ">

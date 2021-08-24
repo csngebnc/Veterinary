@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Veterinary.Model.Entities;
+using Veterinary.Domain.Entities;
 
 namespace Veterinary.Api.Pages
 {

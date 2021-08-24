@@ -2,13 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Veterinary.Dal.Data;
-using Veterinary.Model.Entities;
+using Veterinary.Domain.Entities;
 
 namespace Veterinary.Api.Extensions
 {

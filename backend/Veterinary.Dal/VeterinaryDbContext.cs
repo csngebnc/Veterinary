@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
-using Veterinary.Model.Entities;
+using Veterinary.Domain.Entities;
 
 namespace Veterinary.Dal.Data
 {

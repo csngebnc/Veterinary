@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Veterinary.Model.Entities
+namespace Veterinary.Domain.Entities
 {
     public class VeterinaryUser : IdentityUser<Guid>
     {
