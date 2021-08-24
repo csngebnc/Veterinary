@@ -12,6 +12,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NSwag;
+using NSwag.AspNetCore;
+using NSwag.Generation.Processors.Security;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -110,6 +113,37 @@ namespace Veterinary.Api
                 options.DefaultPolicy = options.GetPolicy("api-openid");
             });
 
+            services.AddOpenApiDocument(config =>
+            {
+                config.Title = "Veterinary API";
+                config.Description = "Veterinary appointment booking and medical record api";
+                config.DocumentName = "Veterinary";
+
+                config.AddSecurity("OAuth2", new OpenApiSecurityScheme
+                {
+                    OpenIdConnectUrl =
+                        $"{Configuration.GetValue<string>("Authentication:Authority")}/.well-known/openid-configuration",
+                    Scheme = "Bearer",
+                    Type = OpenApiSecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl =
+                                $"{Configuration.GetValue<string>("Authentication:Authority")}/connect/authorize",
+                            TokenUrl = $"{Configuration.GetValue<string>("Authentication:Authority")}/connect/token",
+                            Scopes = new Dictionary<string, string>
+                            {
+                                { "openid", "OpenId" },
+                                { "api-openid", "all" }
+                            }
+                        }
+                    }
+                });
+
+                config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("OAuth2"));
+            });
+
             services.AddScoped<IEmailSender, EmailSender>();
 
             services.AddHttpContextAccessor();
@@ -129,6 +163,20 @@ namespace Veterinary.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3(config =>
+            {
+                config.OAuth2Client = new OAuth2ClientSettings
+                {
+                    ClientId = "veterinary-swagger",
+                    ClientSecret = null,
+                    UsePkceWithAuthorizationCodeGrant = true,
+                    ScopeSeparator = " ",
+                    Realm = null,
+                    AppName = "Veterinary Swagger Client"
+                };
+            });
 
             app.UseRouting();
             app.UseIdentityServer();
