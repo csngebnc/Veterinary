@@ -1,35 +1,54 @@
 ﻿@page
 @model Veterinary.Api.Pages.Account.RegisterModel
-@{
-    ViewData["Title"] = "Regisztráció";
-    Layout = "_Layout";
-}
+@{ ViewData["Title"] = "Regisztráció";
+                Layout = "_Layout"; }
 
-<main class="container bg">
-    <div class="stack align-center">
-        <h1 class="title">UNDERSEA</h1>
-
-        <form method="post" class="blurry-panel stack align-center w-461px">
+<div class="content row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 left-box">
+        <div class="login-text">Regisztráció</div>
+        <form method="post" class="input-container">
             <input type="hidden" asp-for="ReturnUrl" />
-            <h2 class="login-title">Regisztráció</h2>
-            <input class="text-input" type="text" placeholder="Felhasználónév" asp-for="Username" required minlength="3"/>
-            @if (ViewData.ModelState.ContainsKey("Username"))
-            {
-                <span asp-validation-for="Username" class="error-text"></span>
-            }
-            <input class="text-input" type="password" placeholder="Jelszó" asp-for="Password" required minlength="6"/>
-            @if (ViewData.ModelState.ContainsKey("Password"))
-            {
-                <span asp-validation-for="Password" class="error-text"></span>
-            }
-            <input class="text-input" type="password" placeholder="Jelszó megerősítése" asp-for="ConfirmPassword" required minlength="6"/>
-            @if (ViewData.ModelState.ContainsKey("ConfirmPassword"))
-            {
-                <span asp-validation-for="ConfirmPassword" class="error-text"></span>
-            }
-            <button name="action" value="register" class="gradient-button mt-05">Regisztráció</button>
-            <a href="@Model.ReturnUrl" class="link mt-2">Bejelentkezés</a>
-
+            <div class="label">
+                <input class="input" placeholder="Teljes név" type="text" asp-for="Name" required minlength="1" />
+                <span></span>
+                @if (ViewData.ModelState.ContainsKey("Name"))
+                {
+                    <span asp-validation-for="Name" class="error-text"></span>
+                }
+            </div>
+            <div class="label">
+                <input class="input" placeholder="E-mail cím" type="text" asp-for="Username" required minlength="3" />
+                <span></span>
+                @if (ViewData.ModelState.ContainsKey("Username"))
+                {
+                    <span asp-validation-for="Username" class="error-text"></span>
+                }
+            </div>
+            <div class="label">
+                <input class="input" placeholder="Jelszó" type="password" asp-for="Password" />
+                <span></span>
+                @if (ViewData.ModelState.ContainsKey("Password"))
+                {
+                    <span asp-validation-for="Password" class="error-text"></span>
+                }
+            </div>
+            <div class="label">
+                <input class="input" placeholder="Jelszó ismét" type="password" asp-for="ConfirmPassword" />
+                <span></span>
+                @if (ViewData.ModelState.ContainsKey("ConfirmPassword"))
+                {
+                    <span asp-validation-for="ConfirmPassword" class="error-text"></span>            
+                }
+            </div>
+            <button name="action" value="register" class="login-button">Regisztráció</button>
+            <div class="bottom-text">
+                Már van fiókod?
+                <a href="@Model.ReturnUrl" class="ml-3">Lépj be!</a>
+            </div>
         </form>
     </div>
-</main>
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 right-box">
+        <img src= "~/images/Realistic-Bunny.png" class="bunny-image" />
+    </div>
+</div>

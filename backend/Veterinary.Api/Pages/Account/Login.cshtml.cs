@@ -26,6 +26,7 @@ namespace Veterinary.Api.Pages
         private readonly IIdentityServerInteractionService interactionService;
         private readonly IUserClaimsPrincipalFactory<VeterinaryUser> claimsPrincipalFactory;
         private readonly UserManager<VeterinaryUser> userManager;
+        public string Message { get; set; }
 
         [Required(ErrorMessage = "Kötelező")]
         [BindProperty]
@@ -38,11 +39,15 @@ namespace Veterinary.Api.Pages
         [BindProperty]
         public string ReturnUrl { get; set; } = "/";
 
+        [BindProperty]
+        public bool RememberMe { get; set; } = false;
+
         public List<string> Errors { get; set; } = new List<string>();
 
-        public void OnGet(string returnUrl)
+        public void OnGet(string returnUrl, string message = "")
         {
             ReturnUrl = returnUrl;
+            Message = message;
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -59,7 +64,7 @@ namespace Veterinary.Api.Pages
                             ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1),
                             AllowRefresh = true,
                             RedirectUri = ReturnUrl,
-                            IsPersistent = false
+                            IsPersistent = RememberMe
                         };
 
                         var claimsPrincipal = await claimsPrincipalFactory.CreateAsync(user);

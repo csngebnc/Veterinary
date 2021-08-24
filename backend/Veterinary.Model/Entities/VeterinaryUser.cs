@@ -9,5 +9,6 @@ namespace Veterinary.Model.Entities
 {
     public class VeterinaryUser : IdentityUser<Guid>
     {
+        public string Name { get; set; }
     }
 }

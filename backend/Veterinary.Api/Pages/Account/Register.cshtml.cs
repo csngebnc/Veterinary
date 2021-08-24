@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
@@ -17,23 +18,23 @@ namespace Veterinary.Api.Pages.Account
         private readonly UserManager<VeterinaryUser> userManager;
         private readonly VeterinaryDbContext context;
 
-        [Required(ErrorMessage = "Kötelezõ")]
+        [Required(ErrorMessage = "A teljes neved megadása kötelezõ.")]
+        [BindProperty]
+        public string Name { get; set; } = "";
+
+        [Required(ErrorMessage = "E-mail cím megadása kötelezõ")]
+        [EmailAddress(ErrorMessage = "Kérlek adj meg egy érvényes e-mail címet.")]
         [BindProperty]
         public string Username { get; set; } = "";
 
-        [Required(ErrorMessage = "Kötelezõ")]
-        [MinLength(6, ErrorMessage = "A jelszónak legalább 6 karakterbõl kell állnia")]
+        [Required(ErrorMessage = "A jelszó megadása kötelezõ.")]
+        [MinLength(6, ErrorMessage = "A jelszónak legalább 6 karakterbõl kell állnia, tartalmaznia kell kis- és nagybetût, valamint legalább egy speciális karaktert.")]
         [BindProperty]
         public string Password { get; set; } = "";
 
-        [Required(ErrorMessage = "Kötelezõ")]
+        [Required(ErrorMessage = "A jelszó ismételt megadása kötelezõ.")]
         [BindProperty]
         public string ConfirmPassword { get; set; } = "";
-
-        [Required(ErrorMessage = "Kötelezõ")]
-        [MinLength(3, ErrorMessage = "Az ország nevének legalább 3 karakterbõl kell állnia")]
-        [BindProperty]
-        public string CountryName { get; set; } = "";
 
         [BindProperty]
         public string ReturnUrl { get; set; } = "";
@@ -62,13 +63,19 @@ namespace Veterinary.Api.Pages.Account
             {
                 var user = new VeterinaryUser
                 {
-                    UserName = Username
+                    Name = Name,
+                    UserName = Username,
+                    Email = Username,
+                    NormalizedUserName = Username.ToUpper(),
+                    NormalizedEmail = Username.ToUpper()
                 };
 
                 var createResult = await userManager.CreateAsync(user, Password);
                 if (createResult.Succeeded)
                 {
                     await userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.Subject, user.Id.ToString()));
+                    await userManager.AddToRoleAsync(user, "User");
+                    ReturnUrl += "&Message=Sikeres+regisztr%C3%A1ci%C3%B3%21+Er%C5%91s%C3%ADtsd+meg+az+e-mail+c%C3%ADmed%2C+hogy+bejelentkezhess%21";
                     return Redirect(ReturnUrl);
                 }
                 else
@@ -95,7 +102,7 @@ namespace Veterinary.Api.Pages.Account
 
             if (usernameTaken)
             {
-                ModelState.AddModelError(nameof(Username), "A felhasználónév már foglalt!");
+                ModelState.AddModelError(nameof(Username), "Az e-mail cím már foglalt!");
             }
 
             if (ConfirmPassword != Password)

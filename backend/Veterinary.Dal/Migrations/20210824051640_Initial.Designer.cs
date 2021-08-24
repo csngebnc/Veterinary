@@ -10,7 +10,7 @@ using Veterinary.Dal.Data;
 namespace Veterinary.Dal.Migrations
 {
     [DbContext(typeof(VeterinaryDbContext))]
-    [Migration("20210822164812_Initial")]
+    [Migration("20210824051640_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -179,6 +179,9 @@ namespace Veterinary.Dal.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)

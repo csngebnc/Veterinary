@@ -125,6 +125,7 @@ namespace Veterinary.Api
             app.UseCors("CorsPolicy");
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
             app.UseIdentityServer();

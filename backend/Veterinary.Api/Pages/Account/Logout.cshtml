@@ -3,20 +3,16 @@
 @{
 }
 
-<main class="container vh-100">
-    <div class="row h-100 justify-content-center align-items-center">
-        <div class="col-12 col-md-9 col-lg-7 p-4 nb-card">
-            <h3>Kijelentkezés</h3>
-            <form method="post" class="w-100">
-                <input type="hidden" asp-for="LogoutId" />
-
-                <p>Biztosan ki szeretne jelentkezni?</p>
-
-                <div class="d-flex justify-content-between mt-3">
-                    <button name="action" type="submit" class="button-ghost" value="cancel">Mégse</button>
-                    <button name="action" type="submit" class="button-full" value="logout">Kijelentkezés</button>
-                </div>
-            </form>
-        </div>
+<div class="content row">
+    <div class="col-12 left-box">
+        <div class="login-text">Kijelentkezés</div>
+        <form method="post" class="input-container">
+            Biztosan ki szeretnél jelentkezni?
+            <button class="login-button" name="action" type="submit" value="logout">Kilépés</button>
+            <div class="bottom-text">
+                Meggondoltad magad?
+                <button class="logout-button ml-3" name="action" type="submit" value="cancel">Kijelentkezés megszakítása</button>
+            </div>
+        </form>
     </div>
-</main>
+</div>
