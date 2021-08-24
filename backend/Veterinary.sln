@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Veterinary.Api", "Veterinary.Api\Veterinary.Api.csproj", "{2D23137E-2B90-4C14-9AAE-2FBB53D2260D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Veterinary.Api", "Veterinary.Api\Veterinary.Api.csproj", "{2D23137E-2B90-4C14-9AAE-2FBB53D2260D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Veterinary.Model", "Veterinary.Model\Veterinary.Model.csproj", "{CD3158E0-7932-44E3-BA6A-383149EFDD6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Veterinary.Model", "Veterinary.Model\Veterinary.Model.csproj", "{CD3158E0-7932-44E3-BA6A-383149EFDD6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Veterinary.Dal", "Veterinary.Dal\Veterinary.Dal.csproj", "{B2360F0B-00C3-44AA-ADCE-53B7E5E55DF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Veterinary.Dal", "Veterinary.Dal\Veterinary.Dal.csproj", "{B2360F0B-00C3-44AA-ADCE-53B7E5E55DF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Veterinary.Bll", "Veterinary.Bll\Veterinary.Bll.csproj", "{932332E8-CE81-45C7-9FDB-C4139AF6D6BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Veterinary.Bll", "Veterinary.Bll\Veterinary.Bll.csproj", "{932332E8-CE81-45C7-9FDB-C4139AF6D6BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

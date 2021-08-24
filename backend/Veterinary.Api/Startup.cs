@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -50,7 +51,7 @@ namespace Veterinary.Api
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<VeterinaryUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            services.AddDefaultIdentity<VeterinaryUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole<Guid>>()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<VeterinaryDbContext>();
@@ -108,6 +109,8 @@ namespace Veterinary.Api
 
                 options.DefaultPolicy = options.GetPolicy("api-openid");
             });
+
+            services.AddScoped<IEmailSender, EmailSender>();
 
             services.AddHttpContextAccessor();
             services.AddRazorPages();

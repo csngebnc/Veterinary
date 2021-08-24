@@ -26,7 +26,6 @@ namespace Veterinary.Api.Pages
         private readonly IIdentityServerInteractionService interactionService;
         private readonly IUserClaimsPrincipalFactory<VeterinaryUser> claimsPrincipalFactory;
         private readonly UserManager<VeterinaryUser> userManager;
-        public string Message { get; set; }
 
         [Required(ErrorMessage = "Kötelező")]
         [BindProperty]
@@ -44,10 +43,9 @@ namespace Veterinary.Api.Pages
 
         public List<string> Errors { get; set; } = new List<string>();
 
-        public void OnGet(string returnUrl, string message = "")
+        public void OnGet(string returnUrl)
         {
             ReturnUrl = returnUrl;
-            Message = message;
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -57,6 +55,11 @@ namespace Veterinary.Api.Pages
                 var user = await userManager.FindByNameAsync(Username);
                 if (user != null)
                 {
+                    if (!user.EmailConfirmed)
+                    {
+                        Errors.Add("Erősítsd meg az e-mail címed ahhoz, hogy bejelentkezhess!");
+                        return Page();
+                    }
                     if((await userManager.CheckPasswordAsync(user, Password)))
                     {
                         var signInProperties = new AuthenticationProperties

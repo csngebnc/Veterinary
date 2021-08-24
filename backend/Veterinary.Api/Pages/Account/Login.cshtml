@@ -7,10 +7,6 @@
 
 <div class="content row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 left-box">
-        @if (Model.Message.Length > 0)
-        {
-            <div class="message-box">@Model.Message</div>
-        }
         <div class="login-text">Bejelentkezés</div>
         <form method="post" class="input-container">
             <div class="label">
@@ -35,7 +31,7 @@
                     <input type="checkbox" id="remember-me" class="input-checkbox" asp-for="RememberMe" />
                     <label for="remember-me"> Emlékezz rám</label>
                 </div>
-                <div class="col-7 input-forgot-pw">Elfelejtett jelszó?</div>
+                <a class="col-7 input-forgot-pw" href="@Url.Page("/Account/ForgotPassword", new { returnUrl = Request.GetEncodedUrl() })">Elfelejtett jelszó?</a>
             </div>
 
             <button name="action" value="login" class="login-button">Belépés</button>

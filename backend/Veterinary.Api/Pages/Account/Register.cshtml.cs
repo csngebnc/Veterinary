@@ -1,12 +1,16 @@
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Veterinary.Dal.Data;
 using Veterinary.Model.Entities;
@@ -17,6 +21,7 @@ namespace Veterinary.Api.Pages.Account
     {
         private readonly UserManager<VeterinaryUser> userManager;
         private readonly VeterinaryDbContext context;
+        private readonly IEmailSender emailSender;
 
         [Required(ErrorMessage = "A teljes neved megadása kötelezõ.")]
         [BindProperty]
@@ -39,10 +44,11 @@ namespace Veterinary.Api.Pages.Account
         [BindProperty]
         public string ReturnUrl { get; set; } = "";
 
-        public RegisterModel(UserManager<VeterinaryUser> userManager, VeterinaryDbContext context)
+        public RegisterModel(UserManager<VeterinaryUser> userManager, VeterinaryDbContext context, IEmailSender emailSender)
         {
             this.userManager = userManager;
             this.context = context;
+            this.emailSender = emailSender;
         }
 
         public void OnGet(string returnUrl)
@@ -75,7 +81,36 @@ namespace Veterinary.Api.Pages.Account
                 {
                     await userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.Subject, user.Id.ToString()));
                     await userManager.AddToRoleAsync(user, "User");
-                    ReturnUrl += "&Message=Sikeres+regisztr%C3%A1ci%C3%B3%21+Er%C5%91s%C3%ADtsd+meg+az+e-mail+c%C3%ADmed%2C+hogy+bejelentkezhess%21";
+
+                    var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    var callbackUrl = Url.Page
+                        (
+                            "/Account/ConfirmEmail",
+                            pageHandler: null,
+                            values: new
+                            {
+                                userId = user.Id,
+                                code = code,
+                                returnUrl = ReturnUrl
+                            },
+                            protocol: Request.Scheme
+                        );
+
+                    await emailSender.SendEmailAsync
+                        (
+                            Username, 
+                            "E-mail cím megerõsítése",
+                            $"Kedves Felhasználónk!<br>" +
+                            $"Az alábbi emailt azért küldtük, mert regisztráltál állatorvosi rendszerünkbe.<br>" +
+                            $"<br>" +
+                            $"A regisztráció véglegesítéséhez kérünk erõsítsd meg az e-mail címed a következõ link segítségével.<br>" +
+                            $"Az e-mail cím megerõsítéséhez: <a href = '{HtmlEncoder.Default.Encode(callbackUrl)}' > kattints ide </a >.<br>" +
+                            $"<br>" +
+                            $"További szép napot kívánunk! <br>" +
+                            $"Veterinary csapata"
+                        );
+
                     return Redirect(ReturnUrl);
                 }
                 else
