@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Veterinary.Dal.Data;
@@ -16,9 +17,12 @@ namespace Veterinary.Api.Extensions
             using (var scope = host.Services.CreateScope())
             {
                 var serviceProvider = scope.ServiceProvider;
+                var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
                 var context = serviceProvider.GetRequiredService<TContext>();
 
+                logger.LogInformation("Start migrating database");
                 context.Database.Migrate();
+                logger.LogInformation("COMPLETED: migrating database");
             }
 
             return host;
