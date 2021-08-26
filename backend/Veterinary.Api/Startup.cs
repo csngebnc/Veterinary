@@ -1,3 +1,5 @@
+using Autofac;
+using FluentValidation.AspNetCore;
 using IdentityModel;
 using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,6 +17,7 @@ using NSwag.Generation.Processors.Security;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using Veterinary.Api.Services;
 using Veterinary.Application.Services;
 using Veterinary.Dal.Data;
@@ -145,7 +148,21 @@ namespace Veterinary.Api
             services.AddScoped<IIdentityService, IdentityService>();
 
             services.AddRazorPages();
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation();
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterAssemblyTypes(Assembly.Load("Veterinary.Application"))
+                .Where(x => x.Name.EndsWith("Service"))
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(Assembly.Load("Veterinary.Application"))
+                .Where(x => x.Name.EndsWith("Validator"))
+                .AsImplementedInterfaces()
+                .InstancePerDependency();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
