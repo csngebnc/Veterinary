@@ -1,0 +1,108 @@
+<header>
+  <nav class="navbar navbar-expand-lg p-0">
+    <a class="navbar-brand ml-5" href="#">
+      <img
+        src="../../../assets/Realistic-Bunny.png"
+        width="30"
+        height="30"
+        class="d-inline-block align-top"
+        alt=""
+      />
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarSupportedContent"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div
+      class="collapse navbar-collapse justify-content-around"
+      id="navbarSupportedContent"
+    >
+      <ul class="navbar-nav">
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link" [routerLink]="['/']">Kezdőlap</a>
+        </li>
+        <ng-container *ngIf="getRole() === 'User'">
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link" [routerLink]="['/']">Állataim</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link" [routerLink]="['/']">Időpontfoglalás</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link" [routerLink]="['/']">Időpontjaim</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link" [routerLink]="['/']">Kórlapok</a>
+          </li>
+        </ng-container>
+
+        <ng-container
+          *ngIf="getRole() === 'NormalDoctor' || getRole() === 'ManagerDoctor'"
+        >
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link" [routerLink]="['/']">Új kórlap</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link" [routerLink]="['/']">Időpont adása</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+            >
+              Gazdi menü
+            </a>
+            <div class="dropdown-menu">
+              <a class="nav-link" [routerLink]="['/']">Állataim</a>
+              <a class="nav-link" [routerLink]="['/']">Időpontfoglalás</a>
+              <a class="nav-link" [routerLink]="['/']">Időpontjaim</a>
+              <a class="nav-link" [routerLink]="['/']">Kórlapok</a>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+            >
+              Műveletek
+            </a>
+            <div class="dropdown-menu">
+              <a class="nav-link" [routerLink]="['/']">Kezeléseim</a>
+              <a class="nav-link" [routerLink]="['/']">Szabadságok</a>
+              <a class="nav-link" [routerLink]="['/']">Gazdik</a>
+            </div>
+          </li>
+        </ng-container>
+
+        <ng-container *ngIf="getRole() === 'ManagerDoctor'">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+            >
+              Beállítások
+            </a>
+            <div class="dropdown-menu">
+              <a class="nav-link" [routerLink]="['/']">Orvosok</a>
+              <a class="nav-link" [routerLink]="['/']">Állatfajták</a>
+              <a class="nav-link" [routerLink]="['/']">Oltások</a>
+              <a class="nav-link" [routerLink]="['/']">Kórlap terápiák</a>
+            </div>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+    <a class="nav-item mr-5" (click)="logOut()">Kijelentkezés</a>
+  </nav>
+</header>

@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using Veterinary.Api.Services;
+using Veterinary.Application.Services;
 using Veterinary.Dal.Data;
 using Veterinary.Domain.Entities;
 
@@ -141,6 +142,8 @@ namespace Veterinary.Api
             services.AddScoped<IEmailSender, EmailSender>();
 
             services.AddHttpContextAccessor();
+            services.AddScoped<IIdentityService, IdentityService>();
+
             services.AddRazorPages();
             services.AddControllers();
         }

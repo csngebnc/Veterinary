@@ -14,6 +14,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Abstractions\Dtos\" />
+	  <Folder Include="Features\VeterinaryUser\" />
 	</ItemGroup>
 
 </Project>

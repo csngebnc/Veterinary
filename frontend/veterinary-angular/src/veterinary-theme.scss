@@ -1,0 +1,85 @@
+$veterinary-primary-palette: (
+  50: #edeff9,
+  100: #d1d6f1,
+  200: #b3bbe7,
+  300: #959fdd,
+  400: #7e8bd6,
+  500: #6776cf,
+  600: #5f6eca,
+  700: #5463c3,
+  800: #4a59bd,
+  900: #3946b2,
+  A100: #fefeff,
+  A200: #cbd0ff,
+  A400: #98a3ff,
+  A700: #7f8cff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$veterinary-accent-palette: (
+  50: #eaedff,
+  100: #ccd1ff,
+  200: #aab2ff,
+  300: #8793ff,
+  400: #6e7cff,
+  500: #5465ff,
+  600: #4d5dff,
+  700: #4353ff,
+  800: #3a49ff,
+  900: #2937ff,
+  A100: #ffffff,
+  A200: #ffffff,
+  A400: #d6d9ff,
+  A700: #bdc0ff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+@import "~@angular/material/theming";
+@include mat-core();
+
+$veterinary-primary: mat-palette($veterinary-primary-palette, 500);
+$veterinary-accent: mat-palette($veterinary-primary-palette, 700, 800, 900);
+
+$veterinary-warn: mat-palette($mat-red);
+
+$veterinary-theme: mat-light-theme(
+  (
+    color: (
+      primary: $veterinary-primary,
+      accent: $veterinary-accent,
+      warn: $veterinary-warn,
+    ),
+  )
+);
+
+@include angular-material-theme($veterinary-theme);

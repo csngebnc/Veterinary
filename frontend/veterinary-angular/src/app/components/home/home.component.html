@@ -1,0 +1,10 @@
+<div class="content-center">
+  <div class="home-body">
+    <app-home-header [userInfo]="userInfo"></app-home-header>
+    <div class="m-3 home-body-text">
+      <ng-container *ngIf="userInfo.role === 'User'">
+        <app-home-user></app-home-user>
+      </ng-container>
+    </div>
+  </div>
+</div>

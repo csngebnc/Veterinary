@@ -1,1 +1,50 @@
 /* You can add global styles to this file, and also import other style files */
+$dark-blue: #5465ff;
+$half-dark-blue: #788bff;
+$normal-blue: #9bb1ff;
+$light-blue: #bfd7ff;
+$light-cyan: #e2fdff;
+$text-color: #6776cf;
+$nav-border-color: rgb(160, 147, 147);
+
+@font-face {
+  font-family: "Baloo";
+  src: url("./assets/fonts/Baloo-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("./assets/fonts/OpenSans-Regular.ttf") format("truetype");
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  background-image: url("./assets/background.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center bottom;
+  background-size: cover;
+}
+
+.content-center {
+  display: flex;
+  justify-content: center;
+}
+
+.content-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.content {
+  position: absolute;
+  font-family: "Baloo";
+  background-color: rgba(white, 0.85);
+  left: 50%;
+  top: 40%;
+  width: 60%;
+  height: 60%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}

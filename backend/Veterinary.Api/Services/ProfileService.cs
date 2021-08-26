@@ -30,6 +30,9 @@ namespace Veterinary.Api.Services
             }
 
             context.IssuedClaims.AddRange(roleClaims);
+            context.IssuedClaims.Add(new Claim(JwtClaimTypes.Name, user.Name));
+            context.IssuedClaims.Add(new Claim(JwtClaimTypes.Email, user.Email));
+            context.IssuedClaims.Add(new Claim(JwtClaimTypes.Picture, user.PhotoUrl == null ? "" : user.PhotoUrl));
         }
 
         public async Task IsActiveAsync(IsActiveContext context)
