@@ -112,7 +112,7 @@ namespace Veterinary.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Animal",
+                name: "Animals",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -129,15 +129,15 @@ namespace Veterinary.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Animal", x => x.Id);
+                    table.PrimaryKey("PK_Animals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Animal_AnimalSpecies_SpeciesId",
+                        name: "FK_Animals_AnimalSpecies_SpeciesId",
                         column: x => x.SpeciesId,
                         principalTable: "AnimalSpecies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Animal_AspNetUsers_OwnerId",
+                        name: "FK_Animals_AspNetUsers_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -288,9 +288,9 @@ namespace Veterinary.Dal.Migrations
                 {
                     table.PrimaryKey("PK_MedicalRecord", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MedicalRecord_Animal_AnimalId",
+                        name: "FK_MedicalRecord_Animals_AnimalId",
                         column: x => x.AnimalId,
-                        principalTable: "Animal",
+                        principalTable: "Animals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -320,9 +320,9 @@ namespace Veterinary.Dal.Migrations
                 {
                     table.PrimaryKey("PK_VaccineRecord", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_VaccineRecord_Animal_AnimalId",
+                        name: "FK_VaccineRecord_Animals_AnimalId",
                         column: x => x.AnimalId,
-                        principalTable: "Animal",
+                        principalTable: "Animals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -352,9 +352,9 @@ namespace Veterinary.Dal.Migrations
                 {
                     table.PrimaryKey("PK_Appointment", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Appointment_Animal_AnimalId",
+                        name: "FK_Appointment_Animals_AnimalId",
                         column: x => x.AnimalId,
-                        principalTable: "Animal",
+                        principalTable: "Animals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -447,13 +447,13 @@ namespace Veterinary.Dal.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Animal_OwnerId",
-                table: "Animal",
+                name: "IX_Animals_OwnerId",
+                table: "Animals",
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Animal_SpeciesId",
-                table: "Animal",
+                name: "IX_Animals_SpeciesId",
+                table: "Animals",
                 column: "SpeciesId");
 
             migrationBuilder.CreateIndex(
@@ -622,7 +622,7 @@ namespace Veterinary.Dal.Migrations
                 name: "Vaccine");
 
             migrationBuilder.DropTable(
-                name: "Animal");
+                name: "Animals");
 
             migrationBuilder.DropTable(
                 name: "AnimalSpecies");

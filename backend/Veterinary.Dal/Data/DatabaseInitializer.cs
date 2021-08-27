@@ -61,6 +61,8 @@ namespace Veterinary.Dal.Data
                 user.NormalizedUserName = user.UserName.ToUpper();
                 user.NormalizedEmail = user.Email.ToUpper();
                 user.SecurityStamp = Guid.NewGuid().ToString();
+                user.EmailConfirmed = true;
+                user.Name = user.UserName.Substring(0, user.UserName.IndexOf("@"));
             }
 
             await context.AddRangeAsync(users);

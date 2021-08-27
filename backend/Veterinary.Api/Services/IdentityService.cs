@@ -15,10 +15,10 @@ namespace Veterinary.Api.Services
             httpContext = httpContextAccessor.HttpContext;
         }
 
-        public Guid? GetCurrentUserId()
+        public Guid GetCurrentUserId()
         {
-            var userId = httpContext.User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub)?.Value;
-            return userId == null ? null : Guid.Parse(userId);
+            var userId = httpContext.User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub).Value;
+            return Guid.Parse(userId);
         }
     }
 }

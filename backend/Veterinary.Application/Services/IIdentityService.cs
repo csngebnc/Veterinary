@@ -8,6 +8,6 @@ namespace Veterinary.Application.Services
 {
     public interface IIdentityService
     {
-        Guid? GetCurrentUserId();
+        Guid GetCurrentUserId();
     }
 }

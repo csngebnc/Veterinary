@@ -19,6 +19,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateRolePipe } from './pipes/translate-role.pipe';
 import { HomeUserComponent } from './components/home/pages/home-body/home-user/home-user.component';
 import { HomeDoctorComponent } from './components/home/pages/home-body/home-doctor/home-doctor.component';
+import { AnimalListComponent } from './components/animal/animal-list/animal-list.component';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AddAnimalComponent } from './components/animal/add-animal/add-animal.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 export function initializeApp(oauthService: OAuthService): any {
   return async () => {
@@ -47,6 +51,8 @@ export function initializeApp(oauthService: OAuthService): any {
     TranslateRolePipe,
     HomeUserComponent,
     HomeDoctorComponent,
+    AnimalListComponent,
+    AddAnimalComponent,
   ],
   imports: [
     MaterialDesignModule,
@@ -62,6 +68,8 @@ export function initializeApp(oauthService: OAuthService): any {
       },
     }),
     BrowserAnimationsModule,
+    NgbModule,
+    ImageCropperModule,
   ],
   providers: [
     { provide: generated.API_BASE_URL, useValue: apiUrl },
@@ -71,6 +79,8 @@ export function initializeApp(oauthService: OAuthService): any {
       deps: [OAuthService],
       multi: true,
     },
+    generated.AnimalService,
+    generated.SpeciesService,
   ],
   bootstrap: [AppComponent],
 })

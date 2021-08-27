@@ -1,0 +1,25 @@
+@import "../../../../styles.scss";
+
+.main-text {
+  display: flex;
+  font-family: "Baloo";
+  align-items: center;
+  color: $text-color;
+  font-size: xx-large;
+}
+
+.container {
+  width: 60%;
+  background-color: rgba(white, 0.85);
+}
+
+.card-footer {
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-color: rgb(224, 223, 223);
+  border-radius: 0px;
+}
+
+h5 {
+  height: auto;
+}

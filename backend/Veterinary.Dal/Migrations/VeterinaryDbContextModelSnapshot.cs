@@ -194,7 +194,7 @@ namespace Veterinary.Dal.Migrations
 
                     b.HasIndex("SpeciesId");
 
-                    b.ToTable("Animal");
+                    b.ToTable("Animals");
                 });
 
             modelBuilder.Entity("Veterinary.Domain.Entities.AnimalEntities.AnimalSpecies", b =>

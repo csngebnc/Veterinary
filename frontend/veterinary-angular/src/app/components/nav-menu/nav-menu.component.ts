@@ -22,4 +22,8 @@ export class NavMenuComponent implements OnInit {
   getRole(): string {
     return this.tokenService.getUserData().role;
   }
+
+  getUserId(): string {
+    return this.tokenService.getUserData().id;
+  }
 }

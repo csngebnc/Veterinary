@@ -13,19 +13,22 @@
           src="https://portolapilot.com/wp-content/uploads/2018/12/300x300.png"
         />
       </div>
-      <div class="row content-center mb-2">
-        <button mat-raised-button color="primary" (click)="openEdit()">
-          <mat-icon> insert_photo</mat-icon>
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          class="ml-1"
-          (click)="deletePhoto()"
-          [disabled]="!userInfo.photoUrl"
-        >
-          <mat-icon> delete</mat-icon>
-        </button>
+      <div class="content-center mb-2">
+        <div>
+          <button mat-raised-button color="primary" (click)="openEdit()">
+            <mat-icon> insert_photo</mat-icon>
+          </button>
+        </div>
+        <div class="ms-1">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="deletePhoto()"
+            [disabled]="!userInfo.photoUrl"
+          >
+            <mat-icon> delete</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
     <div class="col-sm-12 col-md-12 col-lg-6 col-xl-5">

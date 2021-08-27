@@ -1,0 +1,66 @@
+<div class="container mt-4">
+  <div class="row p-2">
+    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-1 main-text">
+      Állatok
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 content-end">
+      <button mat-fab color="primary" class="me-2" (click)="open()">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-fab color="primary" routerLink="../myarchivedanimals">
+        <mat-icon>archive</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="row d-flex justify-content-around mt-4">
+    <div
+      class="col-xl-4 col-lg-6 col-md-12 col-sm-12 pb-3"
+      *ngFor="let item of animalsDataSource.data"
+    >
+      <div class="card mb-3">
+        <div class="row">
+          <div class="col-md-5 d-flex justify-content-center">
+            <img class="profile-image p-2" src="{{ item.photoUrl }}" alt="" />
+          </div>
+          <div class="col-md-7 ps-4 pt-4 pb-2">
+            <h2 class="card-title m-0">{{ item.name }}</h2>
+            <h5 class="m-0">{{ item.sex }}</h5>
+            <h5 class="m-0">{{ item.speciesName }}</h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-5 d-flex ps-4 d-flex align-items-center pb-2">
+            <div class="row">
+              <h5 class="col-4 col-sm-12 m-0 me-1">Kor:</h5>
+              <h5 class="col-8 col-sm-12 m-0">{{ item.age }}</h5>
+            </div>
+          </div>
+          <div class="col-md-7">
+            <div class="card-footer align-self-end border-left pe-0">
+              <button mat-icon-button routerLink="../records/{{ item.id }}">
+                <mat-icon>library_books</mat-icon>
+              </button>
+              <button mat-icon-button routerLink="../edit/{{ item.id }}">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteAnimal(item.id)">
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+              <button mat-icon-button (click)="archiveAnimal(item.id)">
+                <mat-icon>archive</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <mat-paginator
+    [length]="length"
+    [pageSize]="6"
+    (page)="pageEvent = pageChanged($event)"
+  >
+  </mat-paginator>
+</div>

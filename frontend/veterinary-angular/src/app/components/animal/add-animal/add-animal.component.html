@@ -1,0 +1,88 @@
+<div class="container">
+  <form
+    class="p-3"
+    [formGroup]="addAnimalForm"
+    (ngSubmit)="addAnimalForm.valid && addAnimal()"
+    autocomplete="off"
+  >
+    <div class="d-flex justify-content-between">
+      <h2 class="mb-0">Új állat felvétele</h2>
+      <h2 class="mb-0"><i class="fas fa-paw"></i></h2>
+    </div>
+    <hr />
+    <mat-form-field class="full-width">
+      <mat-label>Állat neve:</mat-label>
+      <input matInput formControlName="name" required />
+      <mat-error *ngIf="addAnimalForm.get('name').invalid"
+        >Az állat neve nem lehet üres.</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Születési dátum:</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [max]="maxDate"
+        formControlName="dateOfBirth"
+        required
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="addAnimalForm.get('dateOfBirth').invalid"
+        >Születési dátum megadása kötelező.</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Állat fajtája:</mat-label>
+      <mat-select formControlName="speciesid">
+        <mat-option *ngFor="let spec of species" [value]="spec.id">{{
+          spec.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="full-width">
+      <mat-label>Állat neme:</mat-label>
+    </div>
+    <div class="full-width mb-4">
+      <mat-radio-group formControlName="sex">
+        <mat-radio-button class="ms-4 me-3" value="hím">hím</mat-radio-button>
+        <mat-radio-button value="nőstény">nőstény</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div class="full-width mb-2">
+      <mat-label class="me-3">Kép feltöltése:</mat-label>
+      <input type="file" id="imageFile" (change)="fileChangeEvent($event)" />
+    </div>
+
+    <div *ngIf="imageChangedEvent" class="row content-center mb-4">
+      <div style="width: 250px; max-height: 250px">
+        <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="4 / 4"
+          [resizeToWidth]="256"
+          format="png"
+          (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded()"
+          (cropperReady)="cropperReady()"
+          (loadImageFailed)="loadImageFailed()"
+        >
+        </image-cropper>
+      </div>
+    </div>
+
+    <div class="form-group text-center">
+      <button
+        [disabled]="!addAnimalForm.valid"
+        class="btn btn-success mb-4"
+        type="submit"
+      >
+        Állat felvétele
+      </button>
+    </div>
+  </form>
+</div>

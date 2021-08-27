@@ -9,16 +9,16 @@ namespace Veterinary.Application.Extensions
 {
     public static class QueryableExtensions
     {
-        public static async Task<PagedList<T>> ToPagedListAsync<T>(this IQueryable<T> list, int pageSize, int pageIndex)
+        public static async Task<PagedList<T>> ToPagedListAsync<T>(this IQueryable<T> list, PageData pageData)
         {
             return new PagedList<T>()
             {
                 TotalCount = await list.CountAsync(),
-                PageIndex = pageIndex,
-                PageSize = pageSize,
-                Items = await list.Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToListAsync()
+                PageIndex = pageData.PageIndex,
+                PageSize = pageData.PageSize,
+                Items = await list.Skip(pageData.PageSize * pageData.PageIndex).Take(pageData.PageSize).ToListAsync()
             };
-            
+
         }
     }
 }

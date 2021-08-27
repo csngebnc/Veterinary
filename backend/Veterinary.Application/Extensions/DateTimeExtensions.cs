@@ -36,11 +36,11 @@ namespace Veterinary.Application.Extensions
 
             string age = "";
             if (ageyear > 0)
-                age += ageyear + " év ";
+                age += ageyear + " év ";
             if (agemonth > 0)
-                age += agemonth + " hónap ";
+                age += agemonth + " hónap ";
             if (agemonth == 0)
-                age += ageday + " nap";
+                age += ageday + " nap";
 
             return age;
 

@@ -1,6 +1,6 @@
 <header>
-  <nav class="navbar navbar-expand-lg p-0">
-    <a class="navbar-brand ml-5" href="#">
+  <nav class="navbar navbar-light navbar-expand-lg p-0">
+    <a class="navbar-brand ms-5" href="#">
       <img
         src="../../../assets/Realistic-Bunny.png"
         width="30"
@@ -12,23 +12,25 @@
     <button
       class="navbar-toggler"
       type="button"
-      data-toggle="collapse"
-      data-target="#navbarSupportedContent"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div
-      class="collapse navbar-collapse justify-content-around"
-      id="navbarSupportedContent"
-    >
+    <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item" [routerLinkActive]="['link-active']">
           <a class="nav-link" [routerLink]="['/']">Kezdőlap</a>
         </li>
         <ng-container *ngIf="getRole() === 'User'">
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link" [routerLink]="['/']">Állataim</a>
+            <a class="nav-link" [routerLink]="['/animals', getUserId()]"
+              >Állataim</a
+            >
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link" [routerLink]="['/']">Időpontfoglalás</a>
@@ -60,7 +62,9 @@
               Gazdi menü
             </a>
             <div class="dropdown-menu">
-              <a class="nav-link" [routerLink]="['/']">Állataim</a>
+              <a class="nav-link" [routerLink]="['/animals', getUserId()]"
+                >Állataim</a
+              >
               <a class="nav-link" [routerLink]="['/']">Időpontfoglalás</a>
               <a class="nav-link" [routerLink]="['/']">Időpontjaim</a>
               <a class="nav-link" [routerLink]="['/']">Kórlapok</a>
@@ -103,6 +107,6 @@
         </ng-container>
       </ul>
     </div>
-    <a class="nav-item mr-5" (click)="logOut()">Kijelentkezés</a>
+    <p class="nav-item mb-0" (click)="logOut()">Kijelentkezés</p>
   </nav>
 </header>

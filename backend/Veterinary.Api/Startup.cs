@@ -2,6 +2,8 @@ using Autofac;
 using FluentValidation.AspNetCore;
 using IdentityModel;
 using IdentityServer4.Configuration;
+using MediatR;
+using MediatR.Extensions.Autofac.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,7 +23,9 @@ using System.Reflection;
 using Veterinary.Api.Services;
 using Veterinary.Application.Services;
 using Veterinary.Dal.Data;
+using Veterinary.Dal.Repositories.AnimalRepository;
 using Veterinary.Domain.Entities;
+using Veterinary.Domain.Entities.AnimalRepository;
 
 namespace Veterinary.Api
 {
@@ -146,21 +150,24 @@ namespace Veterinary.Api
 
             services.AddHttpContextAccessor();
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IPhotoService, PhotoService>();
 
+            services.AddMediatR(Assembly.Load("Veterinary.Application"));
             services.AddRazorPages();
             services.AddControllers()
                 .AddFluentValidation();
+            services.AddMediatR(Assembly.Load("Veterinary.Application"));
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(Assembly.Load("Veterinary.Application"))
-                .Where(x => x.Name.EndsWith("Service"))
-                .AsImplementedInterfaces()
-                .InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(Assembly.Load("Veterinary.Application"))
                 .Where(x => x.Name.EndsWith("Validator"))
+                .AsImplementedInterfaces()
+                .InstancePerDependency();
+            builder.RegisterAssemblyTypes(Assembly.Load("Veterinary.Dal"))
+                .Where(x => x.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces()
                 .InstancePerDependency();
         }

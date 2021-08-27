@@ -16,7 +16,7 @@ namespace Veterinary.Domain.Entities.AnimalEntities
 
         public Guid SpeciesId { get; set; }
         public AnimalSpecies Species { get; set; }
-        public string? SubSpecies { get; set; }
+        public string SubSpecies { get; set; }
 
         public Guid OwnerId { get; set; }
         public VeterinaryUser Owner { get; set; }

@@ -7,51 +7,120 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/WeatherForecast": {
+    "/api/animals/my-animals": {
       "get": {
         "tags": [
-          "WeatherForecast"
+          "Animal"
         ],
-        "operationId": "WeatherForecast_Get",
+        "operationId": "Animal_GetCurrentUserActiveAnimals",
+        "requestBody": {
+          "x-name": "pageData",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PageData"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
+                  "$ref": "#/components/schemas/PagedListOfOwnedAnimalDto"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ]
       }
     }
   },
   "components": {
     "schemas": {
-      "WeatherForecast": {
+      "PagedListOfOwnedAnimalDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "date": {
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/OwnedAnimalDto"
+            }
+          }
+        }
+      },
+      "OwnedAnimalDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateOfBirth": {
             "type": "string",
             "format": "date-time"
           },
-          "temperatureC": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "temperatureF": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "summary": {
+          "age": {
             "type": "string",
             "nullable": true
+          },
+          "sex": {
+            "type": "string",
+            "nullable": true
+          },
+          "speciesName": {
+            "type": "string",
+            "nullable": true
+          },
+          "subSpeciesName": {
+            "type": "string",
+            "nullable": true
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "PageData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       }
