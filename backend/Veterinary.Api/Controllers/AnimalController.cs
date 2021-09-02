@@ -9,6 +9,7 @@ using Veterinary.Application.Abstractions;
 using Veterinary.Application.Features.AnimalFeatures.Commands;
 using Veterinary.Application.Features.AnimalFeatures.Queries;
 using Veterinary.Application.Services;
+using Veterinary.Application.Shared.Dtos;
 
 namespace Veterinary.Api.Controllers
 {
@@ -25,7 +26,7 @@ namespace Veterinary.Api.Controllers
         }
 
         [Authorize(Policy = "User")]
-        [HttpGet("{userId}")]
+        [HttpGet("list/{userId}")]
         public Task<PagedList<OwnedAnimalDto>> GetOwnedAnimals(string userId, [FromQuery]PageData pageData)
         {
             return mediator.Send(new GetActiveOwnedAnimalsQuery
@@ -45,6 +46,16 @@ namespace Veterinary.Api.Controllers
                 Data = data
             });
         }
-        
+
+        [Authorize(Policy = "User")]
+        [HttpGet("{animalId}")]
+        public Task<AnimalDto> GetAnimal(string animalId)
+        {
+            return mediator.Send(new GetAnimalQuery
+            {
+                AnimalId = animalId,
+            });
+        }
+
     }
 }

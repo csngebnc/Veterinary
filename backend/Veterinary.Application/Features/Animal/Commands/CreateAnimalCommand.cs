@@ -26,7 +26,7 @@ namespace Veterinary.Application.Features.AnimalFeatures.Commands
             public DateTime DateOfBirth { get; set; }
             public string Sex { get; set; }
             public string SpeciesId { get; set; }
-            public IFormFile Photo { get; set; }
+            public IFormFile? Photo { get; set; }
         }
     }
 

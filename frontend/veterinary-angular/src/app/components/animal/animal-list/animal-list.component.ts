@@ -3,6 +3,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  AnimalDto,
   AnimalService,
   OwnedAnimalDto,
   PagedListOfOwnedAnimalDto,
@@ -59,19 +60,9 @@ export class AnimalListComponent implements OnInit {
   }
 
   open() {
-    let userData = this.tokenService.getUserData();
-    /*
-    this.animalService
-      .createAnimal(userData.id, {
-        name: 'Kutya',
-        sex: 'M',
-        speciesId: '9910828d-f10a-489c-7fc0-08d968c05bea',
-        dateOfBirth: new Date(),
-      })
-      .subscribe();
-      */
-
-    this.modalService.openModal(AddAnimalComponent, this.deleteAnimal);
+    this.modalService.openModal(AddAnimalComponent, () =>
+      this.pageChanged({ pageIndex: 0, pageSize: 6, length: 0 })
+    );
   }
   deleteAnimal() {}
   archiveAnimal() {}

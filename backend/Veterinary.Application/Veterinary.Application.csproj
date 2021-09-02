@@ -5,6 +5,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Features\VeterinaryUser\**" />
+	  <EmbeddedResource Remove="Features\VeterinaryUser\**" />
+	  <None Remove="Features\VeterinaryUser\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="FluentValidation.AspNetCore" Version="10.3.3" />
 		<PackageReference Include="MediatR" Version="9.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.9" />
@@ -16,7 +22,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Abstractions\Dtos\" />
-	  <Folder Include="Features\VeterinaryUser\" />
 	</ItemGroup>
 
 </Project>

@@ -1,9 +1,9 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { base64ToFile, ImageCroppedEvent } from 'ngx-image-cropper';
 import {
+  AnimalDto,
   AnimalService,
   AnimalSpeciesDto,
   SpeciesService,
@@ -33,6 +33,7 @@ export class AddAnimalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.maxDate = new Date();
     this.addAnimalForm = this.fb.group({
       name: ['', Validators.required],
       sex: ['hím', Validators.required],
@@ -46,15 +47,7 @@ export class AddAnimalComponent implements OnInit {
       .subscribe((species: AnimalSpeciesDto[]) => (this.species = species));
   }
 
-  addAnimal() {
-    let formData = new FormData();
-    formData.append('name', this.addAnimalForm.get('name').value);
-    formData.append('sex', this.addAnimalForm.get('sex').value);
-    formData.append('dateOfBirth', this.addAnimalForm.get('dateOfBirth').value);
-    formData.append('speciesid', this.addAnimalForm.get('speciesid').value);
-    formData.append('photo', this.addAnimalForm.get('photo').value);
-
-    console.log(formData);
+  addAnimal(): void {
     this.animalService
       .createAnimal(
         this.tokenService.getUserData().id,
@@ -62,12 +55,14 @@ export class AddAnimalComponent implements OnInit {
         this.addAnimalForm.get('dateOfBirth').value,
         this.addAnimalForm.get('sex').value,
         this.addAnimalForm.get('speciesid').value,
-        {
-          fileName: 'photo',
-          data: this.addAnimalForm.get('photo').value,
-        }
+        this.imageChangedEvent
+          ? {
+              fileName: 'photo',
+              data: this.addAnimalForm.get('photo').value,
+            }
+          : undefined
       )
-      .subscribe();
+      .subscribe(() => this.modal.close());
   }
 
   fileChangeEvent(event: any): void {
@@ -81,7 +76,7 @@ export class AddAnimalComponent implements OnInit {
     console.log(this.addAnimalForm.get('photo'));
   }
 
-  imageLoaded() {}
-  cropperReady() {}
-  loadImageFailed() {}
+  close(): void {
+    this.modal.dismiss();
+  }
 }

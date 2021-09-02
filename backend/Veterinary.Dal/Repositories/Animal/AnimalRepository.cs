@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,13 @@ namespace Veterinary.Dal.Repositories.AnimalRepository
     {
         public AnimalRepository(VeterinaryDbContext context) : base(context)
         {
+        }
+
+        public async Task<Animal> GetAnimalWithSpeciesAsync(Guid animalId)
+        {
+            return await Table
+                    .Include(animal => animal.Species)
+                    .SingleOrDefaultAsync(animal => animal.Id == animalId);
         }
     }
 }

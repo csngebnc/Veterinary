@@ -23,6 +23,9 @@ import { AnimalListComponent } from './components/animal/animal-list/animal-list
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AddAnimalComponent } from './components/animal/add-animal/add-animal.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
+import { EditAnimalComponent } from './components/animal/edit-animal/edit-animal.component';
 
 export function initializeApp(oauthService: OAuthService): any {
   return async () => {
@@ -53,6 +56,7 @@ export function initializeApp(oauthService: OAuthService): any {
     HomeDoctorComponent,
     AnimalListComponent,
     AddAnimalComponent,
+    EditAnimalComponent,
   ],
   imports: [
     MaterialDesignModule,
@@ -73,6 +77,8 @@ export function initializeApp(oauthService: OAuthService): any {
   ],
   providers: [
     { provide: generated.API_BASE_URL, useValue: apiUrl },
+    { provide: MAT_DATE_LOCALE, useValue: 'hu-HU' },
+    { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,

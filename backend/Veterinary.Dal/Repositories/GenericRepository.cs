@@ -11,8 +11,8 @@ namespace Veterinary.Dal.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly VeterinaryDbContext context;
-        private DbSet<T> Table;
+        protected readonly VeterinaryDbContext context;
+        protected DbSet<T> Table;
 
         public GenericRepository(VeterinaryDbContext context)
         {
@@ -37,10 +37,11 @@ namespace Veterinary.Dal.Repositories
             return query.FirstOrDefaultAsync(predicate);
         }
 
-        public async Task InsertAsync(T entity)
+        public async Task<T> InsertAsync(T entity)
         {
             Table.Add(entity);
             await context.SaveChangesAsync();
+            return entity;
         }
 
         public async Task UpdateAsync(T entity)
@@ -55,6 +56,11 @@ namespace Veterinary.Dal.Repositories
             T entity = Table.Find(id);
             Table.Remove(entity);
             await context.SaveChangesAsync();
+        }
+
+        public async Task<T> FindAsync(Guid id)
+        {
+            return await Table.FindAsync(id);
         }
     }
 }

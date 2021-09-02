@@ -12,8 +12,11 @@ namespace Veterinary.Domain.Entities.AnimalRepository
         IQueryable<Animal> GetAllAsQueryable();
         Task<Animal> GetByPredicateAsync(Expression<Func<Animal, bool>> predicate, Func<IQueryable<Animal>,
                          IIncludableQueryable<Animal, object>> include = null);
-        Task InsertAsync(Animal entity);
+        Task<Animal> FindAsync(Guid id);
+        Task<Animal> InsertAsync(Animal entity);
         Task UpdateAsync(Animal entity);
         Task DeleteAsync(Guid id);
+
+        Task<Animal> GetAnimalWithSpeciesAsync(Guid animalId);
     }
 }

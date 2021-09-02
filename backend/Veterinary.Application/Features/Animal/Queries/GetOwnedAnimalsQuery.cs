@@ -6,6 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Veterinary.Application.Abstractions;
 using Veterinary.Application.Extensions;
+using Veterinary.Application.Services;
+using Veterinary.Application.Shared.Dtos;
 using Veterinary.Domain.Entities.AnimalRepository;
 
 namespace Veterinary.Application.Features.AnimalFeatures.Queries
@@ -17,25 +19,15 @@ namespace Veterinary.Application.Features.AnimalFeatures.Queries
         public PageData PageData { get; set; }
     }
 
-    public class OwnedAnimalDto
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string Age { get; set; }
-        public string Sex { get; set; }
-        public string SpeciesName { get; set; }
-        public string SubSpeciesName { get; set; }
-        public string PhotoUrl { get; set; }
-    }
-
     public class GetActiveOwnedAnimalsQueryHandler : IRequestHandler<GetActiveOwnedAnimalsQuery, PagedList<OwnedAnimalDto>>
     {
         private readonly IAnimalRepository repository;
+        private readonly IIdentityService identityService;
 
-        public GetActiveOwnedAnimalsQueryHandler(IAnimalRepository repository)
+        public GetActiveOwnedAnimalsQueryHandler(IAnimalRepository repository, IIdentityService identityService)
         {
             this.repository = repository;
+            this.identityService = identityService;
         }
         public async Task<PagedList<OwnedAnimalDto>> Handle(GetActiveOwnedAnimalsQuery request, CancellationToken cancellationToken)
         {

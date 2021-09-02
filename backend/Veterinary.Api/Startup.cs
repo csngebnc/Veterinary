@@ -23,9 +23,7 @@ using System.Reflection;
 using Veterinary.Api.Services;
 using Veterinary.Application.Services;
 using Veterinary.Dal.Data;
-using Veterinary.Dal.Repositories.AnimalRepository;
 using Veterinary.Domain.Entities;
-using Veterinary.Domain.Entities.AnimalRepository;
 
 namespace Veterinary.Api
 {
