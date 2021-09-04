@@ -1,5 +1,6 @@
 using Autofac;
 using FluentValidation.AspNetCore;
+using Hellang.Middleware.ProblemDetails;
 using IdentityModel;
 using IdentityServer4.Configuration;
 using MediatR;
@@ -7,6 +8,7 @@ using MediatR.Extensions.Autofac.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +24,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using Veterinary.Api.Services;
 using Veterinary.Application.Services;
+using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Dal.Data;
 using Veterinary.Domain.Entities;
 
@@ -151,10 +154,10 @@ namespace Veterinary.Api
             services.AddScoped<IPhotoService, PhotoService>();
 
             services.AddMediatR(Assembly.Load("Veterinary.Application"));
+            services.AddProblemDetails(ConfigureProblemDetails);
             services.AddRazorPages();
             services.AddControllers()
                 .AddFluentValidation();
-            services.AddMediatR(Assembly.Load("Veterinary.Application"));
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -208,6 +211,21 @@ namespace Veterinary.Api
                 endpoints.MapControllers();
                 endpoints.MapRazorPages();
             });
+        }
+
+        private void ConfigureProblemDetails(ProblemDetailsOptions options)
+        {
+            options.IncludeExceptionDetails = (ctx, ex) => false;
+
+            options.Map<ForbiddenException>(
+              (ctx, ex) =>
+              {
+                  var pd = StatusCodeProblemDetails.Create(StatusCodes.Status403Forbidden);
+                  pd.Title = "Forbidden (403)";
+                  return pd;
+              }
+              );
+
         }
     }
 }

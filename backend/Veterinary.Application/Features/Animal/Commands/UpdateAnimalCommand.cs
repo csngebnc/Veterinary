@@ -6,6 +6,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Veterinary.Application.Services;
+using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Dal.Data;
 using Veterinary.Domain.Entities;
 using Veterinary.Domain.Entities.AnimalRepository;
@@ -46,7 +47,7 @@ namespace Veterinary.Application.Features.AnimalFeatures.Commands
 
             if(animal.OwnerId != identityService.GetCurrentUserId() && await identityService.IsInRoleAsync("User"))
             {
-                throw new Exception("Nem gazdi.");
+                throw new ForbiddenException();
             }
 
             animal.Name = request.Data.Name;

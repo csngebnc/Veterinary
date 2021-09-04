@@ -8,6 +8,7 @@ using Veterinary.Application.Abstractions;
 using Veterinary.Application.Extensions;
 using Veterinary.Application.Services;
 using Veterinary.Application.Shared.Dtos;
+using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Domain.Entities.AnimalRepository;
 
 namespace Veterinary.Application.Features.AnimalFeatures.Queries
@@ -32,6 +33,11 @@ namespace Veterinary.Application.Features.AnimalFeatures.Queries
         }
         public async Task<PagedList<OwnedAnimalDto>> Handle(GetOwnedAnimalsQuery request, CancellationToken cancellationToken)
         {
+            if(request.OwnerId != identityService.GetCurrentUserId() && await identityService.IsInRoleAsync("User"))
+            {
+                throw new ForbiddenException();
+            }
+
             return await repository.GetAllAsQueryable()
                 .Include(animal => animal.Species)
                 .Where(animal => animal.OwnerId == request.OwnerId && animal.IsArchived == request.Archived)
