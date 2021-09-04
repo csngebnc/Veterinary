@@ -15,5 +15,6 @@ namespace Veterinary.Domain
         Task<T> InsertAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(Guid id);
+        Task<bool> AnyByIdAsync(Guid id);
     }
 }

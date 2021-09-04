@@ -31,9 +31,11 @@ namespace Veterinary.Application.Features.AnimalFeatures.Queries
                 DateOfBirth = animal.DateOfBirth,
                 Age = animal.DateOfBirth.CalculateAge(),
                 Sex = animal.Sex,
+                Weight = animal.Weight,
                 SpeciesId = animal.SpeciesId,
                 SubSpeciesName = animal.SubSpecies,
-                PhotoUrl = animal.PhotoUrl
+                PhotoUrl = animal.PhotoUrl,
+                OwnerId = animal.OwnerId
             };
         }
     }

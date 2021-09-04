@@ -60,7 +60,13 @@ namespace Veterinary.Dal.Repositories
 
         public async Task<T> FindAsync(Guid id)
         {
-            return await Table.FindAsync(id);
+            var entity = await Table.FindAsync(id);
+            return entity ?? throw new Exception("Nincs.");
+        }
+
+        public async Task<bool> AnyByIdAsync(Guid id)
+        {
+            return await Table.FindAsync(id) != null;
         }
     }
 }

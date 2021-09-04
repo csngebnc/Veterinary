@@ -9,6 +9,8 @@ namespace Veterinary.Dal.EntityConfigurations
 
         public void Configure(EntityTypeBuilder<Animal> builder)
         {
+            builder.HasQueryFilter(x => !x.IsDeleted);
+
             builder.HasOne(x => x.Species)
                 .WithMany(x => x.Animals)
                 .HasForeignKey(x => x.SpeciesId);

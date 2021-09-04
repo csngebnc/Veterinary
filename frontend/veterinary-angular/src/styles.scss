@@ -6,6 +6,8 @@ $light-blue: #bfd7ff;
 $light-cyan: #e2fdff;
 $text-color: #6776cf;
 $nav-border-color: rgb(160, 147, 147);
+$normal-background-color: rgba(white, 0.85);
+$border-color: rgb(224, 223, 223);
 
 @font-face {
   font-family: "Baloo";
@@ -40,7 +42,7 @@ body {
 .content {
   position: absolute;
   font-family: "Baloo";
-  background-color: rgba(white, 0.85);
+  background-color: $normal-background-color;
   left: 50%;
   top: 40%;
   width: 60%;

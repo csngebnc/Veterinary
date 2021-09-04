@@ -26,6 +26,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { EditAnimalComponent } from './components/animal/edit-animal/edit-animal.component';
+import { ListMedicalRecordsComponent } from './components/animal/medical-records/list-medical-records/list-medical-records.component';
+import { MedicalRecordDisplayerComponent } from './components/_partials/medical-record-displayer/medical-record-displayer.component';
 
 export function initializeApp(oauthService: OAuthService): any {
   return async () => {
@@ -57,6 +59,8 @@ export function initializeApp(oauthService: OAuthService): any {
     AnimalListComponent,
     AddAnimalComponent,
     EditAnimalComponent,
+    ListMedicalRecordsComponent,
+    MedicalRecordDisplayerComponent,
   ],
   imports: [
     MaterialDesignModule,

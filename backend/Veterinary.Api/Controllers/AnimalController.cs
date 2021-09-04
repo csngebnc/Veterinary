@@ -27,20 +27,21 @@ namespace Veterinary.Api.Controllers
 
         [Authorize(Policy = "User")]
         [HttpGet("list/{userId}")]
-        public Task<PagedList<OwnedAnimalDto>> GetOwnedAnimals(string userId, [FromQuery]PageData pageData)
+        public Task<PagedList<OwnedAnimalDto>> GetOwnedAnimals(Guid userId, [FromQuery] PageData pageData, [FromQuery] bool isArchived)
         {
-            return mediator.Send(new GetActiveOwnedAnimalsQuery
+            return mediator.Send(new GetOwnedAnimalsQuery
             {
-                OwnerId = Guid.Parse(userId),
+                OwnerId = userId,
+                Archived = isArchived,
                 PageData = pageData
             });
         }
-        
+
         [Authorize(Policy = "User")]
         [HttpPost("{userId}")]
-        public Task CreateAnimal(string userId, [FromForm] CreateAnimalCommand.CreateAnimalCommandData data)
+        public async Task CreateAnimal(Guid userId, [FromForm] CreateAnimalCommand.CreateAnimalCommandData data)
         {
-            return mediator.Send(new CreateAnimalCommand
+            await mediator.Send(new CreateAnimalCommand
             {
                 UserId = userId,
                 Data = data
@@ -48,12 +49,64 @@ namespace Veterinary.Api.Controllers
         }
 
         [Authorize(Policy = "User")]
-        [HttpGet("{animalId}")]
-        public Task<AnimalDto> GetAnimal(string animalId)
+        [HttpPut("{animalId}")]
+        public async Task UpdateAnimal(Guid animalId, UpdateAnimalCommand.UpdateAnimalCommandData data)
         {
-            return mediator.Send(new GetAnimalQuery
+            await mediator.Send(new UpdateAnimalCommand
             {
                 AnimalId = animalId,
+                Data = data
+            });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpGet("{animalId}")]
+        public async Task<AnimalDto> GetAnimal(string animalId)
+        {
+            return await mediator.Send(new GetAnimalQuery
+            {
+                AnimalId = animalId,
+            });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpDelete("{animalId}/photo")]
+        public async Task<string> DeleteAnimalPhoto(Guid animalId)
+        {
+            return await mediator.Send(new DeleteAnimalPhotoCommand
+            {
+                AnimalId = animalId
+            });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpPost("{userId}/photo")]
+        public async Task<string> UpdateAnimalPhoto(Guid userId, [FromForm] UpdateAnimalPhotoCommand.UpdateAnimalPhotoCommandData data)
+        {
+            return await mediator.Send(new UpdateAnimalPhotoCommand
+            {
+                UserId = userId,
+                Data = data
+            });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpPut("{animalId}/status")]
+        public async Task UpdateAnimalArchiveStatus(Guid animalId)
+        {
+            await mediator.Send(new UpdateAnimalArchiveStatusCommand
+            {
+                AnimalId = animalId
+            });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpDelete("{animalId}")]
+        public async Task DeleteAnimal(Guid animalId)
+        {
+            await mediator.Send(new DeleteAnimalCommand
+            {
+                AnimalId = animalId
             });
         }
 

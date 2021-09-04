@@ -6,5 +6,6 @@ namespace Veterinary.Application.Services
     public interface IPhotoService
     {
         Task<string> UploadPhoto(string folderName, string key, IFormFile photo);
+        bool RemovePhoto(string path);
     }
 }

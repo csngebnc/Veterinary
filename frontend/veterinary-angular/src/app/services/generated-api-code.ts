@@ -25,7 +25,7 @@ export class AnimalService {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getOwnedAnimals(userId: string | null, pageSize: number | undefined, pageIndex: number | undefined): Observable<PagedListOfOwnedAnimalDto> {
+    getOwnedAnimals(userId: string, pageSize: number | undefined, pageIndex: number | undefined, isArchived: boolean | undefined): Observable<PagedListOfOwnedAnimalDto> {
         let url_ = this.baseUrl + "/api/animals/list/{userId}?";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -38,6 +38,10 @@ export class AnimalService {
             throw new Error("The parameter 'pageIndex' cannot be null.");
         else if (pageIndex !== undefined)
             url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        if (isArchived === null)
+            throw new Error("The parameter 'isArchived' cannot be null.");
+        else if (isArchived !== undefined)
+            url_ += "isArchived=" + encodeURIComponent("" + isArchived) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -83,7 +87,7 @@ export class AnimalService {
         return _observableOf<PagedListOfOwnedAnimalDto>(<any>null);
     }
 
-    createAnimal(userId: string | null, name: string | null | undefined, dateOfBirth: Date | undefined, sex: string | null | undefined, speciesId: string | null | undefined, photo: FileParameter | null | undefined): Observable<void> {
+    createAnimal(userId: string, name: string | null | undefined, dateOfBirth: Date | null | undefined, sex: string | null | undefined, speciesId: string | undefined, photo: FileParameter | null | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/animals/{userId}";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -93,13 +97,13 @@ export class AnimalService {
         const content_ = new FormData();
         if (name !== null && name !== undefined)
             content_.append("Name", name.toString());
-        if (dateOfBirth === null || dateOfBirth === undefined)
-            throw new Error("The parameter 'dateOfBirth' cannot be null.");
-        else
+        if (dateOfBirth !== null && dateOfBirth !== undefined)
             content_.append("DateOfBirth", dateOfBirth.toJSON());
         if (sex !== null && sex !== undefined)
             content_.append("Sex", sex.toString());
-        if (speciesId !== null && speciesId !== undefined)
+        if (speciesId === null || speciesId === undefined)
+            throw new Error("The parameter 'speciesId' cannot be null.");
+        else
             content_.append("SpeciesId", speciesId.toString());
         if (photo !== null && photo !== undefined)
             content_.append("Photo", photo.data, photo.fileName ? photo.fileName : "Photo");
@@ -127,6 +131,57 @@ export class AnimalService {
     }
 
     protected processCreateAnimal(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    updateAnimal(animalId: string, data: UpdateAnimalCommandData): Observable<void> {
+        let url_ = this.baseUrl + "/api/animals/{animalId}";
+        if (animalId === undefined || animalId === null)
+            throw new Error("The parameter 'animalId' must be defined.");
+        url_ = url_.replace("{animalId}", encodeURIComponent("" + animalId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(data);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateAnimal(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateAnimal(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateAnimal(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -193,6 +248,209 @@ export class AnimalService {
             }));
         }
         return _observableOf<AnimalDto>(<any>null);
+    }
+
+    deleteAnimal(animalId: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/animals/{animalId}";
+        if (animalId === undefined || animalId === null)
+            throw new Error("The parameter 'animalId' must be defined.");
+        url_ = url_.replace("{animalId}", encodeURIComponent("" + animalId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteAnimal(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteAnimal(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteAnimal(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    deleteAnimalPhoto(animalId: string): Observable<string> {
+        let url_ = this.baseUrl + "/api/animals/{animalId}/photo";
+        if (animalId === undefined || animalId === null)
+            throw new Error("The parameter 'animalId' must be defined.");
+        url_ = url_.replace("{animalId}", encodeURIComponent("" + animalId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteAnimalPhoto(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteAnimalPhoto(<any>response_);
+                } catch (e) {
+                    return <Observable<string>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<string>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteAnimalPhoto(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <string>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<string>(<any>null);
+    }
+
+    updateAnimalPhoto(userId: string, animalId: string | undefined, photo: FileParameter | null | undefined): Observable<string> {
+        let url_ = this.baseUrl + "/api/animals/{userId}/photo";
+        if (userId === undefined || userId === null)
+            throw new Error("The parameter 'userId' must be defined.");
+        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (animalId === null || animalId === undefined)
+            throw new Error("The parameter 'animalId' cannot be null.");
+        else
+            content_.append("AnimalId", animalId.toString());
+        if (photo !== null && photo !== undefined)
+            content_.append("Photo", photo.data, photo.fileName ? photo.fileName : "Photo");
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateAnimalPhoto(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateAnimalPhoto(<any>response_);
+                } catch (e) {
+                    return <Observable<string>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<string>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateAnimalPhoto(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <string>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<string>(<any>null);
+    }
+
+    updateAnimalArchiveStatus(animalId: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/animals/{animalId}/status";
+        if (animalId === undefined || animalId === null)
+            throw new Error("The parameter 'animalId' must be defined.");
+        url_ = url_.replace("{animalId}", encodeURIComponent("" + animalId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateAnimalArchiveStatus(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateAnimalArchiveStatus(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateAnimalArchiveStatus(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
     }
 }
 
@@ -273,15 +531,26 @@ export interface OwnedAnimalDto {
     photoUrl?: string | undefined;
 }
 
+export interface UpdateAnimalCommandData {
+    name?: string | undefined;
+    dateOfBirth?: Date | undefined;
+    sex?: string | undefined;
+    speciesId?: string;
+    subSpecies?: string | undefined;
+    weight?: number;
+}
+
 export interface AnimalDto {
     id?: string;
     name?: string | undefined;
     dateOfBirth?: Date;
     age?: string | undefined;
     sex?: string | undefined;
+    weight?: number;
     speciesId?: string;
     subSpeciesName?: string | undefined;
     photoUrl?: string | undefined;
+    ownerId?: string;
 }
 
 export interface AnimalSpeciesDto {

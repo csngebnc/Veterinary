@@ -3,7 +3,6 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AnimalDto,
   AnimalService,
   OwnedAnimalDto,
   PagedListOfOwnedAnimalDto,
@@ -22,6 +21,7 @@ export class AnimalListComponent implements OnInit {
   pageEvent: PageEvent;
   animalsDataSource = new MatTableDataSource<OwnedAnimalDto>();
   length: number = 0;
+  isArchivedPage: boolean = false;
 
   userIdFromRoute: string = '';
 
@@ -41,7 +41,7 @@ export class AnimalListComponent implements OnInit {
     this.pageChanged({ pageIndex: 0, pageSize: 6, length: 0 });
   }
 
-  private validatePermission() {
+  private validatePermission(): void {
     let userData = this.tokenService.getUserData();
 
     if (userData.role === 'User' && userData.id !== this.userIdFromRoute) {
@@ -49,9 +49,14 @@ export class AnimalListComponent implements OnInit {
     }
   }
 
-  pageChanged(event: PageEvent) {
+  pageChanged(event: PageEvent): PageEvent {
     this.animalService
-      .getOwnedAnimals(this.userIdFromRoute, 6, event.pageIndex)
+      .getOwnedAnimals(
+        this.userIdFromRoute,
+        6,
+        event.pageIndex,
+        this.isArchivedPage
+      )
       .subscribe((response: PagedListOfOwnedAnimalDto) => {
         this.animalsDataSource.data = response.items;
         this.length = response.totalCount;
@@ -59,11 +64,32 @@ export class AnimalListComponent implements OnInit {
     return event;
   }
 
-  open() {
+  changePage(): void {
+    this.isArchivedPage = !this.isArchivedPage;
+    this.pageChanged({ pageIndex: 0, pageSize: 6, length: 0 });
+  }
+
+  open(): void {
     this.modalService.openModal(AddAnimalComponent, () =>
       this.pageChanged({ pageIndex: 0, pageSize: 6, length: 0 })
     );
   }
-  deleteAnimal() {}
-  archiveAnimal() {}
+
+  deleteAnimal(animalId: string) {
+    this.animalService.deleteAnimal(animalId).subscribe(() => {
+      this.animalsDataSource.data = this.animalsDataSource.data.filter(
+        (animal) => animal.id !== animalId
+      );
+      this.length -= 1;
+    });
+  }
+
+  archiveAnimal(animalId: string) {
+    this.animalService.updateAnimalArchiveStatus(animalId).subscribe(() => {
+      this.animalsDataSource.data = this.animalsDataSource.data.filter(
+        (animal) => animal.id !== animalId
+      );
+      this.length -= 1;
+    });
+  }
 }

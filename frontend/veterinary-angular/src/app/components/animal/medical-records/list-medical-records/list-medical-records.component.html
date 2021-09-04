@@ -1,0 +1,50 @@
+<div class="container mt-4" *ngIf="animal">
+  <div class="row pb-4">
+    <div class="col-3">
+      <img
+        src="{{ animal.photoUrl }}"
+        alt="{{ animal.name }}"
+        class="card-img-top img-thumbnail"
+      />
+    </div>
+    <div class="col-5 pl-0">
+      <h1 class="mt-2 mb-1">{{ animal.name }} adatai és kezelési lapjai</h1>
+      <table class="table table-borderless table-sm" style="width: 40%">
+        <tr>
+          <td>Kor:</td>
+          <td>{{ animal.age }}</td>
+        </tr>
+        <tr>
+          <td>Súly:</td>
+          <td>{{ animal.weight }}</td>
+        </tr>
+        <tr>
+          <td>Faj:</td>
+          <td>{{ animal.speciesName }}</td>
+        </tr>
+        <tr>
+          <td>Fajta:</td>
+          <td>{{ animal.subSpeciesName }}</td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-4">
+      <div class="mt-2 d-flex justify-content-end">
+        <button
+          mat-raised-button
+          color="primary"
+          style="height: 40px"
+          (click)="openVaccineRecordsDialog()"
+        >
+          Korábbi oltások megtekintése
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <app-medical-record-displayer
+    [meds]="medicalRecords"
+  ></app-medical-record-displayer>
+
+  <div class="p-4"></div>
+</div>

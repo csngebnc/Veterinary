@@ -13,27 +13,28 @@ using Veterinary.Domain.Entities.AnimalRepository;
 namespace Veterinary.Application.Features.AnimalFeatures.Queries
 {
 
-    public class GetActiveOwnedAnimalsQuery : IRequest<PagedList<OwnedAnimalDto>>
+    public class GetOwnedAnimalsQuery : IRequest<PagedList<OwnedAnimalDto>>
     {
         public Guid OwnerId { get; set; }
+        public bool Archived { get; set; }
         public PageData PageData { get; set; }
     }
 
-    public class GetActiveOwnedAnimalsQueryHandler : IRequestHandler<GetActiveOwnedAnimalsQuery, PagedList<OwnedAnimalDto>>
+    public class GetOwnedAnimalsQueryHandler : IRequestHandler<GetOwnedAnimalsQuery, PagedList<OwnedAnimalDto>>
     {
         private readonly IAnimalRepository repository;
         private readonly IIdentityService identityService;
 
-        public GetActiveOwnedAnimalsQueryHandler(IAnimalRepository repository, IIdentityService identityService)
+        public GetOwnedAnimalsQueryHandler(IAnimalRepository repository, IIdentityService identityService)
         {
             this.repository = repository;
             this.identityService = identityService;
         }
-        public async Task<PagedList<OwnedAnimalDto>> Handle(GetActiveOwnedAnimalsQuery request, CancellationToken cancellationToken)
+        public async Task<PagedList<OwnedAnimalDto>> Handle(GetOwnedAnimalsQuery request, CancellationToken cancellationToken)
         {
             return await repository.GetAllAsQueryable()
                 .Include(animal => animal.Species)
-                .Where(animal => animal.OwnerId == request.OwnerId)
+                .Where(animal => animal.OwnerId == request.OwnerId && animal.IsArchived == request.Archived)
                 .Select(animal =>
                     new OwnedAnimalDto
                     {

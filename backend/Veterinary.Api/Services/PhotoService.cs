@@ -32,21 +32,28 @@ namespace Veterinary.Api.Services
 
                 string newFileName = $"{key}-{Guid.NewGuid().ToString("N")}.png";
 
-                path = Path.Combine("Images", folderName, newFileName);
+                path = $"Images/{folderName}/{newFileName}";
 
                 using (var fileStream = new FileStream(Path.Combine(folder, newFileName), FileMode.Create))
                 {
                     await photo.CopyToAsync(fileStream);
                 }
             }
-            return httpContextAccessor.GetApplicationUrl() + "\\" + path;
+            return httpContextAccessor.GetApplicationUrl() + "/" + path;
         }
 
         public bool RemovePhoto(string path)
         {
-            var localPath = path.Substring(path.IndexOf("Images"), path.Length);
+            if (!path.Contains("Images"))
+            {
+                return true;
+            }
+
+            var localPath = path.Substring(path.IndexOf("Images"));
             if (File.Exists(Path.Combine(_webHostEnvironment.WebRootPath, localPath)))
+            {
                 File.Delete(Path.Combine(_webHostEnvironment.WebRootPath, localPath));
+            }
 
             return !File.Exists(Path.Combine(_webHostEnvironment.WebRootPath, localPath));
 

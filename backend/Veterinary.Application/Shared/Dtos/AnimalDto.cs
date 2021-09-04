@@ -9,8 +9,10 @@ namespace Veterinary.Application.Shared.Dtos
         public DateTime DateOfBirth { get; set; }
         public string Age { get; set; }
         public string Sex { get; set; }
+        public double Weight { get; set; }
         public Guid SpeciesId { get; set; }
         public string SubSpeciesName { get; set; }
         public string PhotoUrl { get; set; }
+        public Guid OwnerId { get; set; }
     }
 }
