@@ -69,7 +69,7 @@ export class AnimalListComponent implements OnInit {
     this.pageChanged({ pageIndex: 0, pageSize: 6, length: 0 });
   }
 
-  open(): void {
+  openAddForm(): void {
     this.modalService.openModal(AddAnimalComponent, () =>
       this.pageChanged({ pageIndex: 0, pageSize: 6, length: 0 })
     );

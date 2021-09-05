@@ -44,7 +44,10 @@ export class AddAnimalComponent implements OnInit {
 
     this.speciesService
       .getAnimalSpecies()
-      .subscribe((species: AnimalSpeciesDto[]) => (this.species = species));
+      .subscribe(
+        (species: AnimalSpeciesDto[]) =>
+          (this.species = species.filter((s) => !s.isInactive))
+      );
   }
 
   addAnimal(): void {

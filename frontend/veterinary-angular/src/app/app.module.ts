@@ -28,6 +28,9 @@ import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { EditAnimalComponent } from './components/animal/edit-animal/edit-animal.component';
 import { ListMedicalRecordsComponent } from './components/animal/medical-records/list-medical-records/list-medical-records.component';
 import { MedicalRecordDisplayerComponent } from './components/_partials/medical-record-displayer/medical-record-displayer.component';
+import { AddAnimalSpeciesComponent } from './components/animalspecies/add-animal-species/add-animal-species.component';
+import { EditAnimalSpeciesComponent } from './components/animalspecies/edit-animal-species/edit-animal-species.component';
+import { ListAnimalSpeciesComponent } from './components/animalspecies/list-animal-species/list-animal-species.component';
 
 export function initializeApp(oauthService: OAuthService): any {
   return async () => {
@@ -61,6 +64,9 @@ export function initializeApp(oauthService: OAuthService): any {
     EditAnimalComponent,
     ListMedicalRecordsComponent,
     MedicalRecordDisplayerComponent,
+    AddAnimalSpeciesComponent,
+    EditAnimalSpeciesComponent,
+    ListAnimalSpeciesComponent,
   ],
   imports: [
     MaterialDesignModule,

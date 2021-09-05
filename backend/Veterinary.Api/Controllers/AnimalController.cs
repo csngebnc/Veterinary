@@ -61,7 +61,7 @@ namespace Veterinary.Api.Controllers
 
         [Authorize(Policy = "User")]
         [HttpGet("{animalId}")]
-        public async Task<AnimalDto> GetAnimal(string animalId)
+        public async Task<AnimalDto> GetAnimal(Guid animalId)
         {
             return await mediator.Send(new GetAnimalQuery
             {

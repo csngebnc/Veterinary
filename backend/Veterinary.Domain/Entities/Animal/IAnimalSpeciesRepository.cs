@@ -17,5 +17,8 @@ namespace Veterinary.Domain.Entities.AnimalSpeciesRepository
         Task UpdateAsync(AnimalSpecies entity);
         Task DeleteAsync(Guid id);
         Task<bool> AnyByIdAsync(Guid id);
+
+        Task<bool> AnyByNameAsync(string name);
+        Task<bool> CanBeDeleted(Guid id);
     }
 }

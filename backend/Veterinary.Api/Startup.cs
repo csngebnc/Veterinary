@@ -1,10 +1,12 @@
 using Autofac;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using IdentityModel;
 using IdentityServer4.Configuration;
 using MediatR;
 using MediatR.Extensions.Autofac.DependencyInjection;
+using MediatR.Extensions.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,9 +25,12 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using Veterinary.Api.Services;
+using Veterinary.Api.Validation.ProblemDetails.Data;
+using Veterinary.Api.Validation.ProblemDetails.Exceptions;
 using Veterinary.Application.Services;
 using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Dal.Data;
+using Veterinary.Dal.Validation.ProblemDetails.Exceptions;
 using Veterinary.Domain.Entities;
 
 namespace Veterinary.Api
@@ -154,19 +159,16 @@ namespace Veterinary.Api
             services.AddScoped<IPhotoService, PhotoService>();
 
             services.AddMediatR(Assembly.Load("Veterinary.Application"));
+            services.AddFluentValidation(new[] { Assembly.Load("Veterinary.Application") });
+
             services.AddProblemDetails(ConfigureProblemDetails);
             services.AddRazorPages();
-            services.AddControllers()
-                .AddFluentValidation();
+            services.AddControllers();
+
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-
-            builder.RegisterAssemblyTypes(Assembly.Load("Veterinary.Application"))
-                .Where(x => x.Name.EndsWith("Validator"))
-                .AsImplementedInterfaces()
-                .InstancePerDependency();
             builder.RegisterAssemblyTypes(Assembly.Load("Veterinary.Dal"))
                 .Where(x => x.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces()
@@ -181,6 +183,7 @@ namespace Veterinary.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseProblemDetails();
             app.UseCors("CorsPolicy");
 
             app.UseHttpsRedirection();
@@ -224,7 +227,35 @@ namespace Veterinary.Api
                   pd.Title = "Forbidden (403)";
                   return pd;
               }
-              );
+            );
+
+            options.Map<MethodNotAllowedException>(
+              (ctx, ex) =>
+              {
+                  var pd = StatusCodeProblemDetails.Create(StatusCodes.Status405MethodNotAllowed);
+                  pd.Title = ex.Message;
+                  return pd;
+              }
+            );
+
+            options.Map<EntityNotFoundException>(
+              (ctx, ex) =>
+              {
+                  var pd = StatusCodeProblemDetails.Create(StatusCodes.Status404NotFound);
+                  pd.Title = "A megadott azonosítóval nem található rögzített elem.";
+                  return pd;
+              }
+            );
+
+            options.Map<ValidationException>(
+              (ctx, ex) =>
+              {
+                  var pd = new InputValidationErrors(ex.Errors);
+                  pd.Title = "Sikertelen mentés, mivel validációs hibák vannak.";
+                  pd.Status = 400;
+                  return pd;
+              }
+            );
 
         }
     }

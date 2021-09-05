@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Veterinary.Application.Shared.Dtos;
 using Veterinary.Domain.Entities.AnimalSpeciesRepository;
 
 namespace Veterinary.Application.Features.AnimalSpeciesFeatures.Queries
@@ -13,12 +14,6 @@ namespace Veterinary.Application.Features.AnimalSpeciesFeatures.Queries
 
     public class GetAnimalSpeciesQuery : IRequest<List<AnimalSpeciesDto>>
     {
-    }
-
-    public class AnimalSpeciesDto
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
     }
 
     public class GetAnimalSpeciesQueryHandler : IRequestHandler<GetAnimalSpeciesQuery, List<AnimalSpeciesDto>>
@@ -37,7 +32,8 @@ namespace Veterinary.Application.Features.AnimalSpeciesFeatures.Queries
                 .Select(species => new AnimalSpeciesDto
                 {
                     Id = species.Id,
-                    Name = species.Name
+                    Name = species.Name,
+                    IsInactive = species.IsInactive
                 })
                 .ToListAsync();
         }

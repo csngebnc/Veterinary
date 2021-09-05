@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Veterinary.Dal.Data;
+using Veterinary.Dal.Validation.ProblemDetails.Exceptions;
 using Veterinary.Domain;
 
 namespace Veterinary.Dal.Repositories
@@ -61,7 +62,7 @@ namespace Veterinary.Dal.Repositories
         public async Task<T> FindAsync(Guid id)
         {
             var entity = await Table.FindAsync(id);
-            return entity ?? throw new Exception("Nincs.");
+            return entity ?? throw new EntityNotFoundException();
         }
 
         public async Task<bool> AnyByIdAsync(Guid id)
