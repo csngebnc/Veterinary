@@ -31,6 +31,9 @@ import { MedicalRecordDisplayerComponent } from './components/_partials/medical-
 import { AddAnimalSpeciesComponent } from './components/animalspecies/add-animal-species/add-animal-species.component';
 import { EditAnimalSpeciesComponent } from './components/animalspecies/edit-animal-species/edit-animal-species.component';
 import { ListAnimalSpeciesComponent } from './components/animalspecies/list-animal-species/list-animal-species.component';
+import { AddVaccineComponent } from './components/vaccines/add-vaccine/add-vaccine.component';
+import { EditVaccineComponent } from './components/vaccines/edit-vaccine/edit-vaccine.component';
+import { ListVaccinesComponent } from './components/vaccines/list-vaccines/list-vaccines.component';
 
 export function initializeApp(oauthService: OAuthService): any {
   return async () => {
@@ -67,6 +70,9 @@ export function initializeApp(oauthService: OAuthService): any {
     AddAnimalSpeciesComponent,
     EditAnimalSpeciesComponent,
     ListAnimalSpeciesComponent,
+    AddVaccineComponent,
+    EditVaccineComponent,
+    ListVaccinesComponent,
   ],
   imports: [
     MaterialDesignModule,
@@ -97,6 +103,7 @@ export function initializeApp(oauthService: OAuthService): any {
     },
     generated.AnimalService,
     generated.SpeciesService,
+    generated.VaccinesService,
   ],
   bootstrap: [AppComponent],
 })

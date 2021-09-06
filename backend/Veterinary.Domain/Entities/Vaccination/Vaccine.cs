@@ -7,6 +7,7 @@ namespace Veterinary.Domain.Entities.Vaccination
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public bool IsInactive { get; set; }
 
         public ICollection<VaccineRecord> VaccinationRecords { get; set; }
     }

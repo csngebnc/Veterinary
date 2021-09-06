@@ -15,5 +15,10 @@ namespace Veterinary.Api.Common
         {
             public const string BasePath = ApiResources.BasePath + "/species";
         }
+
+        public static class Vaccine
+        {
+            public const string BasePath = ApiResources.BasePath + "/vaccines";
+        }
     }
 }

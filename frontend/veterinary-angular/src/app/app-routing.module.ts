@@ -5,6 +5,7 @@ import { EditAnimalComponent } from './components/animal/edit-animal/edit-animal
 import { ListMedicalRecordsComponent } from './components/animal/medical-records/list-medical-records/list-medical-records.component';
 import { ListAnimalSpeciesComponent } from './components/animalspecies/list-animal-species/list-animal-species.component';
 import { HomeComponent } from './components/home/home.component';
+import { ListVaccinesComponent } from './components/vaccines/list-vaccines/list-vaccines.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
@@ -32,6 +33,11 @@ const routes: Routes = [
   {
     path: 'species',
     component: ListAnimalSpeciesComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'vaccines',
+    component: ListVaccinesComponent,
     canActivate: [AuthGuard],
   },
 ];
