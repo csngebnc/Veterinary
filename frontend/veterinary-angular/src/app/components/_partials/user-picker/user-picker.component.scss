@@ -1,0 +1,25 @@
+@import "../../../../styles.scss";
+
+img {
+  object-fit: contain;
+}
+
+.picker-form {
+  width: 50%;
+}
+
+.card-container {
+  width: 75%;
+}
+
+img {
+  object-fit: scale-down;
+}
+
+choose-other {
+  cursor: pointer;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: $text-color;
+}

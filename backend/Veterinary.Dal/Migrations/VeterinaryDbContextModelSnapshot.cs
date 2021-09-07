@@ -174,7 +174,9 @@ namespace Veterinary.Dal.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PhotoUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("https://veterinary.blob.core.windows.net/defaults/placeholder.jpg");
 
                     b.Property<string>("Sex")
                         .HasColumnType("nvarchar(max)");
@@ -536,13 +538,17 @@ namespace Veterinary.Dal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("PhotoUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("https://veterinary.blob.core.windows.net/defaults/placeholder.jpg");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");

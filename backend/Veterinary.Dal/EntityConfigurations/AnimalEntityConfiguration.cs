@@ -11,6 +11,9 @@ namespace Veterinary.Dal.EntityConfigurations
         {
             builder.HasQueryFilter(x => !x.IsDeleted);
 
+            builder.Property(x => x.PhotoUrl)
+                .HasDefaultValue("https://veterinary.blob.core.windows.net/defaults/placeholder.jpg");
+
             builder.HasOne(x => x.Species)
                 .WithMany(x => x.Animals)
                 .HasForeignKey(x => x.SpeciesId);

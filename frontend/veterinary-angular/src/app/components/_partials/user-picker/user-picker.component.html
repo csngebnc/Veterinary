@@ -1,0 +1,49 @@
+<form class="picker-form">
+  <mat-form-field class="full-width" appearance="outline" *ngIf="!selectedUser">
+    <mat-label>{{ title }}</mat-label>
+    <input
+      type="text"
+      placeholder="(név, email, lakcím)"
+      matInput
+      [formControl]="searchParamControl"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      [displayWith]="getDisplayText.bind(this)"
+      (optionSelected)="selectOption($event)"
+    >
+      <mat-option *ngFor="let option of options" [value]="option.id">
+        <h4 class="m-0 p-0">
+          <b>{{ option.name }}</b>
+        </h4>
+        <h5 class="m-0 p-0">{{ option.email }}</h5>
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint *ngIf="validationError"
+      ><span class="mat-error">{{ validationError }}</span></mat-hint
+    >
+  </mat-form-field>
+  <div *ngIf="selectedUser" class="card-container">
+    <div class="card mb-3">
+      <div class="row">
+        <div class="col-sm-12 col-md-5">
+          <img
+            class="profile-image p-2"
+            src="{{ selectedUser.photoUrl }}"
+            alt=""
+          />
+        </div>
+        <div class="col-sm-12 col-md-7 mt-2 pt-2 pb-3 ps-3 pe-3">
+          <h2 class="card-title m-0">{{ selectedUser.name }}</h2>
+          <h5 class="m-0">{{ selectedUser.email }}</h5>
+          <h5 class="m-0">{{ selectedUser.address }}</h5>
+          <h5 class="m-0">{{ selectedUser.phoneNumber }}</h5>
+        </div>
+      </div>
+      <div class="content-center border-top">
+        <choose-other (click)="chooseOther()"> Másikat választok </choose-other>
+      </div>
+    </div>
+  </div>
+</form>

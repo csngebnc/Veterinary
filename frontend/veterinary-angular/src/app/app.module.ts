@@ -34,6 +34,7 @@ import { ListAnimalSpeciesComponent } from './components/animalspecies/list-anim
 import { AddVaccineComponent } from './components/vaccines/add-vaccine/add-vaccine.component';
 import { EditVaccineComponent } from './components/vaccines/edit-vaccine/edit-vaccine.component';
 import { ListVaccinesComponent } from './components/vaccines/list-vaccines/list-vaccines.component';
+import { UserPickerComponent } from './components/_partials/user-picker/user-picker.component';
 
 export function initializeApp(oauthService: OAuthService): any {
   return async () => {
@@ -73,6 +74,7 @@ export function initializeApp(oauthService: OAuthService): any {
     AddVaccineComponent,
     EditVaccineComponent,
     ListVaccinesComponent,
+    UserPickerComponent,
   ],
   imports: [
     MaterialDesignModule,
@@ -104,6 +106,7 @@ export function initializeApp(oauthService: OAuthService): any {
     generated.AnimalService,
     generated.SpeciesService,
     generated.VaccinesService,
+    generated.UserService
   ],
   bootstrap: [AppComponent],
 })
