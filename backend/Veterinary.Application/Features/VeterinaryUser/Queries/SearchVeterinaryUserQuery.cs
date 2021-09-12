@@ -5,23 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Veterinary.Application.Shared.Dtos;
 using Veterinary.Domain.Entities;
 
-namespace Veterinary.Application.Features.VeterinaryUser.Queries
+namespace Veterinary.Application.Features.VeterinaryUserFeatures.Queries
 {
     public class SearchVeterinaryUserQuery : IRequest<List<VeterinaryUserDto>>
     {
         public string SearchParam { get; set; }
-    }
-
-    public class VeterinaryUserDto
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Address { get; set; }
-        public string PhoneNumber { get; set; }
-        public string PhotoUrl { get; set; }
     }
 
     public class SearchVeterinaryUserQueryHandler : IRequestHandler<SearchVeterinaryUserQuery, List<VeterinaryUserDto>>

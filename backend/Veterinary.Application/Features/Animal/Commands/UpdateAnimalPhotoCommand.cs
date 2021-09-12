@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Veterinary.Application.Services;
 using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Dal.Data;
-using Veterinary.Domain.Constants;
 using Veterinary.Domain.Entities.AnimalRepository;
+using Veterinary.Shared.Constants;
 
 namespace Veterinary.Application.Features.AnimalFeatures.Commands
 {
@@ -52,7 +52,7 @@ namespace Veterinary.Application.Features.AnimalFeatures.Commands
                 var photoUrl = await photoService.UploadPhoto("Animals", request.UserId.ToString(), request.Data.Photo);
                 if (photoUrl == null)
                 {
-                    photoUrl = UrlConstants.AnimalPlaceholderPhotoUrl;
+                    photoUrl = UrlConstants.PlaceholderImage;
                 }
 
                 animal.PhotoUrl = photoUrl;

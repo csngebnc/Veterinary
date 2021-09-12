@@ -1,5 +1,8 @@
-<form class="picker-form">
-  <mat-form-field class="full-width" appearance="outline" *ngIf="!selectedUser">
+<form class="content-center">
+  <mat-form-field
+    appearance="outline"
+    *ngIf="!selectedUser && !preSelectedUserId"
+  >
     <mat-label>{{ title }}</mat-label>
     <input
       type="text"
@@ -7,6 +10,8 @@
       matInput
       [formControl]="searchParamControl"
       [matAutocomplete]="auto"
+      name="name"
+      autocomplete="off"
     />
     <mat-autocomplete
       #auto="matAutocomplete"
@@ -24,7 +29,7 @@
       ><span class="mat-error">{{ validationError }}</span></mat-hint
     >
   </mat-form-field>
-  <div *ngIf="selectedUser" class="card-container">
+  <div *ngIf="selectedUser" class="user-info-component">
     <div class="card mb-3">
       <div class="row">
         <div class="col-sm-12 col-md-5">
@@ -41,7 +46,7 @@
           <h5 class="m-0">{{ selectedUser.phoneNumber }}</h5>
         </div>
       </div>
-      <div class="content-center border-top">
+      <div class="content-center border-top" *ngIf="!preSelectedUserId">
         <choose-other (click)="chooseOther()"> Másikat választok </choose-other>
       </div>
     </div>

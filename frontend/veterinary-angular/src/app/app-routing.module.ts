@@ -1,3 +1,4 @@
+import { ListDoctorsComponent } from './components/manager/doctors/list-doctors/list-doctors.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AnimalListComponent } from './components/animal/animal-list/animal-list.component';
@@ -38,6 +39,11 @@ const routes: Routes = [
   {
     path: 'vaccines',
     component: ListVaccinesComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'doctors',
+    component: ListDoctorsComponent,
     canActivate: [AuthGuard],
   },
 ];

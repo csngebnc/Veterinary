@@ -32,6 +32,8 @@ using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Dal.Data;
 using Veterinary.Dal.Validation.ProblemDetails.Exceptions;
 using Veterinary.Domain.Entities;
+using Veterinary.Shared.Enums;
+using Veterinary.Shared.Extensions;
 
 namespace Veterinary.Api
 {
@@ -106,16 +108,16 @@ namespace Veterinary.Api
                     .RequireClaim("scope", "api-openid")
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
 
-                options.AddPolicy("Manager", policy => policy.RequireAuthenticatedUser()
-                    .RequireClaim(JwtClaimTypes.Role, "ManagerDoctor")
+                options.AddPolicy(RoleEnum.ManagerDoctor.GetDescription(), policy => policy.RequireAuthenticatedUser()
+                    .RequireClaim(JwtClaimTypes.Role, RoleEnum.ManagerDoctor.Value())
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
 
-                options.AddPolicy("Doctor", policy => policy.RequireAuthenticatedUser()
-                    .RequireClaim(JwtClaimTypes.Role, "ManagerDoctor", "NormalDoctor")
+                options.AddPolicy(RoleEnum.NormalDoctor.GetDescription(), policy => policy.RequireAuthenticatedUser()
+                    .RequireClaim(JwtClaimTypes.Role, RoleEnum.ManagerDoctor.Value(), RoleEnum.NormalDoctor.Value())
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
 
-                options.AddPolicy("User", policy => policy.RequireAuthenticatedUser()
-                    .RequireClaim(JwtClaimTypes.Role, "ManagerDoctor", "NormalDoctor", "User")
+                options.AddPolicy(RoleEnum.User.GetDescription(), policy => policy.RequireAuthenticatedUser()
+                    .RequireClaim(JwtClaimTypes.Role, RoleEnum.ManagerDoctor.Value(), RoleEnum.NormalDoctor.Value(), RoleEnum.User.Value())
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
 
                 options.DefaultPolicy = options.GetPolicy("api-openid");

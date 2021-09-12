@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Veterinary.Application.Services;
 using Veterinary.Application.Validation.ProblemDetails.Exceptions;
-using Veterinary.Domain.Constants;
+using Veterinary.Shared.Constants;
 using Veterinary.Domain.Entities.AnimalRepository;
 
 namespace Veterinary.Application.Features.AnimalFeatures.Commands
@@ -39,7 +39,7 @@ namespace Veterinary.Application.Features.AnimalFeatures.Commands
 
             if (photoService.RemovePhoto(animal.PhotoUrl))
             {
-                animal.PhotoUrl = UrlConstants.AnimalPlaceholderPhotoUrl;
+                animal.PhotoUrl = UrlConstants.PlaceholderImage;
                 await animalRepository.UpdateAsync(animal);
             }
 

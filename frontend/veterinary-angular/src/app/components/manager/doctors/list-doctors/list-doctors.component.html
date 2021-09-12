@@ -1,0 +1,106 @@
+<p>list-doctors works!</p>
+<div class="container mt-4">
+  <div class="row p-2">
+    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-1 main-text">
+      {{ "Orvosok" }}
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 content-end">
+      <button
+        mat-fab
+        color="primary"
+        class="me-2"
+        *ngIf="isAddActivated"
+        (click)="addDoctor()"
+      >
+        <mat-icon>check</mat-icon>
+      </button>
+      <button
+        mat-fab
+        color="primary"
+        class="me-2"
+        (click)="changeView()"
+        *ngIf="!isAddActivated"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+      <button
+        mat-fab
+        color="primary"
+        class="me-2"
+        (click)="resetView()"
+        *ngIf="isAddActivated"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="content-center my-3">
+    <div class="row add-doctor-form container" *ngIf="isAddActivated">
+      <div class="col-12 mt-3 content-center">
+        <app-user-picker
+          class="m-0 p-0"
+          [userIdsToRemove]="userIdsToRemove"
+          [preSelectedUserId]="editId"
+          (userIdSelected)="userSelected($event)"
+        ></app-user-picker>
+      </div>
+      <div class="col-12 mt-3 content-center">
+        <form [formGroup]="addDoctorForm">
+          <mat-form-field appearance="outline"
+            ><mat-label>Szerepkör:</mat-label>
+            <mat-select formControlName="roleName">
+              <mat-option [value]="'NormalDoctor'">Állatorvos</mat-option>
+              <mat-option [value]="'ManagerDoctor'">
+                Főorvos / adminisztrátor
+              </mat-option>
+            </mat-select></mat-form-field
+          >
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row content-center pb-4">
+    <ng-container *ngIf="dataSource?.data?.length > 0">
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef><b>Orvos neve</b></th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef><b>E-mail cím</b></th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.email }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef><b>Beosztás</b></th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.role | translateRole }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="button">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element" class="align-end text-end">
+            <button mat-icon-button (click)="editDoctor(element.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="removeDoctor(element.id)">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </ng-container>
+    <ng-container class="pt-2" *ngIf="dataSource?.data?.length === 0">
+      Nincs rögzítve egyetlen orvos sem.
+    </ng-container>
+  </div>
+</div>

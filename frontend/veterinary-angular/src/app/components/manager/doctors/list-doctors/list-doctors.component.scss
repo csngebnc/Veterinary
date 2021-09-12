@@ -1,0 +1,22 @@
+@import "../../../../../styles.scss";
+
+.main-text {
+  display: flex;
+  font-family: "Baloo";
+  align-items: center;
+  color: $text-color;
+  font-size: xx-large;
+}
+
+table {
+  width: 60%;
+}
+
+.add-doctor-form {
+  width: 50%;
+}
+
+.container {
+  width: 60%;
+  background-color: rgba(white, 0.85);
+}

@@ -1,19 +1,11 @@
 @import "../../../../styles.scss";
 
 img {
-  object-fit: contain;
-}
-
-.picker-form {
-  width: 50%;
-}
-
-.card-container {
-  width: 75%;
-}
-
-img {
   object-fit: scale-down;
+}
+
+.user-info-component {
+  width: 60%;
 }
 
 choose-other {

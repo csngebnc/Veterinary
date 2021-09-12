@@ -21,6 +21,10 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 export class UserPickerComponent implements OnInit, OnDestroy {
   @Input() title: string = 'Válassz egy felhasználót';
+  @Input() userIdsToRemove: string[];
+
+  @Input() preSelectedUserId: string;
+
   @Output() userIdSelected = new EventEmitter<string>();
 
   searchParamControl = new FormControl();
@@ -34,32 +38,48 @@ export class UserPickerComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.searchParamChanged = this.searchParamControl.valueChanges
-      .pipe(debounceTime(1200), distinctUntilChanged())
-      .subscribe(() => {
-        if (this.searchParamControl.value.length > 2) {
-          this.userService.searchUsers(this.searchParamControl.value).subscribe(
-            (result: VeterinaryUserDto[]) => {
-              this.options = result;
-              if (result.length === 0) {
-                this.userIdSelected.emit(this.searchParamControl.value);
-              }
-            },
-            (errors) => {
-              const error = JSON.parse(errors['response']);
-              this.validationError = error.errors.SearchParam[0];
-              console.log(this.validationError);
-            }
-          );
-        } else if (this.searchParamControl.value.length === 0) {
-          this.validationError = '';
-          this.options = [];
-        }
-      });
+    if (this.preSelectedUserId) {
+      this.userService
+        .getUser(this.preSelectedUserId)
+        .subscribe((user: VeterinaryUserDto) => {
+          this.selectedUser = user;
+        });
+    } else {
+      this.searchParamChanged = this.searchParamControl.valueChanges
+        .pipe(debounceTime(1200), distinctUntilChanged())
+        .subscribe(() => {
+          if (this.searchParamControl.value.length > 2) {
+            this.userService
+              .searchUsers(this.searchParamControl.value)
+              .subscribe(
+                (result: VeterinaryUserDto[]) => {
+                  this.options = result;
+
+                  if (this.userIdsToRemove) {
+                    this.options = this.options.filter(
+                      (opt) => this.userIdsToRemove.indexOf(opt.id) === -1
+                    );
+                  }
+
+                  if (result.length === 0) {
+                    this.userIdSelected.emit(this.searchParamControl.value);
+                  }
+                },
+                (errors) => {
+                  const error = JSON.parse(errors['response']);
+                  this.validationError = error.errors.SearchParam[0];
+                }
+              );
+          } else if (this.searchParamControl.value.length === 0) {
+            this.validationError = '';
+            this.options = [];
+          }
+        });
+    }
   }
 
   ngOnDestroy(): void {
-    this.searchParamChanged.unsubscribe();
+    this.searchParamChanged?.unsubscribe();
   }
 
   getDisplayText(id: string) {

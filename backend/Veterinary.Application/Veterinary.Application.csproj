@@ -12,6 +12,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Veterinary.Dal\Veterinary.Dal.csproj" />
+		<ProjectReference Include="..\Veterinary.Shared\Veterinary.Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

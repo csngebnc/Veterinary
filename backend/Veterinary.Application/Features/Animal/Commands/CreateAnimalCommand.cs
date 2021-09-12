@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Veterinary.Application.Services;
 using Veterinary.Dal.Data;
-using Veterinary.Domain.Constants;
+using Veterinary.Shared.Constants;
 using Veterinary.Domain.Entities.AnimalEntities;
 using Veterinary.Domain.Entities.AnimalRepository;
 using static Veterinary.Application.Features.AnimalFeatures.Commands.CreateAnimalCommand;
@@ -54,7 +54,7 @@ namespace Veterinary.Application.Features.AnimalFeatures.Commands
                 SpeciesId = request.Data.SpeciesId,
                 OwnerId = request.UserId,
                 PhotoUrl = request.Data.Photo == null ?
-                        UrlConstants.AnimalPlaceholderPhotoUrl
+                        UrlConstants.PlaceholderImage
                         : await photoService.UploadPhoto("Animals", request.UserId.ToString(), request.Data.Photo)
             };
 
