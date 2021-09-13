@@ -28,9 +28,7 @@
         </li>
         <ng-container *ngIf="getRole() === 'User'">
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link" [routerLink]="['/animals', getUserId()]"
-              >Állataim</a
-            >
+            <a class="nav-link" [routerLink]="['/animals', getUserId()]">Állataim</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link" [routerLink]="['/']">Időpontfoglalás</a>
@@ -43,9 +41,7 @@
           </li>
         </ng-container>
 
-        <ng-container
-          *ngIf="getRole() === 'NormalDoctor' || getRole() === 'ManagerDoctor'"
-        >
+        <ng-container *ngIf="getRole() === 'NormalDoctor' || getRole() === 'ManagerDoctor'">
           <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link" [routerLink]="['/']">Új kórlap</a>
           </li>
@@ -62,9 +58,7 @@
               Gazdi menü
             </a>
             <div class="dropdown-menu">
-              <a class="nav-link" [routerLink]="['/animals', getUserId()]"
-                >Állataim</a
-              >
+              <a class="nav-link" [routerLink]="['/animals', getUserId()]">Állataim</a>
               <a class="nav-link" [routerLink]="['/']">Időpontfoglalás</a>
               <a class="nav-link" [routerLink]="['/']">Időpontjaim</a>
               <a class="nav-link" [routerLink]="['/']">Kórlapok</a>
@@ -101,7 +95,8 @@
               <a class="nav-link" [routerLink]="['/doctors']">Orvosok</a>
               <a class="nav-link" [routerLink]="['/species']">Állatfajták</a>
               <a class="nav-link" [routerLink]="['/vaccines']">Oltások</a>
-              <a class="nav-link" [routerLink]="['/']">Kórlap terápiák</a>
+              <a class="nav-link" [routerLink]="['/medications']">Gyógyszerek</a>
+              <a class="nav-link" [routerLink]="['/therapias']">Szolgáltatások</a>
             </div>
           </li>
         </ng-container>

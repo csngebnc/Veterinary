@@ -1,0 +1,56 @@
+<div class="container">
+  <form
+    class="p-3"
+    [formGroup]="editMedicationForm"
+    (ngSubmit)="editMedicationForm.valid && update()"
+    autocomplete="off"
+  >
+    <div class="d-flex justify-content-between">
+      <h2 class="mb-0">Gyógyszer szerkesztése ({{ medication.name }})</h2>
+      <h2 class="mb-0"><i class="fas fa-pills"></i></h2>
+    </div>
+    <hr />
+    <mat-form-field class="full-width">
+      <mat-label>Gyógyszer neve:</mat-label>
+      <input matInput formControlName="name" required />
+      <mat-error *ngIf="editMedicationForm.get('name').invalid">A mező nem lehet üres.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Mennyiség egy csomagban:</mat-label>
+      <input type="number" matInput formControlName="unit" required />
+      <mat-error *ngIf="editMedicationForm.get('unit').invalid"
+        >A mennyiségnek egész számnak kell lennie.</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Mennyiség megnevezése:</mat-label>
+      <input matInput formControlName="unitName" required id="unit" />
+      <mat-error *ngIf="editMedicationForm.get('unitName').invalid"
+        >A mező nem lehet üres.</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Egységár:</mat-label>
+      <input type="number" matInput formControlName="pricePerUnit" required />
+      <mat-error *ngIf="editMedicationForm.get('pricePerUnit').invalid"
+        >Az egységárnak egész számnak kell lennie.</mat-error
+      >
+    </mat-form-field>
+
+    <div class="content-center form-group text-center">
+      <button
+        mat-raised-button
+        [disabled]="!editMedicationForm.valid"
+        class="mt-3 me-2"
+        type="submit"
+      >
+        Mentés
+      </button>
+
+      <button type="button" mat-button class="mt-3" (click)="close()">Mégsem</button>
+    </div>
+  </form>
+</div>

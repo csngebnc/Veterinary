@@ -28,12 +28,12 @@ namespace Veterinary.Dal.Repositories.AnimalSpeciesRepository
             }
 
             var canBeDeleted = await GetAllAsQueryable()
-                .Include(x => x.Animals)
                 .Where(x => x.Id == id)
+                .Include(x => x.Animals)
                 .Select(x => x.Animals)
-                .CountAsync();
+                .SingleAsync();
 
-            return canBeDeleted == 0;
+            return canBeDeleted.Count == 0;
         }
     }
 }

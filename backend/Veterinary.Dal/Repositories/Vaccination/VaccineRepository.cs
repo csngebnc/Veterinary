@@ -27,11 +27,12 @@ namespace Veterinary.Dal.Repositories.Vaccination
             }
 
             var canBeDeleted = await GetAllAsQueryable()
+                .Where(vaccine => vaccine.Id == id)
                 .Include(x => x.VaccinationRecords)
                 .Select(x => x.VaccinationRecords)
-                .CountAsync();
+                .SingleAsync();
 
-            return canBeDeleted == 0;
+            return canBeDeleted.Count == 0;
         }
     }
 }

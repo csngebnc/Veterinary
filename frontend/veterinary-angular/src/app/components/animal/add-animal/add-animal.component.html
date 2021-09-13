@@ -13,9 +13,7 @@
     <mat-form-field class="full-width">
       <mat-label>Állat neve:</mat-label>
       <input matInput formControlName="name" required />
-      <mat-error *ngIf="addAnimalForm.get('name').invalid"
-        >Az állat neve nem lehet üres.</mat-error
-      >
+      <mat-error *ngIf="addAnimalForm.get('name').invalid">Az állat neve nem lehet üres.</mat-error>
     </mat-form-field>
 
     <mat-form-field class="full-width">
@@ -32,8 +30,7 @@
       <mat-error *ngIf="addAnimalForm.get('dateOfBirth').hasError('required')"
         >Születési dátum megadása kötelező.</mat-error
       >
-      <mat-error
-        *ngIf="addAnimalForm.get('dateOfBirth').hasError('matDatepickerMax')"
+      <mat-error *ngIf="addAnimalForm.get('dateOfBirth').hasError('matDatepickerMax')"
         >A születési dátum nem lehet jövőbeli.</mat-error
       >
     </mat-form-field>
@@ -41,9 +38,7 @@
     <mat-form-field class="full-width">
       <mat-label>Állat fajtája:</mat-label>
       <mat-select formControlName="speciesid">
-        <mat-option *ngFor="let spec of species" [value]="spec.id">{{
-          spec.name
-        }}</mat-option>
+        <mat-option *ngFor="let spec of species" [value]="spec.id">{{ spec.name }}</mat-option>
       </mat-select>
     </mat-form-field>
 

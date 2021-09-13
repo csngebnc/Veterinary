@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Veterinary.Domain.Entities;
 using Veterinary.Domain.Entities.AnimalEntities;
+using Veterinary.Domain.Entities.MedicationEntities;
+using Veterinary.Domain.Entities.TherapiaEntities;
+using Veterinary.Domain.Entities.Vaccination;
 
 namespace Veterinary.Dal.Data
 {
@@ -11,6 +14,11 @@ namespace Veterinary.Dal.Data
     {
         public DbSet<Animal> Animals { get; set; }
         public DbSet<AnimalSpecies> AnimalSpecies { get; set; }
+
+        public DbSet<Vaccine> Vaccines {  get; set; }
+        public DbSet<Medication> Medications {  get; set; }
+        public DbSet<Therapia> Therapias {  get; set; }
+
         public VeterinaryDbContext(DbContextOptions options) : base(options)
         {
         }

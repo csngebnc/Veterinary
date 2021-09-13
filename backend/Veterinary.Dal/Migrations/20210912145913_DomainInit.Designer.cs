@@ -10,7 +10,7 @@ using Veterinary.Dal.Data;
 namespace Veterinary.Dal.Migrations
 {
     [DbContext(typeof(VeterinaryDbContext))]
-    [Migration("20210907145244_DomainInit")]
+    [Migration("20210912145913_DomainInit")]
     partial class DomainInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -405,7 +405,7 @@ namespace Veterinary.Dal.Migrations
                     b.ToTable("MedicalRecordPhoto");
                 });
 
-            modelBuilder.Entity("Veterinary.Domain.Entities.TherapiaEntities.Therapia", b =>
+            modelBuilder.Entity("Veterinary.Domain.Entities.MedicationEntities.Medication", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -428,7 +428,51 @@ namespace Veterinary.Dal.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Therapia");
+                    b.ToTable("Medications");
+                });
+
+            modelBuilder.Entity("Veterinary.Domain.Entities.MedicationEntities.MedicationRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("MedicalRecordId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MedicineId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicalRecordId");
+
+                    b.HasIndex("MedicineId");
+
+                    b.ToTable("MedicationRecord");
+                });
+
+            modelBuilder.Entity("Veterinary.Domain.Entities.TherapiaEntities.Therapia", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsInactive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Therapias");
                 });
 
             modelBuilder.Entity("Veterinary.Domain.Entities.TherapiaEntities.TherapiaRecord", b =>
@@ -469,7 +513,7 @@ namespace Veterinary.Dal.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vaccine");
+                    b.ToTable("Vaccines");
                 });
 
             modelBuilder.Entity("Veterinary.Domain.Entities.Vaccination.VaccineRecord", b =>
@@ -745,6 +789,25 @@ namespace Veterinary.Dal.Migrations
                     b.Navigation("MedicalRecord");
                 });
 
+            modelBuilder.Entity("Veterinary.Domain.Entities.MedicationEntities.MedicationRecord", b =>
+                {
+                    b.HasOne("Veterinary.Domain.Entities.MedicalRecordEntities.MedicalRecord", "MedicalRecord")
+                        .WithMany()
+                        .HasForeignKey("MedicalRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Veterinary.Domain.Entities.MedicationEntities.Medication", "Medicine")
+                        .WithMany("MedicineRecords")
+                        .HasForeignKey("MedicineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MedicalRecord");
+
+                    b.Navigation("Medicine");
+                });
+
             modelBuilder.Entity("Veterinary.Domain.Entities.TherapiaEntities.TherapiaRecord", b =>
                 {
                     b.HasOne("Veterinary.Domain.Entities.MedicalRecordEntities.MedicalRecord", "MedicalRecord")
@@ -807,6 +870,11 @@ namespace Veterinary.Dal.Migrations
                     b.Navigation("Photos");
 
                     b.Navigation("TherapiaRecords");
+                });
+
+            modelBuilder.Entity("Veterinary.Domain.Entities.MedicationEntities.Medication", b =>
+                {
+                    b.Navigation("MedicineRecords");
                 });
 
             modelBuilder.Entity("Veterinary.Domain.Entities.TherapiaEntities.Therapia", b =>

@@ -63,7 +63,7 @@ namespace Veterinary.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Therapia",
+                name: "Medications",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -75,11 +75,25 @@ namespace Veterinary.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Therapia", x => x.Id);
+                    table.PrimaryKey("PK_Medications", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Vaccine",
+                name: "Therapias",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    IsInactive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Therapias", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Vaccines",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -88,7 +102,7 @@ namespace Veterinary.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vaccine", x => x.Id);
+                    table.PrimaryKey("PK_Vaccines", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -327,9 +341,9 @@ namespace Veterinary.Dal.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_VaccineRecord_Vaccine_VaccineId",
+                        name: "FK_VaccineRecord_Vaccines_VaccineId",
                         column: x => x.VaccineId,
-                        principalTable: "Vaccine",
+                        principalTable: "Vaccines",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -422,6 +436,32 @@ namespace Veterinary.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MedicationRecord",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    MedicalRecordId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MedicineId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MedicationRecord", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MedicationRecord_MedicalRecord_MedicalRecordId",
+                        column: x => x.MedicalRecordId,
+                        principalTable: "MedicalRecord",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MedicationRecord_Medications_MedicineId",
+                        column: x => x.MedicineId,
+                        principalTable: "Medications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TherapiaRecord",
                 columns: table => new
                 {
@@ -440,9 +480,9 @@ namespace Veterinary.Dal.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TherapiaRecord_Therapia_TherapiaId",
+                        name: "FK_TherapiaRecord_Therapias_TherapiaId",
                         column: x => x.TherapiaId,
-                        principalTable: "Therapia",
+                        principalTable: "Therapias",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -542,6 +582,16 @@ namespace Veterinary.Dal.Migrations
                 column: "MedicalRecordId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MedicationRecord_MedicalRecordId",
+                table: "MedicationRecord",
+                column: "MedicalRecordId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MedicationRecord_MedicineId",
+                table: "MedicationRecord",
+                column: "MedicineId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TherapiaRecord_MedicalRecordId",
                 table: "TherapiaRecord",
                 column: "MedicalRecordId");
@@ -599,6 +649,9 @@ namespace Veterinary.Dal.Migrations
                 name: "MedicalRecordPhoto");
 
             migrationBuilder.DropTable(
+                name: "MedicationRecord");
+
+            migrationBuilder.DropTable(
                 name: "TherapiaRecord");
 
             migrationBuilder.DropTable(
@@ -611,16 +664,19 @@ namespace Veterinary.Dal.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Medications");
+
+            migrationBuilder.DropTable(
                 name: "MedicalRecord");
 
             migrationBuilder.DropTable(
-                name: "Therapia");
+                name: "Therapias");
 
             migrationBuilder.DropTable(
                 name: "Treatment");
 
             migrationBuilder.DropTable(
-                name: "Vaccine");
+                name: "Vaccines");
 
             migrationBuilder.DropTable(
                 name: "Animals");
