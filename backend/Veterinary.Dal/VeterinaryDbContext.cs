@@ -19,6 +19,8 @@ namespace Veterinary.Dal.Data
         public DbSet<Medication> Medications {  get; set; }
         public DbSet<Therapia> Therapias {  get; set; }
 
+        public DbSet<VaccineRecord> VaccineRecords { get; set; }
+
         public VeterinaryDbContext(DbContextOptions options) : base(options)
         {
         }

@@ -54,7 +54,13 @@ namespace Veterinary.Dal.Repositories
 
         public async Task DeleteAsync(Guid id)
         {
-            T entity = Table.Find(id);
+            T entity = await Table.FindAsync(id);
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException();
+            }
+
             Table.Remove(entity);
             await context.SaveChangesAsync();
         }

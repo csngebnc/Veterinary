@@ -1,0 +1,44 @@
+<div>
+  <form class="content-center">
+    <mat-form-field appearance="outline" *ngIf="!selectedVaccine && !preSelectedVaccineId">
+      <mat-label>{{ title }}</mat-label>
+      <input
+        type="text"
+        placeholder="Kezdj el gépelni..."
+        matInput
+        [formControl]="searchParamControl"
+        [matAutocomplete]="auto"
+        name="name"
+        autocomplete="off"
+      />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        [displayWith]="getDisplayText.bind(this)"
+        (optionSelected)="selectOption($event)"
+      >
+        <mat-option *ngFor="let option of options" [value]="option.id">
+          <h4 class="m-0 p-0">
+            <b>{{ option.name }}</b>
+          </h4>
+          <h5 class="m-0 p-0">{{ option.email }}</h5>
+        </mat-option>
+      </mat-autocomplete>
+      <mat-hint *ngIf="validationError"
+        ><span class="mat-error">{{ validationError }}</span></mat-hint
+      >
+    </mat-form-field>
+    <div *ngIf="selectedVaccine" class="vaccine-info-component">
+      <div class="border mb-3">
+        <div class="row">
+          <div class="col-12 p-2">
+            <h4 class="card-title m-0 text-center">Kiválasztott oltás:</h4>
+            <h4 class="m-0 text-center">{{ selectedVaccine.name }}</h4>
+          </div>
+        </div>
+        <div class="content-center border-top" *ngIf="!preSelectedVaccineId">
+          <choose-other (click)="chooseOther()"> Másikat választok </choose-other>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

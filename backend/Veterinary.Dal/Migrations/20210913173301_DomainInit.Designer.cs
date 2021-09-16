@@ -10,7 +10,7 @@ using Veterinary.Dal.Data;
 namespace Veterinary.Dal.Migrations
 {
     [DbContext(typeof(VeterinaryDbContext))]
-    [Migration("20210912145913_DomainInit")]
+    [Migration("20210913173301_DomainInit")]
     partial class DomainInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -537,7 +537,7 @@ namespace Veterinary.Dal.Migrations
 
                     b.HasIndex("VaccineId");
 
-                    b.ToTable("VaccineRecord");
+                    b.ToTable("VaccineRecords");
                 });
 
             modelBuilder.Entity("Veterinary.Domain.Entities.VeterinaryUser", b =>

@@ -323,7 +323,7 @@ namespace Veterinary.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "VaccineRecord",
+                name: "VaccineRecords",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -333,15 +333,15 @@ namespace Veterinary.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_VaccineRecord", x => x.Id);
+                    table.PrimaryKey("PK_VaccineRecords", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_VaccineRecord_Animals_AnimalId",
+                        name: "FK_VaccineRecords_Animals_AnimalId",
                         column: x => x.AnimalId,
                         principalTable: "Animals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_VaccineRecord_Vaccines_VaccineId",
+                        name: "FK_VaccineRecords_Vaccines_VaccineId",
                         column: x => x.VaccineId,
                         principalTable: "Vaccines",
                         principalColumn: "Id",
@@ -612,13 +612,13 @@ namespace Veterinary.Dal.Migrations
                 column: "TreatmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VaccineRecord_AnimalId",
-                table: "VaccineRecord",
+                name: "IX_VaccineRecords_AnimalId",
+                table: "VaccineRecords",
                 column: "AnimalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VaccineRecord_VaccineId",
-                table: "VaccineRecord",
+                name: "IX_VaccineRecords_VaccineId",
+                table: "VaccineRecords",
                 column: "VaccineId");
         }
 
@@ -658,7 +658,7 @@ namespace Veterinary.Dal.Migrations
                 name: "TreatmentInterval");
 
             migrationBuilder.DropTable(
-                name: "VaccineRecord");
+                name: "VaccineRecords");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -10,19 +10,19 @@ $normal-background-color: rgba(white, 0.85);
 $border-color: rgb(224, 223, 223);
 
 @font-face {
-  font-family: "Baloo";
-  src: url("./assets/fonts/Baloo-Regular.ttf") format("truetype");
+  font-family: 'Baloo';
+  src: url('./assets/fonts/Baloo-Regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: "OpenSans";
-  src: url("./assets/fonts/OpenSans-Regular.ttf") format("truetype");
+  font-family: 'OpenSans';
+  src: url('./assets/fonts/OpenSans-Regular.ttf') format('truetype');
 }
 
 body {
   height: 100%;
   margin: 0;
-  background-image: url("./assets/background.png");
+  background-image: url('./assets/background.png');
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center bottom;
@@ -41,7 +41,7 @@ body {
 
 .content {
   position: absolute;
-  font-family: "Baloo";
+  font-family: 'Baloo';
   background-color: $normal-background-color;
   left: 50%;
   top: 40%;

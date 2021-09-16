@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -16,8 +17,8 @@ namespace Veterinary.Domain.Entities.Vaccination
         Task UpdateAsync(Vaccine entity);
         Task DeleteAsync(Guid id);
         Task<bool> AnyByIdAsync(Guid id);
-
         Task<bool> AnyByNameAsync(string name);
         Task<bool> CanBeDeleted(Guid id);
+        Task<List<Vaccine>> Search(string param);
     }
 }

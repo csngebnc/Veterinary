@@ -42,6 +42,10 @@ import { EditMedicationComponent } from './components/manager/medications/edit-m
 import { ListTherapiasComponent } from './components/manager/therapias/list-therapias/list-therapias.component'
 import { AddTherapiaComponent } from './components/manager/therapias/add-therapia/add-therapia.component'
 import { EditTherapiaComponent } from './components/manager/therapias/edit-therapia/edit-therapia.component'
+import { ListVaccineRecordsComponent } from './components/animal/vaccine-records/list-vaccine-records/list-vaccine-records.component'
+import { AddVaccineRecordComponent } from './components/vaccine-records/add-vaccine-record/add-vaccine-record.component'
+import { EditVaccineRecordComponent } from './components/vaccine-records/edit-vaccine-record/edit-vaccine-record.component';
+import { VaccinePickerComponent } from './components/_partials/vaccine-picker/vaccine-picker.component'
 
 export function initializeApp(oauthService: OAuthService): any {
   return async () => {
@@ -89,6 +93,10 @@ export function initializeApp(oauthService: OAuthService): any {
     ListTherapiasComponent,
     AddTherapiaComponent,
     EditTherapiaComponent,
+    ListVaccineRecordsComponent,
+    AddVaccineRecordComponent,
+    EditVaccineRecordComponent,
+    VaccinePickerComponent,
   ],
   imports: [
     MaterialDesignModule,

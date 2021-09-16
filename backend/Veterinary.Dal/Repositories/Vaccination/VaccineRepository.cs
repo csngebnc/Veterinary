@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Veterinary.Dal.Data;
@@ -33,6 +34,14 @@ namespace Veterinary.Dal.Repositories.Vaccination
                 .SingleAsync();
 
             return canBeDeleted.Count == 0;
+        }
+
+        public async Task<List<Vaccine>> Search(string param)
+        {
+            var result = await Table.Where(v => v.Name.ToLower().Contains(param) && !v.IsInactive)
+                .ToListAsync();
+
+            return result;
         }
     }
 }

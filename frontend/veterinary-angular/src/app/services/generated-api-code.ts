@@ -1241,8 +1241,10 @@ export class VaccinesService {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getVaccines(): Observable<VaccineDto[]> {
-        let url_ = this.baseUrl + "/api/vaccines";
+    searchVaccines(param: string | null | undefined): Observable<VaccineSearchResultDto[]> {
+        let url_ = this.baseUrl + "/api/vaccines/search?";
+        if (param !== undefined && param !== null)
+            url_ += "param=" + encodeURIComponent("" + param) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1254,20 +1256,20 @@ export class VaccinesService {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetVaccines(response_);
+            return this.processSearchVaccines(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetVaccines(<any>response_);
+                    return this.processSearchVaccines(<any>response_);
                 } catch (e) {
-                    return <Observable<VaccineDto[]>><any>_observableThrow(e);
+                    return <Observable<VaccineSearchResultDto[]>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<VaccineDto[]>><any>_observableThrow(response_);
+                return <Observable<VaccineSearchResultDto[]>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetVaccines(response: HttpResponseBase): Observable<VaccineDto[]> {
+    protected processSearchVaccines(response: HttpResponseBase): Observable<VaccineSearchResultDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1277,7 +1279,7 @@ export class VaccinesService {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
-            result200 = _responseText === "" ? null : <VaccineDto[]>JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = _responseText === "" ? null : <VaccineSearchResultDto[]>JSON.parse(_responseText, this.jsonParseReviver);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1285,7 +1287,58 @@ export class VaccinesService {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<VaccineDto[]>(<any>null);
+        return _observableOf<VaccineSearchResultDto[]>(<any>null);
+    }
+
+    getVaccine(vaccineId: string | undefined): Observable<VaccineDto> {
+        let url_ = this.baseUrl + "/api/vaccines?";
+        if (vaccineId === null)
+            throw new Error("The parameter 'vaccineId' cannot be null.");
+        else if (vaccineId !== undefined)
+            url_ += "vaccineId=" + encodeURIComponent("" + vaccineId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetVaccine(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetVaccine(<any>response_);
+                } catch (e) {
+                    return <Observable<VaccineDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<VaccineDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetVaccine(response: HttpResponseBase): Observable<VaccineDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <VaccineDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<VaccineDto>(<any>null);
     }
 
     createVaccine(name: string | null | undefined): Observable<VaccineDto> {
@@ -1463,6 +1516,308 @@ export class VaccinesService {
     }
 
     protected processDeleteVaccine(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    getVaccines(): Observable<VaccineDto[]> {
+        let url_ = this.baseUrl + "/api/vaccines/list";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetVaccines(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetVaccines(<any>response_);
+                } catch (e) {
+                    return <Observable<VaccineDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<VaccineDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetVaccines(response: HttpResponseBase): Observable<VaccineDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <VaccineDto[]>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<VaccineDto[]>(<any>null);
+    }
+
+    getVaccineRecords(animalId: string, pageSize: number | undefined, pageIndex: number | undefined): Observable<PagedListOfVaccineRecordDto> {
+        let url_ = this.baseUrl + "/api/vaccines/records/{animalId}?";
+        if (animalId === undefined || animalId === null)
+            throw new Error("The parameter 'animalId' must be defined.");
+        url_ = url_.replace("{animalId}", encodeURIComponent("" + animalId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetVaccineRecords(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetVaccineRecords(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedListOfVaccineRecordDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedListOfVaccineRecordDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetVaccineRecords(response: HttpResponseBase): Observable<PagedListOfVaccineRecordDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <PagedListOfVaccineRecordDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedListOfVaccineRecordDto>(<any>null);
+    }
+
+    getVaccineRecord(recordId: string): Observable<VaccineRecordDto> {
+        let url_ = this.baseUrl + "/api/vaccines/record/{recordId}";
+        if (recordId === undefined || recordId === null)
+            throw new Error("The parameter 'recordId' must be defined.");
+        url_ = url_.replace("{recordId}", encodeURIComponent("" + recordId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetVaccineRecord(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetVaccineRecord(<any>response_);
+                } catch (e) {
+                    return <Observable<VaccineRecordDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<VaccineRecordDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetVaccineRecord(response: HttpResponseBase): Observable<VaccineRecordDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <VaccineRecordDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<VaccineRecordDto>(<any>null);
+    }
+
+    createVaccineRecord(data: CreateVaccineRecordCommandData): Observable<VaccineRecordDto> {
+        let url_ = this.baseUrl + "/api/vaccines/record";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(data);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateVaccineRecord(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateVaccineRecord(<any>response_);
+                } catch (e) {
+                    return <Observable<VaccineRecordDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<VaccineRecordDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateVaccineRecord(response: HttpResponseBase): Observable<VaccineRecordDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <VaccineRecordDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<VaccineRecordDto>(<any>null);
+    }
+
+    updateVaccineRecord(data: UpdateVaccineRecordCommandData): Observable<void> {
+        let url_ = this.baseUrl + "/api/vaccines/record";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(data);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateVaccineRecord(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateVaccineRecord(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateVaccineRecord(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    deleteVaccineRecord(vaccineRecordId: string | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/vaccines/record?";
+        if (vaccineRecordId === null)
+            throw new Error("The parameter 'vaccineRecordId' cannot be null.");
+        else if (vaccineRecordId !== undefined)
+            url_ += "vaccineRecordId=" + encodeURIComponent("" + vaccineRecordId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteVaccineRecord(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteVaccineRecord(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteVaccineRecord(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1797,6 +2152,11 @@ export interface UpdateTherapiaCommandData {
     price?: number;
 }
 
+export interface VaccineSearchResultDto {
+    id?: string;
+    name?: string | undefined;
+}
+
 export interface VaccineDto {
     id?: string;
     name?: string | undefined;
@@ -1806,6 +2166,35 @@ export interface VaccineDto {
 export interface UpdateVaccineCommand {
     id?: string;
     name?: string | undefined;
+}
+
+export interface PagedListOfVaccineRecordDto {
+    pageIndex?: number;
+    pageSize?: number;
+    totalCount?: number;
+    items?: VaccineRecordDto[] | undefined;
+}
+
+export interface VaccineRecordDto {
+    id?: string;
+    date?: Date;
+    vaccineId?: string;
+    vaccineName?: string | undefined;
+    animalId?: string;
+    animalName?: string | undefined;
+}
+
+export interface CreateVaccineRecordCommandData {
+    date?: Date;
+    animalId?: string;
+    vaccineId?: string;
+}
+
+export interface UpdateVaccineRecordCommandData {
+    id?: string;
+    date?: Date;
+    animalId?: string;
+    vaccineId?: string;
 }
 
 export interface VeterinaryUserDto {

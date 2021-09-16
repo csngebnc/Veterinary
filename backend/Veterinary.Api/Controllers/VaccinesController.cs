@@ -1,15 +1,16 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Veterinary.Api.Common;
 using Veterinary.Api.Common.BaseControllers;
+using Veterinary.Application.Abstractions;
 using Veterinary.Application.Features.VaccineFeatures.Commands;
 using Veterinary.Application.Features.VaccineFeatures.Queries;
+using Veterinary.Application.Features.VaccineRecordFeatures.Commands;
+using Veterinary.Application.Features.VaccineRecordFeatures.Queries;
 using Veterinary.Application.Services;
 using Veterinary.Application.Shared.Dtos;
 
@@ -28,10 +29,24 @@ namespace Veterinary.Api.Controllers
         }
 
         [Authorize(Policy = "User")]
-        [HttpGet]
-        public Task<List<VaccineDto>> GetVaccines()
+        [HttpGet("search")]
+        public async Task<List<VaccineSearchResultDto>> SearchVaccines(string param)
         {
-            return mediator.Send(new GetVaccinesQuery());
+            return await mediator.Send(new SearchVaccineQuery { SearchParam = param });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpGet]
+        public async Task<VaccineDto> GetVaccine(Guid vaccineId)
+        {
+            return await mediator.Send(new GetVaccineQuery { VaccineId = vaccineId });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpGet("list")]
+        public async Task<List<VaccineDto>> GetVaccines()
+        {
+            return await mediator.Send(new GetVaccinesQuery());
         }
 
         [Authorize(Policy = "Manager")]
@@ -68,6 +83,57 @@ namespace Veterinary.Api.Controllers
             await mediator.Send(new DeleteVaccineCommand
             {
                 VaccineId = vaccineId
+            });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpGet("records/{animalId}")]
+        public async Task<PagedList<VaccineRecordDto>> GetVaccineRecords(Guid animalId, [FromQuery] PageData pageData)
+        {
+            return await mediator.Send(new GetAnimalVaccineRecordsQuery
+            {
+                AnimalId = animalId,
+                PageData = pageData
+            });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpGet("record/{recordId}")]
+        public async Task<VaccineRecordDto> GetVaccineRecord(Guid recordId)
+        {
+            return await mediator.Send(new GetVaccineRecordQuery
+            {
+                VaccineRecordId = recordId
+            });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpPost("record")]
+        public async Task<VaccineRecordDto> CreateVaccineRecord(CreateVaccineRecordCommandData data)
+        {
+            return await mediator.Send(new CreateVaccineRecordCommand
+            {
+                Data = data
+            });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpPut("record")]
+        public async Task UpdateVaccineRecord(UpdateVaccineRecordCommandData data)
+        {
+            await mediator.Send(new UpdateVaccineRecordCommand
+            {
+                Data = data
+            });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpDelete("record")]
+        public async Task DeleteVaccineRecord(Guid vaccineRecordId)
+        {
+            await mediator.Send(new DeleteVaccineRecordCommand
+            {
+                RecordId = vaccineRecordId
             });
         }
     }

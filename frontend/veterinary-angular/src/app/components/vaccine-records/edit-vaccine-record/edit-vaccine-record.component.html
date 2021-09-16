@@ -1,0 +1,45 @@
+<div class="container p-4" *ngIf="editVaccineRecordForm">
+  <div class="d-flex justify-content-center" style="width: 100%">
+    <h1>{{ record.animalName }} oltásának szerkesztése</h1>
+  </div>
+  <form>
+    <div class="row">
+      <div class="col-12">
+        <app-vaccine-picker
+          class="mx-4 px-4"
+          [preSelectedVaccineId]="record.vaccineId"
+          (vaccineSelected)="vaccineSelected($event)"
+        ></app-vaccine-picker>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <mat-form-field class="w-100 px-4 mx-4">
+        <mat-label>Oltás dátuma:</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          [max]="maxDate"
+          [formControl]="editVaccineRecordForm.controls['date']"
+          required
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="editVaccineRecordForm.get('date').invalid"
+          >Az oltás dátumának megadása kötelező.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <button
+        (click)="save()"
+        mat-raised-button
+        color="primary"
+        [disabled]="!editVaccineRecordForm.valid"
+      >
+        Mentés
+      </button>
+    </div>
+  </form>
+</div>

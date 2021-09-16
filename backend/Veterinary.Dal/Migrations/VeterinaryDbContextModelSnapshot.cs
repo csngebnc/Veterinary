@@ -535,7 +535,7 @@ namespace Veterinary.Dal.Migrations
 
                     b.HasIndex("VaccineId");
 
-                    b.ToTable("VaccineRecord");
+                    b.ToTable("VaccineRecords");
                 });
 
             modelBuilder.Entity("Veterinary.Domain.Entities.VeterinaryUser", b =>

@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AnimalDto, AnimalService } from 'src/app/services/generated-api-code';
-import { TokenService } from 'src/app/services/token.service';
+import { ModalService } from 'src/app/services/modal.service'
+import { ListVaccineRecordsComponent } from './../../vaccine-records/list-vaccine-records/list-vaccine-records.component'
+import { Component, OnInit } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { AnimalDto, AnimalService } from 'src/app/services/generated-api-code'
+import { TokenService } from 'src/app/services/token.service'
 
 @Component({
   selector: 'app-list-medical-records',
@@ -13,11 +15,11 @@ export class ListMedicalRecordsComponent implements OnInit {
   constructor(
     private animalService: AnimalService,
     private route: ActivatedRoute,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     private tokenService: TokenService
   ) {}
 
-  animal: AnimalDto;
+  animal: AnimalDto
   medicalRecords: any[] = [
     {
       id: 1,
@@ -29,18 +31,18 @@ export class ListMedicalRecordsComponent implements OnInit {
       therapiaRecords: [],
       photos: [],
     },
-  ];
+  ]
 
   ngOnInit(): void {
-    const animalId = this.route.snapshot.paramMap.get('animalid');
+    const animalId = this.route.snapshot.paramMap.get('animalid')
     this.animalService.getAnimal(animalId).subscribe((animal: AnimalDto) => {
-      this.animal = animal;
+      this.animal = animal
       // TODO: Load MedicalRecords
       // TODO: Pagination
-    });
+    })
   }
 
   openVaccineRecordsDialog(): void {
-    // TODO
+    this.modalService.openModal(ListVaccineRecordsComponent, () => {}, { animalId: this.animal.id })
   }
 }
