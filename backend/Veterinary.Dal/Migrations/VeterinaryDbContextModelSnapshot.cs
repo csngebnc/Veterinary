@@ -306,7 +306,7 @@ namespace Veterinary.Dal.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Treatment");
+                    b.ToTable("Treatments");
                 });
 
             modelBuilder.Entity("Veterinary.Domain.Entities.Doctor.TreatmentEntities.TreatmentInterval", b =>
@@ -340,7 +340,7 @@ namespace Veterinary.Dal.Migrations
 
                     b.HasIndex("TreatmentId");
 
-                    b.ToTable("TreatmentInterval");
+                    b.ToTable("TreatmentIntervals");
                 });
 
             modelBuilder.Entity("Veterinary.Domain.Entities.MedicalRecordEntities.MedicalRecord", b =>

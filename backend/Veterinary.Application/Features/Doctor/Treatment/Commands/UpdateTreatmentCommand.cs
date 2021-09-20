@@ -13,12 +13,12 @@ namespace Veterinary.Application.Features.Doctor.TreatmentFeatures.Commands
 {
     public class UpdateTreatmentCommand : IRequest
     {
-        public Guid TreatmentId { get; set; }
         public UpdateTreatmentCommandData Data { get; set; }
     }
 
     public class UpdateTreatmentCommandData
     {
+        public Guid TreatmentId { get; set; }
         public string Name { get; set; }
         public int Duration { get; set; }
     }
@@ -36,7 +36,7 @@ namespace Veterinary.Application.Features.Doctor.TreatmentFeatures.Commands
 
         public async Task<Unit> Handle(UpdateTreatmentCommand request, CancellationToken cancellationToken)
         {
-            var treatment = await treatmentRepository.FindAsync(request.TreatmentId);
+            var treatment = await treatmentRepository.FindAsync(request.Data.TreatmentId);
 
             if (treatment.DoctorId != identityService.GetCurrentUserId() && !await identityService.IsInRoleAsync(RoleEnum.ManagerDoctor.Value()))
             {
@@ -56,8 +56,6 @@ namespace Veterinary.Application.Features.Doctor.TreatmentFeatures.Commands
     {
         public UpdateTreatmentCommandValidator()
         {
-            RuleFor(x => x.TreatmentId).NotNull()
-                .WithMessage("A kezelés azonosítójának megadása kötelező.");
             RuleFor(x => x.Data).NotNull().SetValidator(new UpdateTreatmentCommandDataValidator());
         }
     }
@@ -66,6 +64,8 @@ namespace Veterinary.Application.Features.Doctor.TreatmentFeatures.Commands
     {
         public UpdateTreatmentCommandDataValidator()
         {
+            RuleFor(x => x.TreatmentId).NotNull()
+                .WithMessage("A kezelés azonosítójának megadása kötelező.");
             RuleFor(x => x.Name).NotEmpty()
                 .WithMessage("A kezelés nevének megadása kötelező.");
             RuleFor(x => x.Duration).GreaterThan(0)

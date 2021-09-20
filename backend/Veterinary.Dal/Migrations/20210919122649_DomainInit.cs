@@ -265,7 +265,7 @@ namespace Veterinary.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Treatment",
+                name: "Treatments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -276,9 +276,9 @@ namespace Veterinary.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Treatment", x => x.Id);
+                    table.PrimaryKey("PK_Treatments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Treatment_AspNetUsers_DoctorId",
+                        name: "FK_Treatments_AspNetUsers_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -385,15 +385,15 @@ namespace Veterinary.Dal.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Appointment_Treatment_TreatmentId",
+                        name: "FK_Appointment_Treatments_TreatmentId",
                         column: x => x.TreatmentId,
-                        principalTable: "Treatment",
+                        principalTable: "Treatments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TreatmentInterval",
+                name: "TreatmentIntervals",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -407,11 +407,11 @@ namespace Veterinary.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TreatmentInterval", x => x.Id);
+                    table.PrimaryKey("PK_TreatmentIntervals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TreatmentInterval_Treatment_TreatmentId",
+                        name: "FK_TreatmentIntervals_Treatments_TreatmentId",
                         column: x => x.TreatmentId,
-                        principalTable: "Treatment",
+                        principalTable: "Treatments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -602,14 +602,14 @@ namespace Veterinary.Dal.Migrations
                 column: "TherapiaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Treatment_DoctorId",
-                table: "Treatment",
-                column: "DoctorId");
+                name: "IX_TreatmentIntervals_TreatmentId",
+                table: "TreatmentIntervals",
+                column: "TreatmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TreatmentInterval_TreatmentId",
-                table: "TreatmentInterval",
-                column: "TreatmentId");
+                name: "IX_Treatments_DoctorId",
+                table: "Treatments",
+                column: "DoctorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VaccineRecords_AnimalId",
@@ -655,7 +655,7 @@ namespace Veterinary.Dal.Migrations
                 name: "TherapiaRecord");
 
             migrationBuilder.DropTable(
-                name: "TreatmentInterval");
+                name: "TreatmentIntervals");
 
             migrationBuilder.DropTable(
                 name: "VaccineRecords");
@@ -673,7 +673,7 @@ namespace Veterinary.Dal.Migrations
                 name: "Therapias");
 
             migrationBuilder.DropTable(
-                name: "Treatment");
+                name: "Treatments");
 
             migrationBuilder.DropTable(
                 name: "Vaccines");

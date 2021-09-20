@@ -10,7 +10,7 @@ using Veterinary.Dal.Data;
 namespace Veterinary.Dal.Migrations
 {
     [DbContext(typeof(VeterinaryDbContext))]
-    [Migration("20210913173301_DomainInit")]
+    [Migration("20210919122649_DomainInit")]
     partial class DomainInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -308,7 +308,7 @@ namespace Veterinary.Dal.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Treatment");
+                    b.ToTable("Treatments");
                 });
 
             modelBuilder.Entity("Veterinary.Domain.Entities.Doctor.TreatmentEntities.TreatmentInterval", b =>
@@ -342,7 +342,7 @@ namespace Veterinary.Dal.Migrations
 
                     b.HasIndex("TreatmentId");
 
-                    b.ToTable("TreatmentInterval");
+                    b.ToTable("TreatmentIntervals");
                 });
 
             modelBuilder.Entity("Veterinary.Domain.Entities.MedicalRecordEntities.MedicalRecord", b =>

@@ -57,12 +57,11 @@ namespace Veterinary.Api.Controllers
         }
 
         [Authorize(Policy = "Doctor")]
-        [HttpPut("update/{treatmentId}")]
-        public async Task UpdateTreatment(Guid treatmentId, UpdateTreatmentCommandData data)
+        [HttpPut]
+        public async Task UpdateTreatment(UpdateTreatmentCommandData data)
         {
             await mediator.Send(new UpdateTreatmentCommand
             {
-                TreatmentId = treatmentId,
                 Data = data
             });
         }
