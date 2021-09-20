@@ -49,6 +49,9 @@ import { VaccinePickerComponent } from './components/_partials/vaccine-picker/va
 import { ListTreatmentsComponent } from './components/doctor/treatments/list-treatments/list-treatments.component';
 import { AddTreatmentComponent } from './components/doctor/treatments/add-treatment/add-treatment.component';
 import { EditTreatmentComponent } from './components/doctor/treatments/edit-treatment/edit-treatment.component';
+import { ListHolidaysComponent } from './components/doctor/holidays/list-holidays/list-holidays.component';
+import { AddHolidayComponent } from './components/doctor/holidays/add-holiday/add-holiday.component';
+import { EditHolidayComponent } from './components/doctor/holidays/edit-holiday/edit-holiday.component';
 
 export function initializeApp(oauthService: OAuthService): any {
   return async () => {
@@ -103,6 +106,9 @@ export function initializeApp(oauthService: OAuthService): any {
     ListTreatmentsComponent,
     AddTreatmentComponent,
     EditTreatmentComponent,
+    ListHolidaysComponent,
+    AddHolidayComponent,
+    EditHolidayComponent,
   ],
   imports: [
     MaterialDesignModule,
@@ -138,6 +144,7 @@ export function initializeApp(oauthService: OAuthService): any {
     generated.MedicationService,
     generated.TherapiaService,
     generated.TreatmentService,
+    generated.HolidayService,
   ],
   bootstrap: [AppComponent],
 })

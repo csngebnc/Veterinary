@@ -245,7 +245,7 @@ namespace Veterinary.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Holiday",
+                name: "Holidays",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -255,9 +255,9 @@ namespace Veterinary.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Holiday", x => x.Id);
+                    table.PrimaryKey("PK_Holidays", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Holiday_AspNetUsers_DoctorId",
+                        name: "FK_Holidays_AspNetUsers_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -557,8 +557,8 @@ namespace Veterinary.Dal.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Holiday_DoctorId",
-                table: "Holiday",
+                name: "IX_Holidays_DoctorId",
+                table: "Holidays",
                 column: "DoctorId");
 
             migrationBuilder.CreateIndex(
@@ -643,7 +643,7 @@ namespace Veterinary.Dal.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Holiday");
+                name: "Holidays");
 
             migrationBuilder.DropTable(
                 name: "MedicalRecordPhoto");

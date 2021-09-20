@@ -1,3 +1,4 @@
+import { ListHolidaysComponent } from './components/doctor/holidays/list-holidays/list-holidays.component';
 import { ListTreatmentsComponent } from './components/doctor/treatments/list-treatments/list-treatments.component';
 import { ListTherapiasComponent } from './components/manager/therapias/list-therapias/list-therapias.component';
 import { ListMedicationsComponent } from './components/manager/medications/list-medications/list-medications.component';
@@ -62,6 +63,11 @@ const routes: Routes = [
   {
     path: 'treatments/:doctorid',
     component: ListTreatmentsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'holidays/:doctorid',
+    component: ListHolidaysComponent,
     canActivate: [AuthGuard],
   },
 ];

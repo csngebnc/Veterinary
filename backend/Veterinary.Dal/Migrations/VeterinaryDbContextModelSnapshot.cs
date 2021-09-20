@@ -281,7 +281,7 @@ namespace Veterinary.Dal.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Holiday");
+                    b.ToTable("Holidays");
                 });
 
             modelBuilder.Entity("Veterinary.Domain.Entities.Doctor.TreatmentEntities.Treatment", b =>
