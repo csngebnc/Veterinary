@@ -12,6 +12,7 @@ import { ListAnimalSpeciesComponent } from './components/animalspecies/list-anim
 import { HomeComponent } from './components/home/home.component';
 import { ListVaccinesComponent } from './components/vaccines/list-vaccines/list-vaccines.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ListTreatmentIntervalsComponent } from './components/doctor/treatment-intervals/list-treatment-intervals/list-treatment-intervals.component';
 
 const routes: Routes = [
   {
@@ -63,6 +64,11 @@ const routes: Routes = [
   {
     path: 'treatments/:doctorid',
     component: ListTreatmentsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'treatments/:doctorid/:treatmentid',
+    component: ListTreatmentIntervalsComponent,
     canActivate: [AuthGuard],
   },
   {

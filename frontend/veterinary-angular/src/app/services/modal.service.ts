@@ -12,9 +12,10 @@ export class ModalService {
     component: any,
     callback: Function,
     data?: any,
+    size?: string,
     errCallback?: Function
   ): void {
-    const modal = this.ngbModal.open(component);
+    const modal = this.ngbModal.open(component, { size: size });
     if (data) {
       modal.componentInstance.data = data;
     }

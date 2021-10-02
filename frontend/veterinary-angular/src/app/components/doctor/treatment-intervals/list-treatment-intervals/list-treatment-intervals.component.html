@@ -1,6 +1,6 @@
-<div class="container mt-4" *ngIf="treatments">
+<div class="container mt-4" *ngIf="treatmentIntervals">
   <div class="row pt-4 mb-4">
-    <div class="content-center col-6 main-text">Elérhető kezelések</div>
+    <div class="content-center col-6 main-text">Kezelés idősávjai</div>
     <div class="content-end col-4">
       <button mat-mini-fab color="primary" (click)="add()">
         <mat-icon>add</mat-icon>
@@ -8,16 +8,23 @@
     </div>
   </div>
 
-  <div class="row content-center mt-2 pb-4" *ngIf="treatments?.length > 0">
+  <div class="row main-text">
+    <h2 class="text-center">{{ treatmentName }}</h2>
+  </div>
+
+  <div class="row content-center mt-2 pb-4" *ngIf="treatmentIntervals?.length > 0">
     <table mat-table [dataSource]="dataSource">
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef><b>Kezelés neve</b></th>
-        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      <ng-container matColumnDef="day">
+        <th mat-header-cell *matHeaderCellDef><b>Idősáv napja</b></th>
+        <td mat-cell *matCellDef="let element">{{ element.dayOfWeek | dayOfWeek }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="duration">
-        <th class="w-25" mat-header-cell *matHeaderCellDef><b>Kezelés időtartama</b></th>
-        <td mat-cell *matCellDef="let element">{{ element.duration }} perc</td>
+      <ng-container matColumnDef="interval">
+        <th class="w-25" mat-header-cell *matHeaderCellDef><b>Idősáv</b></th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.startHour | displayZeroTime }}:{{ element.startMin | displayZeroTime }} -
+          {{ element.endHour | displayZeroTime }}:{{ element.endMin | displayZeroTime }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="status">
@@ -28,10 +35,6 @@
       <ng-container matColumnDef="button">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element" class="align-end text-end">
-          <button mat-icon-button [routerLink]="[element.id, { name: element.name }]">
-            <mat-icon>list_alt</mat-icon>
-          </button>
-
           <button mat-icon-button (click)="edit(element.id)">
             <mat-icon>edit</mat-icon>
           </button>
@@ -44,7 +47,7 @@
             <mat-icon>power_on</mat-icon>
           </button>
 
-          <button mat-icon-button (click)="deleteTreatment(element.id)">
+          <button mat-icon-button (click)="deleteInterval(element.id)">
             <mat-icon>delete_forever</mat-icon>
           </button>
         </td>
@@ -55,7 +58,15 @@
     </table>
   </div>
 
-  <div *ngIf="treatments?.length === 0" class="content-center mb-2 pb-4">
-    Nincs korábban rögzített kezelés.
+  <div *ngIf="treatmentIntervals?.length === 0" class="content-center mb-2 pb-4">
+    Nincs korábban rögzített kezelési idősáv.
   </div>
+
+  <mat-paginator
+    [length]="length"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="pageEvent = pageChanged($event)"
+  >
+  </mat-paginator>
 </div>

@@ -68,8 +68,48 @@ body {
 
 .main-text {
   display: flex;
-  font-family: "Baloo";
+  font-family: 'Baloo';
   align-items: center;
   color: $text-color;
   font-size: xx-large;
+}
+
+mat-paginator {
+  background-color: transparent;
+}
+
+.timepicker-overlay {
+  z-index: 10000000 !important;
+}
+
+.timepicker-backdrop-overlay {
+  z-index: 10000000 !important;
+}
+
+.timepicker {
+  .timepicker__header {
+    background-color: $half-dark-blue !important;
+  }
+
+  .clock-face__clock-hand {
+    background-color: $half-dark-blue !important;
+
+    &::after {
+      background-color: $half-dark-blue !important;
+    }
+
+    &::before {
+      border-color: $half-dark-blue !important;
+    }
+  }
+
+  .clock-face__number {
+    > span.active {
+      background-color: $half-dark-blue !important;
+    }
+  }
+
+  button:not(.timepicker-dial__item) {
+    color: $half-dark-blue !important;
+  }
 }

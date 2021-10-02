@@ -20,7 +20,7 @@ import { TranslateRolePipe } from './pipes/translate-role.pipe';
 import { HomeUserComponent } from './components/home/pages/home-body/home-user/home-user.component';
 import { HomeDoctorComponent } from './components/home/pages/home-body/home-doctor/home-doctor.component';
 import { AnimalListComponent } from './components/animal/animal-list/animal-list.component';
-import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModule, NgbTimepicker } from '@ng-bootstrap/ng-bootstrap';
 import { AddAnimalComponent } from './components/animal/add-animal/add-animal.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
@@ -52,6 +52,11 @@ import { EditTreatmentComponent } from './components/doctor/treatments/edit-trea
 import { ListHolidaysComponent } from './components/doctor/holidays/list-holidays/list-holidays.component';
 import { AddHolidayComponent } from './components/doctor/holidays/add-holiday/add-holiday.component';
 import { EditHolidayComponent } from './components/doctor/holidays/edit-holiday/edit-holiday.component';
+import { ListTreatmentIntervalsComponent } from './components/doctor/treatment-intervals/list-treatment-intervals/list-treatment-intervals.component';
+import { AddTreatmentIntervalComponent } from './components/doctor/treatment-intervals/add-treatment-interval/add-treatment-interval.component';
+import { EditTreatmentIntervalComponent } from './components/doctor/treatment-intervals/edit-treatment-interval/edit-treatment-interval.component';
+import { DayOfWeekPipe } from './pipes/day-of-week.pipe';
+import { FixTimeDisplayPipe } from './pipes/fix-time-display.pipe';
 
 export function initializeApp(oauthService: OAuthService): any {
   return async () => {
@@ -109,6 +114,11 @@ export function initializeApp(oauthService: OAuthService): any {
     ListHolidaysComponent,
     AddHolidayComponent,
     EditHolidayComponent,
+    ListTreatmentIntervalsComponent,
+    AddTreatmentIntervalComponent,
+    EditTreatmentIntervalComponent,
+    DayOfWeekPipe,
+    FixTimeDisplayPipe,
   ],
   imports: [
     MaterialDesignModule,
@@ -144,6 +154,7 @@ export function initializeApp(oauthService: OAuthService): any {
     generated.MedicationService,
     generated.TherapiaService,
     generated.TreatmentService,
+    generated.TreatmentIntervalService,
     generated.HolidayService,
   ],
   bootstrap: [AppComponent],

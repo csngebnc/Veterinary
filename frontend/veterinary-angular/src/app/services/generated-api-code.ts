@@ -1755,6 +1755,279 @@ export class TreatmentService {
 }
 
 @Injectable()
+export class TreatmentIntervalService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getTreatmentIntervalsWithDetails(treatmentId: string, pageSize: number | undefined, pageIndex: number | undefined): Observable<PagedListOfTreatmentIntervalDetailsDto> {
+        let url_ = this.baseUrl + "/api/treatment-intervals/list/{treatmentId}?";
+        if (treatmentId === undefined || treatmentId === null)
+            throw new Error("The parameter 'treatmentId' must be defined.");
+        url_ = url_.replace("{treatmentId}", encodeURIComponent("" + treatmentId));
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTreatmentIntervalsWithDetails(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTreatmentIntervalsWithDetails(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedListOfTreatmentIntervalDetailsDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedListOfTreatmentIntervalDetailsDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetTreatmentIntervalsWithDetails(response: HttpResponseBase): Observable<PagedListOfTreatmentIntervalDetailsDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <PagedListOfTreatmentIntervalDetailsDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedListOfTreatmentIntervalDetailsDto>(<any>null);
+    }
+
+    createTreatmentInterval(doctorId: string | undefined, data: CreateTreatmentIntervalCommandData): Observable<TreatmentIntervalDetailsDto> {
+        let url_ = this.baseUrl + "/api/treatment-intervals?";
+        if (doctorId === null)
+            throw new Error("The parameter 'doctorId' cannot be null.");
+        else if (doctorId !== undefined)
+            url_ += "doctorId=" + encodeURIComponent("" + doctorId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(data);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateTreatmentInterval(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateTreatmentInterval(<any>response_);
+                } catch (e) {
+                    return <Observable<TreatmentIntervalDetailsDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreatmentIntervalDetailsDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateTreatmentInterval(response: HttpResponseBase): Observable<TreatmentIntervalDetailsDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <TreatmentIntervalDetailsDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreatmentIntervalDetailsDto>(<any>null);
+    }
+
+    updateTreatmentInterval(doctorId: string | undefined, data: UpdateTreatmentIntervalCommandData): Observable<void> {
+        let url_ = this.baseUrl + "/api/treatment-intervals?";
+        if (doctorId === null)
+            throw new Error("The parameter 'doctorId' cannot be null.");
+        else if (doctorId !== undefined)
+            url_ += "doctorId=" + encodeURIComponent("" + doctorId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(data);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateTreatmentInterval(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateTreatmentInterval(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateTreatmentInterval(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    updateTreatmentIntervalStatus(treatmentIntervalId: string | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/treatment-intervals?";
+        if (treatmentIntervalId === null)
+            throw new Error("The parameter 'treatmentIntervalId' cannot be null.");
+        else if (treatmentIntervalId !== undefined)
+            url_ += "treatmentIntervalId=" + encodeURIComponent("" + treatmentIntervalId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("patch", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateTreatmentIntervalStatus(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateTreatmentIntervalStatus(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateTreatmentIntervalStatus(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    deleteTreatmentInterval(vaccineId: string | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/treatment-intervals?";
+        if (vaccineId === null)
+            throw new Error("The parameter 'vaccineId' cannot be null.");
+        else if (vaccineId !== undefined)
+            url_ += "vaccineId=" + encodeURIComponent("" + vaccineId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteTreatmentInterval(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteTreatmentInterval(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteTreatmentInterval(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
 export class VaccinesService {
     private http: HttpClient;
     private baseUrl: string;
@@ -2718,6 +2991,42 @@ export interface UpdateTreatmentCommandData {
     treatmentId?: string;
     name?: string | undefined;
     duration?: number;
+}
+
+export interface PagedListOfTreatmentIntervalDetailsDto {
+    pageIndex?: number;
+    pageSize?: number;
+    totalCount?: number;
+    items?: TreatmentIntervalDetailsDto[] | undefined;
+}
+
+export interface TreatmentIntervalDetailsDto {
+    id?: string;
+    startHour?: number;
+    startMin?: number;
+    endHour?: number;
+    endMin?: number;
+    dayOfWeek?: number;
+    isInactive?: boolean;
+    treatmentId?: string;
+}
+
+export interface CreateTreatmentIntervalCommandData {
+    startHour?: number;
+    startMin?: number;
+    endHour?: number;
+    endMin?: number;
+    dayOfWeek?: number;
+    treatmentId?: string;
+}
+
+export interface UpdateTreatmentIntervalCommandData {
+    id?: string;
+    startHour?: number;
+    startMin?: number;
+    endHour?: number;
+    endMin?: number;
+    dayOfWeek?: number;
 }
 
 export interface VaccineSearchResultDto {

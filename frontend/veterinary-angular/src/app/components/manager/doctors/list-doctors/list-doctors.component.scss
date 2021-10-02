@@ -1,8 +1,8 @@
-@import "../../../../../styles.scss";
+@import '../../../../../styles.scss';
 
 .main-text {
   display: flex;
-  font-family: "Baloo";
+  font-family: 'Baloo';
   align-items: center;
   color: $text-color;
   font-size: xx-large;
@@ -17,6 +17,6 @@ table {
 }
 
 .container {
-  width: 60%;
+  width: 70%;
   background-color: rgba(white, 0.85);
 }

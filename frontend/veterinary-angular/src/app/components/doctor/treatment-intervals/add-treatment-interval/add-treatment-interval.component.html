@@ -1,0 +1,45 @@
+<div class="container">
+  <form
+    class="p-3"
+    [formGroup]="addIntervalForm"
+    (ngSubmit)="addIntervalForm.valid && add()"
+    autocomplete="off"
+  >
+    <div class="d-flex justify-content-between">
+      <h2 class="mb-0">Új idősáv rögzítése</h2>
+      <h2 class="mb-0"><i class="fas fa-clock"></i></h2>
+    </div>
+    <hr />
+
+    <div class="d-flex align-items-center justify-content-between pt-1">
+      <div
+        *ngFor="let dayIndex of [1, 2, 3, 4, 5, 6, 0]"
+        class="day-item"
+        (click)="selectDay(dayIndex)"
+        [ngClass]="selectedDayIndex == dayIndex ? 'selected-day' : 'not-selected-day'"
+      >
+        {{ dayIndex | dayOfWeek }}
+      </div>
+    </div>
+
+    <div class="row content-center mt-4">
+      <div class="col-4 content-center">
+        Idősáv kezdete:
+        <input type="time" required (input)="startInput($event)" />
+      </div>
+
+      <div class="col-4 content-center">
+        Idősáv vége:
+        <input type="time" required (input)="endInput($event)" />
+      </div>
+    </div>
+
+    <div class="content-center form-group text-center">
+      <button mat-raised-button [disabled]="!addIntervalForm.valid" class="mt-5 me-2" type="submit">
+        Mentés
+      </button>
+
+      <button type="button" mat-button class="mt-5" (click)="close()">Mégsem</button>
+    </div>
+  </form>
+</div>

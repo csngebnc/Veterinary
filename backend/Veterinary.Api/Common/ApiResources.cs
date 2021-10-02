@@ -39,6 +39,7 @@ namespace Veterinary.Api.Common
         public static class Treatment
         {
             public const string BasePath = ApiResources.BasePath + "/treatments";
+            public const string Intervals = ApiResources.BasePath + "/treatment-intervals";
         }
 
         public static class Holiday
