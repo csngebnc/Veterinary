@@ -86,8 +86,8 @@ namespace Veterinary.Application.Features.Doctor.TreatmentIntervalFeatures.Comma
             {
                 RuleFor(x => x.Id).NotNull()
                     .WithMessage("A kezelési idősáv azonosítója nem lehet üres.");
-                RuleFor(x => x.DayOfWeek).InclusiveBetween(1, 7)
-                    .WithMessage("A hét napjának száma 1 és 7 között lévő érték kell legyen.");
+                RuleFor(x => x.DayOfWeek).InclusiveBetween(0, 6)
+                    .WithMessage("A hét napjának száma 0 (vasárnap) és 6 (szombat) között lévő érték kell legyen.");
                 RuleFor(x => x.StartHour).InclusiveBetween(0, 23)
                     .WithMessage("Az időpont óra értéke 0 és 23 között kell, hogy legyen.");
                 RuleFor(x => x.StartMin).InclusiveBetween(0, 59)

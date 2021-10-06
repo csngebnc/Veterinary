@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Veterinary.Api.Common;
 using Veterinary.Api.Common.BaseControllers;
@@ -27,13 +28,23 @@ namespace Veterinary.Api.Controllers
 
         [Authorize(Policy = "User")]
         [HttpGet("list/{userId}")]
-        public Task<PagedList<OwnedAnimalDto>> GetOwnedAnimals(Guid userId, [FromQuery] PageData pageData, [FromQuery] bool isArchived)
+        public async Task<PagedList<OwnedAnimalDto>> GetOwnedAnimals(Guid userId, [FromQuery] PageData pageData, [FromQuery] bool isArchived)
         {
-            return mediator.Send(new GetOwnedAnimalsQuery
+            return await mediator.Send(new GetOwnedAnimalsQuery
             {
                 OwnerId = userId,
                 Archived = isArchived,
                 PageData = pageData
+            });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpGet("list/{userId}/select")]
+        public async Task<List<AnimalForSelectDto>> GetAnimalsForSelect(Guid userId)
+        {
+            return await mediator.Send(new GetActiveAnimalsForSelectByUserIdQuery
+            {
+                UserId = userId
             });
         }
 

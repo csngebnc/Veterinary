@@ -26,7 +26,7 @@ namespace Veterinary.Api.Controllers
 
         [Authorize(Policy = "User")]
         [HttpGet("user/{doctorId}")]
-        public Task<List<TreatmentDto>> GetTreatmentsByDoctorId(Guid doctorId)
+        public Task<List<TreatmentDto>> GetTreatmentsDoctorId(Guid doctorId)
         {
             return mediator.Send(new GetTreatmentsByDoctorIdQuery
             {

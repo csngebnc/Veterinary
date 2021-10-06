@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,17 @@ namespace Veterinary.Dal.Repositories.Doctor
     {
         public HolidayRepository(VeterinaryDbContext context) : base(context)
         {
+        }
+
+        public async Task<List<Holiday>> GetDoctorHolidaysByInterval(Guid doctorId, DateTime startDate, int duration)
+        {
+            var endDate = startDate.AddDays(duration);
+            return await Table.Where(holiday => holiday.DoctorId == doctorId &&
+                                     holiday.StartDate <= startDate && holiday.EndDate >= startDate ||
+                                     holiday.StartDate >= startDate && holiday.EndDate <= endDate ||
+                                     holiday.StartDate <= endDate && holiday.EndDate >= endDate ||
+                                     holiday.StartDate <= startDate && holiday.EndDate >= endDate
+                                    ).ToListAsync();
         }
     }
 }

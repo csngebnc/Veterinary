@@ -1,3 +1,4 @@
+import { TokenService } from './../../../../services/token.service';
 import { AddTreatmentComponent } from './../add-treatment/add-treatment.component';
 import { TreatmentDto, TreatmentService } from '../../../../services/generated-api-code';
 import { Component, OnInit } from '@angular/core';

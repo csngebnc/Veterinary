@@ -13,16 +13,16 @@ namespace Veterinary.Api.Services
     public class IdentityService : IIdentityService
     {
         private readonly HttpContext httpContext;
-        private readonly VeterinaryDbContext veterinaryDbContext;
+        private readonly IVeterinaryUserRepository veterinaryUserRepository;
         private readonly UserManager<VeterinaryUser> userManager;
 
         public IdentityService(
             IHttpContextAccessor httpContextAccessor, 
-            VeterinaryDbContext veterinaryDbContext,
+            IVeterinaryUserRepository veterinaryUserRepository,
             UserManager<VeterinaryUser> userManager)
         {
             httpContext = httpContextAccessor.HttpContext;
-            this.veterinaryDbContext = veterinaryDbContext;
+            this.veterinaryUserRepository = veterinaryUserRepository;
             this.userManager = userManager;
         }        
 
@@ -33,13 +33,19 @@ namespace Veterinary.Api.Services
         }
         public async Task<VeterinaryUser> GetCurrentUser()
         {
-            return await veterinaryDbContext.Users.FindAsync(GetCurrentUserId());
+            return await veterinaryUserRepository.FindAsync(GetCurrentUserId());
         }
 
         public async Task<bool> IsInRoleAsync(string role)
         {
             var currentUser = await GetCurrentUser();
             return await userManager.IsInRoleAsync(currentUser, role);
+        }
+
+        public async Task<bool> IsInRoleAsync(Guid userId, string role)
+        {
+            var user = await veterinaryUserRepository.FindAsync(userId);
+            return await userManager.IsInRoleAsync(user, role);
         }
     }
 }

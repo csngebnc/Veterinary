@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Veterinary.Domain.Entities;
 using Veterinary.Domain.Entities.AnimalEntities;
+using Veterinary.Domain.Entities.AppointmentEntities;
 using Veterinary.Domain.Entities.Doctor.HolidayEntities;
 using Veterinary.Domain.Entities.Doctor.TreatmentEntities;
 using Veterinary.Domain.Entities.MedicationEntities;
@@ -25,6 +26,7 @@ namespace Veterinary.Dal.Data
         public DbSet<Holiday> Holidays { get; set; }
         public DbSet<Treatment> Treatments { get; set; }
         public DbSet<TreatmentInterval> TreatmentIntervals { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
 
         public DbSet<VaccineRecord> VaccineRecords { get; set; }
 

@@ -57,6 +57,14 @@ import { AddTreatmentIntervalComponent } from './components/doctor/treatment-int
 import { EditTreatmentIntervalComponent } from './components/doctor/treatment-intervals/edit-treatment-interval/edit-treatment-interval.component';
 import { DayOfWeekPipe } from './pipes/day-of-week.pipe';
 import { FixTimeDisplayPipe } from './pipes/fix-time-display.pipe';
+import { BookAnAppointmentComponent } from './components/appointment/book-an-appointment/book-an-appointment.component';
+import { DatePipe } from '@angular/common';
+import { ListDoctorAppointmentsDisplayComponent } from './components/_partials/list-doctor-appointments-display/list-doctor-appointments-display.component';
+import { ListDoctorAppointmentsComponent } from './components/doctor/list-doctor-appointments/list-doctor-appointments.component';
+import { ListAppointmentsComponent } from './components/appointment/list-appointments/list-appointments.component';
+import { BookAppointmentUserSelectorComponent } from './components/doctor/appointments/book-appointment-user-selector/book-appointment-user-selector.component';
+import { AppointmentStatusUpdateModalComponent } from './components/_partials/appointment-status-update-modal/appointment-status-update-modal.component';
+import { LabelValuePipe } from './pipes/label-value.pipe';
 
 export function initializeApp(oauthService: OAuthService): any {
   return async () => {
@@ -119,6 +127,13 @@ export function initializeApp(oauthService: OAuthService): any {
     EditTreatmentIntervalComponent,
     DayOfWeekPipe,
     FixTimeDisplayPipe,
+    BookAnAppointmentComponent,
+    ListDoctorAppointmentsDisplayComponent,
+    ListDoctorAppointmentsComponent,
+    ListAppointmentsComponent,
+    BookAppointmentUserSelectorComponent,
+    AppointmentStatusUpdateModalComponent,
+    LabelValuePipe,
   ],
   imports: [
     MaterialDesignModule,
@@ -156,6 +171,9 @@ export function initializeApp(oauthService: OAuthService): any {
     generated.TreatmentService,
     generated.TreatmentIntervalService,
     generated.HolidayService,
+    generated.AppointmentService,
+    FixTimeDisplayPipe,
+    DatePipe,
   ],
   bootstrap: [AppComponent],
 })

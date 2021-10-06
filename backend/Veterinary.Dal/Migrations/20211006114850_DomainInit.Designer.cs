@@ -10,7 +10,7 @@ using Veterinary.Dal.Data;
 namespace Veterinary.Dal.Migrations
 {
     [DbContext(typeof(VeterinaryDbContext))]
-    [Migration("20210920044808_DomainInit")]
+    [Migration("20211006114850_DomainInit")]
     partial class DomainInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -227,17 +227,11 @@ namespace Veterinary.Dal.Migrations
                     b.Property<Guid?>("AnimalId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Details")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsResigned")
-                        .HasColumnType("bit");
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
@@ -247,6 +241,9 @@ namespace Veterinary.Dal.Migrations
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("TreatmentId")
                         .HasColumnType("uniqueidentifier");
@@ -261,7 +258,7 @@ namespace Veterinary.Dal.Migrations
 
                     b.HasIndex("TreatmentId");
 
-                    b.ToTable("Appointment");
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("Veterinary.Domain.Entities.Doctor.HolidayEntities.Holiday", b =>

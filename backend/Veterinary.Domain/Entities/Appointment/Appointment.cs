@@ -1,6 +1,7 @@
 ﻿using System;
 using Veterinary.Domain.Entities.AnimalEntities;
 using Veterinary.Domain.Entities.Doctor.TreatmentEntities;
+using Veterinary.Shared.Enums;
 
 namespace Veterinary.Domain.Entities.AppointmentEntities
 {
@@ -23,8 +24,6 @@ namespace Veterinary.Domain.Entities.AppointmentEntities
         public Animal Animal { get; set; }
 
         public string Reasons { get; set; }
-        public string Details { get; set; }
-
-        public bool IsResigned { get; set; }
+        public AppointmentStatusEnum Status { get; set; }
     }
 }

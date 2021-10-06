@@ -1,0 +1,28 @@
+@import '../../../../styles.scss';
+
+.container {
+  width: 55%;
+  background-color: rgba(white, 0.85);
+}
+
+::ng-deep .mat-step-header {
+  pointer-events: none;
+}
+
+mat-vertical-stepper {
+  background-color: transparent;
+}
+
+.btn-success {
+  color: #fff;
+  background-color: $text-color;
+  border-color: $text-color;
+}
+.btn-success:hover {
+  color: #fff;
+  background-color: $text-color;
+  border-color: $text-color;
+}
+.btn-success:focus {
+  box-shadow: 0 0 0 0.2rem $text-color;
+}

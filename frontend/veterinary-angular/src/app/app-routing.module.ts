@@ -1,3 +1,6 @@
+import { ListAppointmentsComponent } from './components/appointment/list-appointments/list-appointments.component';
+import { ListDoctorAppointmentsComponent } from './components/doctor/list-doctor-appointments/list-doctor-appointments.component';
+import { BookAnAppointmentComponent } from './components/appointment/book-an-appointment/book-an-appointment.component';
 import { ListHolidaysComponent } from './components/doctor/holidays/list-holidays/list-holidays.component';
 import { ListTreatmentsComponent } from './components/doctor/treatments/list-treatments/list-treatments.component';
 import { ListTherapiasComponent } from './components/manager/therapias/list-therapias/list-therapias.component';
@@ -74,6 +77,21 @@ const routes: Routes = [
   {
     path: 'holidays/:doctorid',
     component: ListHolidaysComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'appointments/create/:userId',
+    component: BookAnAppointmentComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'appointments/list/doctor/:doctorId',
+    component: ListDoctorAppointmentsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'appointments/list/user/:userId',
+    component: ListAppointmentsComponent,
     canActivate: [AuthGuard],
   },
 ];

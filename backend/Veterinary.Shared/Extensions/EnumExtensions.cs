@@ -34,6 +34,48 @@ namespace Veterinary.Shared.Extensions
             return @enum.ToString();
         }
 
+        public static List<LabelValuePair<T>> GetLabelValuePairs<T>() where T : Enum
+        {
+            var list = new List<LabelValuePair<T>>();
+            var values = (T[])Enum.GetValues(typeof(T));
+            foreach (var value in values)
+            {
+                list.Add(new LabelValuePair<T>
+                {
+                    Label = value.GetDisplayName(),
+                    Value = value
+                });
+            }
+
+            return list;
+        }
+
+        public static T GetValueFromName<T>(string name)
+        {
+            var type = typeof(T);
+            if (!type.IsEnum) throw new InvalidOperationException();
+
+            foreach (var field in type.GetFields())
+            {
+                var attribute = Attribute.GetCustomAttribute(field,
+                    typeof(DisplayAttribute)) as DisplayAttribute;
+                if (attribute != null)
+                {
+                    if (attribute.Name == name)
+                    {
+                        return (T)field.GetValue(null);
+                    }
+                }
+                else
+                {
+                    if (field.Name == name)
+                        return (T)field.GetValue(null);
+                }
+            }
+
+            throw new ArgumentOutOfRangeException("name");
+        }
+
         public static List<string> GetValues<T>()
         {
             return Enum.GetNames(typeof(T)).ToList();

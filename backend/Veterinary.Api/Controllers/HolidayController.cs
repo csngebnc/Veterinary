@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Veterinary.Api.Common;
 using Veterinary.Api.Common.BaseControllers;
@@ -60,6 +61,13 @@ namespace Veterinary.Api.Controllers
             {
                 HolidayId = HolidayId
             });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpGet("intervals")]
+        public async Task<List<HolidayDto>> GetDoctorHolidaysByInterval([FromQuery] GetDoctorHolidaysByIntervalQuery query)
+        {
+            return await mediator.Send(query);
         }
     }
 }

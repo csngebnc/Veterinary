@@ -1,0 +1,230 @@
+<div class="container mt-3 pt-3">
+  <mat-vertical-stepper [linear]="true" #stepper>
+    <mat-step [stepControl]="addAppointmentForm.get('doctorId')">
+      <form [formGroup]="addAppointmentForm">
+        <ng-template *ngIf="addAppointmentForm.get('doctorId')" matStepLabel
+          >Válassz egy orvost
+          {{ selectedValues.doctorName ? getSelectedPropName('doctorName') : '' }}</ng-template
+        >
+        <div style="width: 40%">
+          <mat-form-field class="full-width">
+            <mat-label>Válassz...</mat-label>
+            <mat-select formControlName="doctorId">
+              <mat-option *ngFor="let doc of doctors" [value]="doc.id">
+                {{ doc.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+      <button
+        type="button"
+        mat-raised-button
+        color="primary"
+        class="mt-3"
+        [disabled]="!addAppointmentForm.get('doctorId').value"
+        (click)="doctorSelected()"
+      >
+        Következő: kezelés választása
+      </button>
+    </mat-step>
+
+    <mat-step [stepControl]="addAppointmentForm.get('treatmentId')">
+      <form [formGroup]="addAppointmentForm">
+        <ng-template *ngIf="addAppointmentForm.get('treatmentId')" matStepLabel
+          >Válassz egy kezelést
+          {{
+            selectedValues.treatmentName ? getSelectedPropName('treatmentName') : ''
+          }}</ng-template
+        >
+        <div style="width: 40%">
+          <mat-form-field class="full-width">
+            <mat-label>Válassz...</mat-label>
+            <mat-select formControlName="treatmentId">
+              <mat-option *ngFor="let treatment of treatments" [value]="treatment.id">
+                {{ treatment.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+      <button class="mt-3 me-2" mat-raised-button color="primary" matStepperPrevious>
+        Vissza: állatorvos választása
+      </button>
+      <button
+        type="button"
+        mat-raised-button
+        color="primary"
+        class="mt-3"
+        [disabled]="!addAppointmentForm.get('treatmentId').value"
+        (click)="treatmentSelected()"
+      >
+        Következő: időpont kiválasztása
+      </button>
+    </mat-step>
+
+    <mat-step [stepControl]="addAppointmentForm.get('startDate')">
+      <ng-template matStepLabel
+        >Válassz egy időpontot
+        {{ selectedValues.time ? getSelectedPropName('time') : '' }}</ng-template
+      >
+      <form [formGroup]="addAppointmentForm" *ngIf="showCalendar">
+        <div class="row d-flex justify-content-around">
+          <div class="col-4 mb-3">
+            <mat-calendar
+              [minDate]="minDate"
+              [dateFilter]="customDateFilter"
+              (selectedChange)="onValueChange($event)"
+            >
+            </mat-calendar>
+          </div>
+          <div class="col-7">
+            <div class="row m-2" *ngIf="availableTimes">
+              <div class="col-2 mb-3" *ngFor="let item of availableTimes">
+                <button
+                  class="btn"
+                  [ngClass]="{
+                    'btn-success': selectedTime === item.id,
+                    'btn-outline-secondary': selectedTime !== item.id
+                  }"
+                  (click)="setSelectedTime(item.id)"
+                >
+                  {{ item.startTime.getHours() | number: '2.0' }}:{{
+                    item.startTime.getMinutes() | number: '2.0'
+                  }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <button class="mt-3 me-2" mat-raised-button color="primary" matStepperPrevious>
+        Vissza: kezelés választása
+      </button>
+      <button
+        (click)="chooseAnimal()"
+        type="button"
+        mat-raised-button
+        color="primary"
+        class="mt-3"
+        [disabled]="!addAppointmentForm.get('startDate').value"
+      >
+        Következő: állat kiválasztása
+      </button>
+    </mat-step>
+
+    <mat-step [stepControl]="addAppointmentForm">
+      <form class="form-inline" [formGroup]="addAppointmentForm">
+        <ng-template matStepLabel
+          >Válassz állatot
+          {{ selectedValues.animalName ? getSelectedPropName('animalName') : '' }}</ng-template
+        >
+
+        <div class="form-group" style="width: 40%">
+          <mat-form-field>
+            <mat-label>Válassz...</mat-label>
+            <mat-select formControlName="animalId">
+              <mat-option *ngFor="let a of animals" [value]="a.id">
+                {{ a.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button type="button" class="ms-2" mat-button (click)="setEmpty()">Visszaállít</button>
+        </div>
+      </form>
+      <button class="mt-3 me-2" mat-raised-button color="primary" matStepperPrevious>
+        Vissza: időpont választása
+      </button>
+      <button
+        matStepperNext
+        type="button"
+        mat-raised-button
+        color="primary"
+        class="mt-3"
+        matStepperNext
+        (click)="addReasons()"
+      >
+        Következő: foglalás indoklása
+      </button>
+    </mat-step>
+
+    <mat-step>
+      <form class="form-inline" [formGroup]="addAppointmentForm">
+        <ng-template matStepLabel>Időpontfoglalás indoklása</ng-template>
+
+        <div class="form-group" style="width: 40%">
+          <mat-form-field class="full-width">
+            <mat-label>Foglalás indoklása</mat-label>
+            <textarea matInput formControlName="reasons"></textarea>
+          </mat-form-field>
+        </div>
+      </form>
+      <button class="mt-3 me-2" mat-raised-button color="primary" matStepperPrevious>
+        Vissza: állat választása
+      </button>
+      <button
+        matStepperNext
+        type="button"
+        mat-raised-button
+        color="primary"
+        class="mt-3"
+        matStepperNext
+        (click)="addReasons()"
+      >
+        Következő: foglalás véglegesítése
+      </button>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Időpontfoglalás véglegesítése</ng-template>
+      <p class="pb-3">
+        Az időpontfoglaláshoz minden szükséges adatot kitöltöttél, a megadott adatok a következők:
+      </p>
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>Választott orvos:</td>
+            <td>{{ getSelectedPropName('doctorName', true) }}</td>
+          </tr>
+          <tr>
+            <td>Választott kezelés:</td>
+            <td>{{ getSelectedPropName('treatmentName', true) }}</td>
+          </tr>
+          <tr>
+            <td>Kezelés időpontja:</td>
+            <td>{{ getSelectedPropName('time', true) }}</td>
+          </tr>
+          <tr>
+            <td *ngIf="addAppointmentForm.get('animalId').value">Állat neve:</td>
+            <td *ngIf="addAppointmentForm.get('animalId').value">
+              {{ getSelectedPropName('animalName', true) }}
+            </td>
+          </tr>
+          <tr>
+            <td *ngIf="addAppointmentForm.get('reasons').value">Foglalás indoklása:</td>
+            <td *ngIf="addAppointmentForm.get('reasons').value">
+              {{ addAppointmentForm.get('reasons', true).value }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div>
+        <button class="mt-3 me-2" mat-raised-button color="primary" matStepperPrevious>
+          Vissza: foglalás indoklása
+        </button>
+        <button
+          matStepperNext
+          type="button"
+          mat-raised-button
+          color="primary"
+          class="mt-3"
+          (click)="bookAppointment()"
+        >
+          Foglalás rögzítése
+        </button>
+      </div>
+    </mat-step>
+  </mat-vertical-stepper>
+</div>

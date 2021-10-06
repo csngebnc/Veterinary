@@ -12,5 +12,6 @@ namespace Veterinary.Application.Services
         Guid GetCurrentUserId();
         Task<VeterinaryUser> GetCurrentUser();
         Task<bool> IsInRoleAsync(string role);
+        Task<bool> IsInRoleAsync(Guid userId, string role);
     }
 }

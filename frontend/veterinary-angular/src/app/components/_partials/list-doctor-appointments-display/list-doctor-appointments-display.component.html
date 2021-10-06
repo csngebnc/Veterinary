@@ -1,0 +1,82 @@
+<div class="container mt-4">
+  <div class="row content-center mt-2 pb-4" *ngIf="appointments?.length > 0">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="ownerName">
+        <th mat-header-cell *matHeaderCellDef><b>Gazdi neve</b></th>
+        <td mat-cell *matCellDef="let element">
+          <a routerLink="./animals/{{ element.userId }}" class="noselect">{{ element.userName }}</a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="animalName">
+        <th mat-header-cell *matHeaderCellDef><b>Állat neve</b></th>
+        <td mat-cell *matCellDef="let element">
+          <a routerLink="./records/{{ element.animalId }}" class="noselect">{{
+            element.animalName || '—'
+          }}</a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="animalSpecies">
+        <th mat-header-cell *matHeaderCellDef><b>Állat fajtája</b></th>
+        <td mat-cell *matCellDef="let element" class="noselect">
+          {{ element.animalSpecies || '—' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="treatmentName">
+        <th mat-header-cell *matHeaderCellDef><b>Kezelés</b></th>
+        <td mat-cell *matCellDef="let element" class="noselect">{{ element.treatmentName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="reasons">
+        <th mat-header-cell *matHeaderCellDef><b>Indoklás</b></th>
+        <td mat-cell *matCellDef="let element" class="noselect">
+          <mat-icon matTooltip="{{ element.reasons || 'Nincs megadva.' }}">info</mat-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef><b>Állapot</b></th>
+        <td mat-cell *matCellDef="let element" class="noselect">
+          {{ element.status | labelValue: statuses }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="time">
+        <th class="w-25" mat-header-cell *matHeaderCellDef><b>Idősáv</b></th>
+        <td mat-cell *matCellDef="let element" class="noselect">
+          {{ element.startDate | date: 'yyyy.MM.dd' }}:
+          <strong>
+            {{ element.startDate | date: 'HH:mm' }} -
+            {{ element.endDate | date: ' HH:mm' }}
+          </strong>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element" class="align-end text-end">
+          <button mat-icon-button (click)="setState(element.id)">
+            <mat-icon>notifications</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+
+  <div *ngIf="appointments?.length === 0" class="content-center mb-2 pb-4">
+    Nincs időpont foglalva.
+  </div>
+
+  <mat-paginator
+    [length]="length"
+    [pageSize]="10"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="pageEvent = pageChanged($event)"
+  >
+  </mat-paginator>
+</div>

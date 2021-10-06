@@ -17,15 +17,17 @@ namespace Veterinary.Dal.Repositories.Doctor
 
         public async Task<List<Treatment>> GetTreatmentsByDoctorId(Guid doctorId, bool getAll)
         {
-            var treatments = GetAllAsQueryable()
+            var treatmentsQuery = GetAllAsQueryable()
                 .Where(treatment => treatment.DoctorId == doctorId);
 
             if (!getAll)
             {
-                treatments = treatments.Where(treatment => !treatment.IsInactive);
+                treatmentsQuery = treatmentsQuery
+                    .Include(treatment => treatment.TreatmentIntervals)
+                    .Where(treatment => !treatment.IsInactive && treatment.TreatmentIntervals.Count > 0);
             }
 
-            return await treatments.ToListAsync();
+            return await treatmentsQuery.ToListAsync();
         }
 
         public async Task<bool> CanBeDeleted(Guid id)

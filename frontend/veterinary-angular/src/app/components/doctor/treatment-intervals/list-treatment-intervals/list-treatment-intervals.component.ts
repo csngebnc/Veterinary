@@ -3,6 +3,7 @@ import { EditTreatmentIntervalComponent } from './../edit-treatment-interval/edi
 import { AddTreatmentIntervalComponent } from './../add-treatment-interval/add-treatment-interval.component';
 import { ModalService } from 'src/app/services/modal.service';
 import {
+  AppointmentService,
   PagedListOfTreatmentIntervalDetailsDto,
   TreatmentIntervalDetailsDto,
   TreatmentIntervalService,
@@ -33,7 +34,8 @@ export class ListTreatmentIntervalsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private intervalService: TreatmentIntervalService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private appointmentService: AppointmentService
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +44,11 @@ export class ListTreatmentIntervalsComponent implements OnInit {
     this.treatmentName = this.route.snapshot.paramMap.get('name');
 
     this.dataSource.paginator = this.paginator;
+    this.appointmentService
+      .getDoctorTreatmentAvailableTimes(new Date(), this.doctorId, this.treatmentId)
+      .subscribe((res) => {
+        console.log(res);
+      });
     this.pageChanged({ pageIndex: 0, pageSize: 10, length: 0 });
   }
 

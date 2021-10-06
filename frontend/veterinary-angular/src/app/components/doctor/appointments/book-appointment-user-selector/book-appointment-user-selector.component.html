@@ -1,0 +1,19 @@
+<div class="row p-4">
+  <div class="content-center main-text mb-4">Időpont adása</div>
+  <app-user-picker
+    [title]="'Válassz egy gazdit'"
+    (userIdSelected)="saveSelectedId($event)"
+  ></app-user-picker>
+
+  <div class="content-center">
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="!selectedUserId"
+      (click)="close()"
+      [routerLink]="['/appointments/create', selectedUserId]"
+    >
+      Időpont foglalása
+    </button>
+  </div>
+</div>

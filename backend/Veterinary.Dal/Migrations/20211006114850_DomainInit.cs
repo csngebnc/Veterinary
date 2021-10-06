@@ -349,7 +349,7 @@ namespace Veterinary.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Appointment",
+                name: "Appointments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -360,32 +360,31 @@ namespace Veterinary.Dal.Migrations
                     OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AnimalId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Reasons = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Details = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsResigned = table.Column<bool>(type: "bit", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Appointment", x => x.Id);
+                    table.PrimaryKey("PK_Appointments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Appointment_Animals_AnimalId",
+                        name: "FK_Appointments_Animals_AnimalId",
                         column: x => x.AnimalId,
                         principalTable: "Animals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Appointment_AspNetUsers_DoctorId",
+                        name: "FK_Appointments_AspNetUsers_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Appointment_AspNetUsers_OwnerId",
+                        name: "FK_Appointments_AspNetUsers_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Appointment_Treatments_TreatmentId",
+                        name: "FK_Appointments_Treatments_TreatmentId",
                         column: x => x.TreatmentId,
                         principalTable: "Treatments",
                         principalColumn: "Id",
@@ -498,23 +497,23 @@ namespace Veterinary.Dal.Migrations
                 column: "SpeciesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Appointment_AnimalId",
-                table: "Appointment",
+                name: "IX_Appointments_AnimalId",
+                table: "Appointments",
                 column: "AnimalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Appointment_DoctorId",
-                table: "Appointment",
+                name: "IX_Appointments_DoctorId",
+                table: "Appointments",
                 column: "DoctorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Appointment_OwnerId",
-                table: "Appointment",
+                name: "IX_Appointments_OwnerId",
+                table: "Appointments",
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Appointment_TreatmentId",
-                table: "Appointment",
+                name: "IX_Appointments_TreatmentId",
+                table: "Appointments",
                 column: "TreatmentId");
 
             migrationBuilder.CreateIndex(
@@ -625,7 +624,7 @@ namespace Veterinary.Dal.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Appointment");
+                name: "Appointments");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");

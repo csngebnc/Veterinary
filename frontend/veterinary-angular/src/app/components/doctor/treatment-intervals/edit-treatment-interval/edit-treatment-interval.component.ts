@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { FixTimeDisplayPipe } from 'src/app/pipes/fix-time-display.pipe';
 import {
   TreatmentIntervalDetailsDto,
   TreatmentIntervalService,
@@ -21,11 +22,13 @@ export class EditTreatmentIntervalComponent implements OnInit {
   constructor(
     private intervalService: TreatmentIntervalService,
     private fb: FormBuilder,
-    private ngbModal: NgbActiveModal
+    private ngbModal: NgbActiveModal,
+    private displayTimePipe: FixTimeDisplayPipe
   ) {}
 
   ngOnInit(): void {
     this.editedInterval = this.data.interval;
+    this.selectedDayIndex = this.editedInterval.dayOfWeek;
     this.editIntervalForm = this.fb.group({
       id: [this.editedInterval.id, Validators.required],
       treatmentId: [this.editedInterval.treatmentId, Validators.required],
@@ -47,13 +50,17 @@ export class EditTreatmentIntervalComponent implements OnInit {
       ],
       dayOfWeek: [
         this.editedInterval.dayOfWeek,
-        [Validators.required, Validators.pattern('\\d*'), Validators.min(1), Validators.max(7)],
+        [Validators.required, Validators.pattern('\\d*'), Validators.min(0), Validators.max(6)],
       ],
     });
   }
 
   getTime(property: string): string {
-    return this.editedInterval[property + 'Hour'] + ':' + this.editedInterval[property + 'Min'];
+    return (
+      this.displayTimePipe.transform(this.editedInterval[property + 'Hour']) +
+      ':' +
+      this.displayTimePipe.transform(this.editedInterval[property + 'Min'])
+    );
   }
 
   selectDay(dayIndex: number): void {

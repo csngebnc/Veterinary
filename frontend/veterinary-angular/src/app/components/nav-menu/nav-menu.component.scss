@@ -1,8 +1,8 @@
-@import "../../../styles.scss";
+@import '../../../styles.scss';
 
 nav {
   background-color: rgba(white, 0.5);
-  font-family: "Baloo";
+  font-family: 'Baloo';
   font-size: large;
   border-bottom: 1px solid $nav-border-color;
   color: $text-color;
@@ -15,6 +15,10 @@ nav {
   color: $text-color;
 }
 
+.nav-link {
+  cursor: pointer;
+}
+
 .dropdown-item {
   color: $text-color;
 }
@@ -23,6 +27,6 @@ nav {
   border: 1px solid $nav-border-color;
 }
 
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }

@@ -5,6 +5,9 @@
       <ng-container *ngIf="userInfo.role === 'User'">
         <app-home-user></app-home-user>
       </ng-container>
+      <ng-container *ngIf="userInfo.role === 'NormalDoctor' || userInfo.role === 'ManagerDoctor'">
+        <app-home-doctor [doctorId]="userInfo.id"></app-home-doctor>
+      </ng-container>
     </div>
   </div>
 </div>

@@ -25,10 +25,18 @@ namespace Veterinary.Api.Controllers
             this.mediator = mediator;
         }
 
+        [Authorize(Policy = "Doctor")]
         [HttpGet("list/{treatmentId}")]
-        public async Task<PagedList<TreatmentIntervalDetailsDto>> GetTreatmentIntervalsWithDetails(Guid treatmentId, [FromQuery]PageData pageData)
+        public async Task<PagedList<TreatmentIntervalDetailsDto>> GetTreatmentIntervalsWithDetails(Guid treatmentId, [FromQuery] PageData pageData)
         {
             return await mediator.Send(new GetTreatmentIntervalsWithDetailsQuery { TreatmentId = treatmentId, PageData = pageData });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpGet("interval-days/{treatmentId}")]
+        public async Task<List<int>> GetTreatmentIntervalDays(Guid treatmentId)
+        {
+            return await mediator.Send(new GetTreatmentIntervalDaysQuery { TreatmentId = treatmentId });
         }
 
         [Authorize(Policy = "Doctor")]

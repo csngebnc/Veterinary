@@ -87,6 +87,56 @@ export class AnimalService {
         return _observableOf<PagedListOfOwnedAnimalDto>(<any>null);
     }
 
+    getAnimalsForSelect(userId: string): Observable<AnimalForSelectDto[]> {
+        let url_ = this.baseUrl + "/api/animals/list/{userId}/select";
+        if (userId === undefined || userId === null)
+            throw new Error("The parameter 'userId' must be defined.");
+        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAnimalsForSelect(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAnimalsForSelect(<any>response_);
+                } catch (e) {
+                    return <Observable<AnimalForSelectDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AnimalForSelectDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAnimalsForSelect(response: HttpResponseBase): Observable<AnimalForSelectDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <AnimalForSelectDto[]>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AnimalForSelectDto[]>(<any>null);
+    }
+
     createAnimal(userId: string, name: string | null | undefined, dateOfBirth: Date | null | undefined, sex: string | null | undefined, speciesId: string | undefined, photo: FileParameter | null | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/animals/{userId}";
         if (userId === undefined || userId === null)
@@ -455,6 +505,391 @@ export class AnimalService {
 }
 
 @Injectable()
+export class AppointmentService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getStatuses(): Observable<LabelValuePairOfAppointmentStatusEnum[]> {
+        let url_ = this.baseUrl + "/api/appointments/statuses";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetStatuses(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetStatuses(<any>response_);
+                } catch (e) {
+                    return <Observable<LabelValuePairOfAppointmentStatusEnum[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<LabelValuePairOfAppointmentStatusEnum[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetStatuses(response: HttpResponseBase): Observable<LabelValuePairOfAppointmentStatusEnum[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <LabelValuePairOfAppointmentStatusEnum[]>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<LabelValuePairOfAppointmentStatusEnum[]>(<any>null);
+    }
+
+    getDoctors(): Observable<DoctorForAppointmentDto[]> {
+        let url_ = this.baseUrl + "/api/appointments/doctors";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDoctors(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDoctors(<any>response_);
+                } catch (e) {
+                    return <Observable<DoctorForAppointmentDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DoctorForAppointmentDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetDoctors(response: HttpResponseBase): Observable<DoctorForAppointmentDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <DoctorForAppointmentDto[]>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DoctorForAppointmentDto[]>(<any>null);
+    }
+
+    getDoctorTreatmentAvailableTimes(date: Date | undefined, doctorId: string | undefined, treatmentId: string | undefined): Observable<AvailableTime[]> {
+        let url_ = this.baseUrl + "/api/appointments/available-times?";
+        if (date === null)
+            throw new Error("The parameter 'date' cannot be null.");
+        else if (date !== undefined)
+            url_ += "date=" + encodeURIComponent(date ? "" + date.toJSON() : "") + "&";
+        if (doctorId === null)
+            throw new Error("The parameter 'doctorId' cannot be null.");
+        else if (doctorId !== undefined)
+            url_ += "doctorId=" + encodeURIComponent("" + doctorId) + "&";
+        if (treatmentId === null)
+            throw new Error("The parameter 'treatmentId' cannot be null.");
+        else if (treatmentId !== undefined)
+            url_ += "treatmentId=" + encodeURIComponent("" + treatmentId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDoctorTreatmentAvailableTimes(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDoctorTreatmentAvailableTimes(<any>response_);
+                } catch (e) {
+                    return <Observable<AvailableTime[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AvailableTime[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetDoctorTreatmentAvailableTimes(response: HttpResponseBase): Observable<AvailableTime[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <AvailableTime[]>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AvailableTime[]>(<any>null);
+    }
+
+    bookAnAppointment(command: CreateAppointmentCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/appointments";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processBookAnAppointment(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processBookAnAppointment(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processBookAnAppointment(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    getAppointmentsForDoctor(doctorId: string | undefined, fromToday: boolean | undefined, pageData_PageSize: number | undefined, pageData_PageIndex: number | undefined): Observable<PagedListOfAppointmentForDoctorDto> {
+        let url_ = this.baseUrl + "/api/appointments/list/doctor?";
+        if (doctorId === null)
+            throw new Error("The parameter 'doctorId' cannot be null.");
+        else if (doctorId !== undefined)
+            url_ += "DoctorId=" + encodeURIComponent("" + doctorId) + "&";
+        if (fromToday === null)
+            throw new Error("The parameter 'fromToday' cannot be null.");
+        else if (fromToday !== undefined)
+            url_ += "FromToday=" + encodeURIComponent("" + fromToday) + "&";
+        if (pageData_PageSize === null)
+            throw new Error("The parameter 'pageData_PageSize' cannot be null.");
+        else if (pageData_PageSize !== undefined)
+            url_ += "PageData.PageSize=" + encodeURIComponent("" + pageData_PageSize) + "&";
+        if (pageData_PageIndex === null)
+            throw new Error("The parameter 'pageData_PageIndex' cannot be null.");
+        else if (pageData_PageIndex !== undefined)
+            url_ += "PageData.PageIndex=" + encodeURIComponent("" + pageData_PageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAppointmentsForDoctor(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAppointmentsForDoctor(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedListOfAppointmentForDoctorDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedListOfAppointmentForDoctorDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAppointmentsForDoctor(response: HttpResponseBase): Observable<PagedListOfAppointmentForDoctorDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <PagedListOfAppointmentForDoctorDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedListOfAppointmentForDoctorDto>(<any>null);
+    }
+
+    getAppointmentsForUser(userId: string | undefined, animalId: string | null | undefined, pageData_PageSize: number | undefined, pageData_PageIndex: number | undefined): Observable<PagedListOfAppointmentForUserDto> {
+        let url_ = this.baseUrl + "/api/appointments/list/user?";
+        if (userId === null)
+            throw new Error("The parameter 'userId' cannot be null.");
+        else if (userId !== undefined)
+            url_ += "UserId=" + encodeURIComponent("" + userId) + "&";
+        if (animalId !== undefined && animalId !== null)
+            url_ += "AnimalId=" + encodeURIComponent("" + animalId) + "&";
+        if (pageData_PageSize === null)
+            throw new Error("The parameter 'pageData_PageSize' cannot be null.");
+        else if (pageData_PageSize !== undefined)
+            url_ += "PageData.PageSize=" + encodeURIComponent("" + pageData_PageSize) + "&";
+        if (pageData_PageIndex === null)
+            throw new Error("The parameter 'pageData_PageIndex' cannot be null.");
+        else if (pageData_PageIndex !== undefined)
+            url_ += "PageData.PageIndex=" + encodeURIComponent("" + pageData_PageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAppointmentsForUser(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAppointmentsForUser(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedListOfAppointmentForUserDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedListOfAppointmentForUserDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAppointmentsForUser(response: HttpResponseBase): Observable<PagedListOfAppointmentForUserDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <PagedListOfAppointmentForUserDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedListOfAppointmentForUserDto>(<any>null);
+    }
+
+    updateAppointmentStatus(command: UpdateAppointmentStatusCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/appointments/status";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateAppointmentStatus(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateAppointmentStatus(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateAppointmentStatus(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
 export class HolidayService {
     private http: HttpClient;
     private baseUrl: string;
@@ -668,6 +1103,65 @@ export class HolidayService {
             }));
         }
         return _observableOf<void>(<any>null);
+    }
+
+    getDoctorHolidaysByInterval(doctorId: string | undefined, date: Date | undefined, duration: number | undefined): Observable<HolidayDto[]> {
+        let url_ = this.baseUrl + "/api/holidays/intervals?";
+        if (doctorId === null)
+            throw new Error("The parameter 'doctorId' cannot be null.");
+        else if (doctorId !== undefined)
+            url_ += "DoctorId=" + encodeURIComponent("" + doctorId) + "&";
+        if (date === null)
+            throw new Error("The parameter 'date' cannot be null.");
+        else if (date !== undefined)
+            url_ += "Date=" + encodeURIComponent(date ? "" + date.toJSON() : "") + "&";
+        if (duration === null)
+            throw new Error("The parameter 'duration' cannot be null.");
+        else if (duration !== undefined)
+            url_ += "Duration=" + encodeURIComponent("" + duration) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDoctorHolidaysByInterval(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDoctorHolidaysByInterval(<any>response_);
+                } catch (e) {
+                    return <Observable<HolidayDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<HolidayDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetDoctorHolidaysByInterval(response: HttpResponseBase): Observable<HolidayDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <HolidayDto[]>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<HolidayDto[]>(<any>null);
     }
 }
 
@@ -1458,7 +1952,7 @@ export class TreatmentService {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getTreatmentsByDoctorId(doctorId: string): Observable<TreatmentDto[]> {
+    getTreatmentsDoctorId(doctorId: string): Observable<TreatmentDto[]> {
         let url_ = this.baseUrl + "/api/treatments/user/{doctorId}";
         if (doctorId === undefined || doctorId === null)
             throw new Error("The parameter 'doctorId' must be defined.");
@@ -1474,11 +1968,11 @@ export class TreatmentService {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetTreatmentsByDoctorId(response_);
+            return this.processGetTreatmentsDoctorId(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetTreatmentsByDoctorId(<any>response_);
+                    return this.processGetTreatmentsDoctorId(<any>response_);
                 } catch (e) {
                     return <Observable<TreatmentDto[]>><any>_observableThrow(e);
                 }
@@ -1487,7 +1981,7 @@ export class TreatmentService {
         }));
     }
 
-    protected processGetTreatmentsByDoctorId(response: HttpResponseBase): Observable<TreatmentDto[]> {
+    protected processGetTreatmentsDoctorId(response: HttpResponseBase): Observable<TreatmentDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1821,6 +2315,56 @@ export class TreatmentIntervalService {
             }));
         }
         return _observableOf<PagedListOfTreatmentIntervalDetailsDto>(<any>null);
+    }
+
+    getTreatmentIntervalDays(treatmentId: string): Observable<number[]> {
+        let url_ = this.baseUrl + "/api/treatment-intervals/interval-days/{treatmentId}";
+        if (treatmentId === undefined || treatmentId === null)
+            throw new Error("The parameter 'treatmentId' must be defined.");
+        url_ = url_.replace("{treatmentId}", encodeURIComponent("" + treatmentId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTreatmentIntervalDays(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTreatmentIntervalDays(<any>response_);
+                } catch (e) {
+                    return <Observable<number[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<number[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetTreatmentIntervalDays(response: HttpResponseBase): Observable<number[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <number[]>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number[]>(<any>null);
     }
 
     createTreatmentInterval(doctorId: string | undefined, data: CreateTreatmentIntervalCommandData): Observable<TreatmentIntervalDetailsDto> {
@@ -2860,6 +3404,11 @@ export interface OwnedAnimalDto {
     photoUrl?: string | undefined;
 }
 
+export interface AnimalForSelectDto {
+    id?: string;
+    name?: string | undefined;
+}
+
 export interface UpdateAnimalCommandData {
     name?: string | undefined;
     dateOfBirth?: Date | undefined;
@@ -2880,6 +3429,90 @@ export interface AnimalDto {
     subSpeciesName?: string | undefined;
     photoUrl?: string | undefined;
     ownerId?: string;
+}
+
+export interface LabelValuePairOfAppointmentStatusEnum {
+    label?: string | undefined;
+    value?: AppointmentStatusEnum;
+}
+
+export enum AppointmentStatusEnum {
+    New = 0,
+    Arrived = 1,
+    Closed = 2,
+    Resigned = 3,
+    ResignedByDoctor = 4,
+    Other = 5,
+}
+
+export interface DoctorForAppointmentDto {
+    id?: string;
+    name?: string | undefined;
+}
+
+export interface AvailableTime {
+    id?: number;
+    startTime?: Date;
+    endTime?: Date;
+}
+
+export interface CreateAppointmentCommand {
+    startDate?: Date;
+    endDate?: Date;
+    treatmentId?: string;
+    doctorId?: string;
+    ownerId?: string | undefined;
+    animalId?: string | undefined;
+    reasons?: string | undefined;
+}
+
+export interface PagedListOfAppointmentForDoctorDto {
+    pageIndex?: number;
+    pageSize?: number;
+    totalCount?: number;
+    items?: AppointmentForDoctorDto[] | undefined;
+}
+
+export interface AppointmentForDoctorDto {
+    id?: string;
+    userId?: string;
+    userName?: string | undefined;
+    treatmentId?: string;
+    treatmentName?: string | undefined;
+    animalId?: string | undefined;
+    animalName?: string | undefined;
+    animalSpecies?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
+    reasons?: string | undefined;
+    status?: AppointmentStatusEnum;
+}
+
+export interface PagedListOfAppointmentForUserDto {
+    pageIndex?: number;
+    pageSize?: number;
+    totalCount?: number;
+    items?: AppointmentForUserDto[] | undefined;
+}
+
+export interface AppointmentForUserDto {
+    id?: string;
+    doctorId?: string;
+    doctorName?: string | undefined;
+    treatmentId?: string;
+    treatmentName?: string | undefined;
+    animalId?: string | undefined;
+    animalName?: string | undefined;
+    animalSpecies?: string | undefined;
+    startDate?: Date;
+    endDate?: Date;
+    reasons?: string | undefined;
+    status?: AppointmentStatusEnum;
+}
+
+export interface UpdateAppointmentStatusCommand {
+    appointmentId?: string;
+    statusId?: number;
 }
 
 export interface PagedListOfHolidayDto {

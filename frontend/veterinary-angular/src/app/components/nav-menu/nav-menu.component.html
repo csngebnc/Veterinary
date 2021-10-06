@@ -31,9 +31,11 @@
             <a class="nav-link" [routerLink]="['/animals', getUserId()]">Állataim</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link" [routerLink]="['/']">Időpontfoglalás</a>
+            <a class="nav-link" [routerLink]="['/appointments/create', getUserId()]"
+              >Időpontfoglalás</a
+            >
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
+          <li class="nav-item" [routerLink]="['/appointments/list/user', getUserId()]">
             <a class="nav-link" [routerLink]="['/']">Időpontjaim</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
@@ -46,7 +48,7 @@
             <a class="nav-link" [routerLink]="['/']">Új kórlap</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link" [routerLink]="['/']">Időpont adása</a>
+            <a class="nav-link" (click)="bookingMenu()">Időpont adása</a>
           </li>
           <li class="nav-item dropdown">
             <a
@@ -59,8 +61,12 @@
             </a>
             <div class="dropdown-menu">
               <a class="nav-link" [routerLink]="['/animals', getUserId()]">Állataim</a>
-              <a class="nav-link" [routerLink]="['/']">Időpontfoglalás</a>
-              <a class="nav-link" [routerLink]="['/']">Időpontjaim</a>
+              <a class="nav-link" [routerLink]="['/appointments/create', getUserId()]"
+                >Időpontfoglalás</a
+              >
+              <a class="nav-link" [routerLink]="['/appointments/list/user', getUserId()]"
+                >Időpontjaim</a
+              >
               <a class="nav-link" [routerLink]="['/']">Kórlapok</a>
             </div>
           </li>
@@ -75,6 +81,9 @@
             </a>
             <div class="dropdown-menu">
               <a class="nav-link" [routerLink]="['/treatments', getUserId()]">Kezeléseim</a>
+              <a class="nav-link" [routerLink]="['/appointments/list/doctor', getUserId()]"
+                >Foglalt időpontok</a
+              >
               <a class="nav-link" [routerLink]="['/holidays', getUserId()]">Szabadságok</a>
               <a class="nav-link" [routerLink]="['/']">Gazdik</a>
             </div>

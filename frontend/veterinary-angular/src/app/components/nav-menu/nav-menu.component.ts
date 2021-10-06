@@ -1,3 +1,5 @@
+import { BookAppointmentUserSelectorComponent } from './../doctor/appointments/book-appointment-user-selector/book-appointment-user-selector.component';
+import { ModalService } from './../../services/modal.service';
 import { Component, OnInit } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { TokenService } from 'src/app/services/token.service';
@@ -10,6 +12,7 @@ import { TokenService } from 'src/app/services/token.service';
 export class NavMenuComponent implements OnInit {
   constructor(
     public tokenService: TokenService,
+    private modalService: ModalService,
     private authService: OAuthService
   ) {}
 
@@ -25,5 +28,9 @@ export class NavMenuComponent implements OnInit {
 
   getUserId(): string {
     return this.tokenService.getUserData().id;
+  }
+
+  bookingMenu(): void {
+    this.modalService.openModal(BookAppointmentUserSelectorComponent, () => {});
   }
 }
