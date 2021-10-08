@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Veterinary.Api.Common;
 using Veterinary.Application.Features.Manager.Commands;
 using Veterinary.Application.Features.Manager.Queries;
+using Veterinary.Application.Features.VeterinaryUserFeatures.Commands;
 using Veterinary.Application.Features.VeterinaryUserFeatures.Queries;
 using Veterinary.Application.Services;
 using Veterinary.Application.Shared.Dtos;
@@ -23,6 +24,27 @@ namespace Veterinary.Api.Controllers
         {
             this.mediator = mediator;
             this.identityService = identityService;
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpPost("get-photo-url/{userId}")]
+        public async Task<string> GetPhotoUrl(Guid userId)
+        {
+            return await mediator.Send(new GetUserPhotoUrl { UserId = userId });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpDelete("delete-photo/{userId}")]
+        public async Task<string> DeletePhoto(Guid userId)
+        {
+            return await mediator.Send(new DeleteUserPhotoCommand { UserId = userId });
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpPost("upload-photo")]
+        public async Task<string> UploadPhoto([FromForm]UploadUserPhotoCommand command)
+        {
+            return await mediator.Send(command);
         }
 
         [Authorize(Policy = "Doctor")]

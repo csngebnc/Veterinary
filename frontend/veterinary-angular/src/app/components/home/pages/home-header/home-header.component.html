@@ -2,20 +2,16 @@
   <div class="row no-gutters content-center">
     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
       <div class="row content-center m-0 p-2">
+        <img *ngIf="photoUrl" class="profile-image" src="{{ photoUrl }}" />
         <img
-          *ngIf="userInfo.photoUrl"
-          class="profile-image"
-          src="{{ userInfo.photoUrl }}"
-        />
-        <img
-          *ngIf="!userInfo.photoUrl"
+          *ngIf="!photoUrl"
           class="profile-image"
           src="https://portolapilot.com/wp-content/uploads/2018/12/300x300.png"
         />
       </div>
       <div class="content-center mb-2">
         <div>
-          <button mat-raised-button color="primary" (click)="openEdit()">
+          <button mat-raised-button color="primary" (click)="editPhoto()">
             <mat-icon> insert_photo</mat-icon>
           </button>
         </div>
@@ -50,12 +46,7 @@
           [formControl]="notesFormControl"
         ></textarea>
         <div class="content-end">
-          <button
-            mat-flat-button
-            color="primary"
-            class="mt-3"
-            (click)="saveNotes()"
-          >
+          <button mat-flat-button color="primary" class="mt-3" (click)="saveNotes()">
             Frissítés
           </button>
         </div>

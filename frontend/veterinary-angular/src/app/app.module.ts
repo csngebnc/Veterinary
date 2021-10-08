@@ -65,6 +65,7 @@ import { ListAppointmentsComponent } from './components/appointment/list-appoint
 import { BookAppointmentUserSelectorComponent } from './components/doctor/appointments/book-appointment-user-selector/book-appointment-user-selector.component';
 import { AppointmentStatusUpdateModalComponent } from './components/_partials/appointment-status-update-modal/appointment-status-update-modal.component';
 import { LabelValuePipe } from './pipes/label-value.pipe';
+import { UserImageUploaderComponent } from './components/_partials/user-image-uploader/user-image-uploader.component';
 
 export function initializeApp(oauthService: OAuthService): any {
   return async () => {
@@ -134,6 +135,7 @@ export function initializeApp(oauthService: OAuthService): any {
     BookAppointmentUserSelectorComponent,
     AppointmentStatusUpdateModalComponent,
     LabelValuePipe,
+    UserImageUploaderComponent,
   ],
   imports: [
     MaterialDesignModule,
