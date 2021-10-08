@@ -20,7 +20,9 @@
             mat-raised-button
             color="primary"
             (click)="deletePhoto()"
-            [disabled]="!userInfo.photoUrl"
+            [disabled]="
+              photoUrl === 'https://veterinary.blob.core.windows.net/defaults/placeholder.jpg'
+            "
           >
             <mat-icon> delete</mat-icon>
           </button>

@@ -18,6 +18,7 @@ import { MatTableDataSource } from '@angular/material/table';
 export class ListDoctorAppointmentsDisplayComponent implements OnInit {
   @Input() pageSizeOptions: number[] = [5];
   @Input() fromToday: boolean = true;
+  @Input() urlPathPrefix: string = './';
   @Input() doctorId: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

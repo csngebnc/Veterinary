@@ -1,5 +1,5 @@
 import { TokenService } from 'src/app/services/token.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   AvailableTime,
   TreatmentService,
@@ -57,7 +57,8 @@ export class BookAnAppointmentComponent implements OnInit {
     private holidayService: HolidayService,
     private fb: FormBuilder,
     private datePipe: DatePipe,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -90,7 +91,9 @@ export class BookAnAppointmentComponent implements OnInit {
       reasons: this.addAppointmentForm.get('reasons').value ?? '',
     };
 
-    this.appointmentService.bookAnAppointment(appointment).subscribe(() => {});
+    this.appointmentService
+      .bookAnAppointment(appointment)
+      .subscribe(() => this.router.navigateByUrl('/'));
   }
 
   doctorSelected(): void {
