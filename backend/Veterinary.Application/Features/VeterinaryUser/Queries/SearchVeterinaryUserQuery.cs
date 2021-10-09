@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace Veterinary.Application.Features.VeterinaryUserFeatures.Queries
 
         public async Task<List<VeterinaryUserDto>> Handle(SearchVeterinaryUserQuery request, CancellationToken cancellationToken)
         {
-            var result = await veterinaryUserRepository.Search(request.SearchParam.Trim().ToLower());
+            var result = await veterinaryUserRepository.SearchQueryable(request.SearchParam.Trim().ToLower()).ToListAsync();
 
             return result.Select(u => new VeterinaryUserDto
             {

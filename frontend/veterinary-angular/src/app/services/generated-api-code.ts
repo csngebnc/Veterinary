@@ -3394,6 +3394,63 @@ export class UserService {
         return _observableOf<VeterinaryUserDto[]>(<any>null);
     }
 
+    searchUsersPaged(searchParam: string | null | undefined, pageData_PageSize: number | undefined, pageData_PageIndex: number | undefined): Observable<PagedListOfVeterinaryUserDto> {
+        let url_ = this.baseUrl + "/api/users/search-paged?";
+        if (searchParam !== undefined && searchParam !== null)
+            url_ += "SearchParam=" + encodeURIComponent("" + searchParam) + "&";
+        if (pageData_PageSize === null)
+            throw new Error("The parameter 'pageData_PageSize' cannot be null.");
+        else if (pageData_PageSize !== undefined)
+            url_ += "PageData.PageSize=" + encodeURIComponent("" + pageData_PageSize) + "&";
+        if (pageData_PageIndex === null)
+            throw new Error("The parameter 'pageData_PageIndex' cannot be null.");
+        else if (pageData_PageIndex !== undefined)
+            url_ += "PageData.PageIndex=" + encodeURIComponent("" + pageData_PageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSearchUsersPaged(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSearchUsersPaged(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedListOfVeterinaryUserDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedListOfVeterinaryUserDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processSearchUsersPaged(response: HttpResponseBase): Observable<PagedListOfVeterinaryUserDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <PagedListOfVeterinaryUserDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedListOfVeterinaryUserDto>(<any>null);
+    }
+
     getUser(userId: string): Observable<VeterinaryUserDto> {
         let url_ = this.baseUrl + "/api/users/user/{userId}";
         if (userId === undefined || userId === null)
@@ -3870,6 +3927,13 @@ export interface VeterinaryUserDto {
     address?: string | undefined;
     phoneNumber?: string | undefined;
     photoUrl?: string | undefined;
+}
+
+export interface PagedListOfVeterinaryUserDto {
+    pageIndex?: number;
+    pageSize?: number;
+    totalCount?: number;
+    items?: VeterinaryUserDto[] | undefined;
 }
 
 export interface DoctorWithRoleDto {

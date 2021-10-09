@@ -13,12 +13,12 @@ namespace Veterinary.Dal.Repositories
         {
         }
 
-        public async Task<List<VeterinaryUser>> Search(string param)
+        public IQueryable<VeterinaryUser> SearchQueryable(string param)
         {
-            var result = await Table.Where(u => u.Name.ToLower().Contains(param) ||
+            var result = Table.Where(u => u.Name.ToLower().Contains(param) ||
                         u.Email.ToLower().Contains(param) ||
                         u.Address.ToLower().Contains(param))
-                .ToListAsync();
+                        .AsQueryable();
 
             return result;
         }

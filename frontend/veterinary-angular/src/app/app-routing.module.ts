@@ -1,3 +1,4 @@
+import { SearchUsersComponent } from './components/doctor/search-users/search-users.component';
 import { ListAppointmentsComponent } from './components/appointment/list-appointments/list-appointments.component';
 import { ListDoctorAppointmentsComponent } from './components/doctor/list-doctor-appointments/list-doctor-appointments.component';
 import { BookAnAppointmentComponent } from './components/appointment/book-an-appointment/book-an-appointment.component';
@@ -92,6 +93,11 @@ const routes: Routes = [
   {
     path: 'appointments/list/user/:userId',
     component: ListAppointmentsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'users',
+    component: SearchUsersComponent,
     canActivate: [AuthGuard],
   },
 ];

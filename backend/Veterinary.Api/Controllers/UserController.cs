@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Veterinary.Api.Common;
+using Veterinary.Application.Abstractions;
 using Veterinary.Application.Features.Manager.Commands;
 using Veterinary.Application.Features.Manager.Queries;
 using Veterinary.Application.Features.VeterinaryUserFeatures.Commands;
@@ -52,6 +53,13 @@ namespace Veterinary.Api.Controllers
         public async Task<List<VeterinaryUserDto>> SearchUsers(string param)
         {
             return await mediator.Send(new SearchVeterinaryUserQuery { SearchParam = param });
+        }
+
+        [Authorize(Policy = "Doctor")]
+        [HttpGet("search-paged")]
+        public async Task<PagedList<VeterinaryUserDto>> SearchUsersPaged(SearchVeterinaryUserPagedQuery query)
+        {
+            return await mediator.Send(query);
         }
 
         [Authorize(Policy = "Doctor")]

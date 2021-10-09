@@ -18,6 +18,6 @@ namespace Veterinary.Domain.Entities
         Task DeleteAsync(Guid id);
         Task<bool> AnyByIdAsync(Guid id);
 
-        Task<List<VeterinaryUser>> Search(string param);
+        IQueryable<VeterinaryUser> SearchQueryable(string param);
     }
 }

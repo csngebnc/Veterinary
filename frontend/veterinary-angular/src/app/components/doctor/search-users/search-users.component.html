@@ -1,0 +1,60 @@
+<div class="container mt-4">
+  <div class="row pt-4 mb-4 content-center">
+    <div class="main-text justify-content-center">Gazdik listája</div>
+  </div>
+  <div class="row content-center mt-3">
+    <mat-form-field appearance="outline" class="mat-focused">
+      <mat-label>Keresés</mat-label>
+      <input
+        type="text"
+        placeholder="Gazdi neve/email címe/lakcíme"
+        matInput
+        [formControl]="searchParamControl"
+        name="name"
+        autocomplete="off"
+      />
+    </mat-form-field>
+  </div>
+  <div class="row content-center p-3" *ngIf="users?.length > 0">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="userName">
+        <th mat-header-cell *matHeaderCellDef><b>Gazdi neve</b></th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef><b>Gazdi e-mail címe</b></th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.email }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element" class="align-end text-end">
+          <button mat-icon-button routerLink="../animals/{{ element.id }}">
+            <mat-icon>pets</mat-icon>
+          </button>
+          <button mat-icon-button routerLink="../appointments/list/user/{{ element.id }}">
+            <mat-icon>date_range</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+
+  <div *ngIf="users?.length === 0" class="content-center mb-2 pb-4">Nincs találat.</div>
+
+  <mat-paginator
+    [length]="length"
+    [pageSize]="10"
+    [pageSizeOptions]="[10, 20, 50]"
+    (page)="pageEvent = pageChanged($event)"
+  >
+  </mat-paginator>
+</div>
