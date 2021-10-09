@@ -1,0 +1,29 @@
+<div class="container p-4">
+  <div class="row main-text justify-content-center mb-3">
+    {{ template.name }} sablon szerkesztése
+  </div>
+  <div class="custom-container">
+    <form [formGroup]="templateForm" style="width: 100%">
+      <mat-form-field class="full-width">
+        <mat-label>Sablon neve:</mat-label>
+        <input matInput formControlName="name" required />
+        <mat-error *ngIf="templateForm.get('name').invalid">A mező nem lehet üres.</mat-error>
+      </mat-form-field>
+
+      <angular-editor formControlName="htmlContent" [config]="editorConfig"></angular-editor>
+    </form>
+  </div>
+  <div class="content-center form-group text-center">
+    <button
+      mat-raised-button
+      [disabled]="!templateForm.valid"
+      class="mt-3 me-2"
+      color="primary"
+      (click)="updateTemplate()"
+    >
+      Mentés
+    </button>
+
+    <button type="button" mat-button class="mt-3" (click)="close()">Mégsem</button>
+  </div>
+</div>

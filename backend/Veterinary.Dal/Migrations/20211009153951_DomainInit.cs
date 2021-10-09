@@ -63,6 +63,19 @@ namespace Veterinary.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MedicalRecordTextTemplates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HtmlContent = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MedicalRecordTextTemplates", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Medications",
                 columns: table => new
                 {
@@ -646,6 +659,9 @@ namespace Veterinary.Dal.Migrations
 
             migrationBuilder.DropTable(
                 name: "MedicalRecordPhoto");
+
+            migrationBuilder.DropTable(
+                name: "MedicalRecordTextTemplates");
 
             migrationBuilder.DropTable(
                 name: "MedicationRecord");

@@ -23,6 +23,7 @@ import { AnimalListComponent } from './components/animal/animal-list/animal-list
 import { NgbModal, NgbModule, NgbTimepicker } from '@ng-bootstrap/ng-bootstrap';
 import { AddAnimalComponent } from './components/animal/add-animal/add-animal.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { EditAnimalComponent } from './components/animal/edit-animal/edit-animal.component';
@@ -67,6 +68,10 @@ import { AppointmentStatusUpdateModalComponent } from './components/_partials/ap
 import { LabelValuePipe } from './pipes/label-value.pipe';
 import { UserImageUploaderComponent } from './components/_partials/user-image-uploader/user-image-uploader.component';
 import { SearchUsersComponent } from './components/doctor/search-users/search-users.component';
+import { ListTemplatesComponent } from './components/text-templates/list-templates/list-templates.component';
+import { AddTemplateComponent } from './components/text-templates/add-template/add-template.component';
+import { EditTemplateComponent } from './components/text-templates/edit-template/edit-template.component';
+import { ViewTemplateComponent } from './components/text-templates/view-template/view-template.component';
 
 export function initializeApp(oauthService: OAuthService): any {
   return async () => {
@@ -138,6 +143,10 @@ export function initializeApp(oauthService: OAuthService): any {
     LabelValuePipe,
     UserImageUploaderComponent,
     SearchUsersComponent,
+    ListTemplatesComponent,
+    AddTemplateComponent,
+    EditTemplateComponent,
+    ViewTemplateComponent,
   ],
   imports: [
     MaterialDesignModule,
@@ -146,6 +155,7 @@ export function initializeApp(oauthService: OAuthService): any {
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    AngularEditorModule,
     OAuthModule.forRoot({
       resourceServer: {
         allowedUrls: [apiUrl],
@@ -176,6 +186,7 @@ export function initializeApp(oauthService: OAuthService): any {
     generated.TreatmentIntervalService,
     generated.HolidayService,
     generated.AppointmentService,
+    generated.TemplateService,
     FixTimeDisplayPipe,
     DatePipe,
   ],

@@ -400,6 +400,23 @@ namespace Veterinary.Dal.Migrations
                     b.ToTable("MedicalRecordPhoto");
                 });
 
+            modelBuilder.Entity("Veterinary.Domain.Entities.MedicalRecordEntities.MedicalRecordTextTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("HtmlContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MedicalRecordTextTemplates");
+                });
+
             modelBuilder.Entity("Veterinary.Domain.Entities.MedicationEntities.Medication", b =>
                 {
                     b.Property<Guid>("Id")

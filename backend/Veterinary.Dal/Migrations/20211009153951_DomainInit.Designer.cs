@@ -10,7 +10,7 @@ using Veterinary.Dal.Data;
 namespace Veterinary.Dal.Migrations
 {
     [DbContext(typeof(VeterinaryDbContext))]
-    [Migration("20211006114850_DomainInit")]
+    [Migration("20211009153951_DomainInit")]
     partial class DomainInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -400,6 +400,23 @@ namespace Veterinary.Dal.Migrations
                     b.HasIndex("MedicalRecordId");
 
                     b.ToTable("MedicalRecordPhoto");
+                });
+
+            modelBuilder.Entity("Veterinary.Domain.Entities.MedicalRecordEntities.MedicalRecordTextTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("HtmlContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MedicalRecordTextTemplates");
                 });
 
             modelBuilder.Entity("Veterinary.Domain.Entities.MedicationEntities.Medication", b =>

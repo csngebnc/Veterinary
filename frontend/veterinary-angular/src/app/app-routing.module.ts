@@ -1,3 +1,4 @@
+import { ListTemplatesComponent } from './components/text-templates/list-templates/list-templates.component';
 import { SearchUsersComponent } from './components/doctor/search-users/search-users.component';
 import { ListAppointmentsComponent } from './components/appointment/list-appointments/list-appointments.component';
 import { ListDoctorAppointmentsComponent } from './components/doctor/list-doctor-appointments/list-doctor-appointments.component';
@@ -98,6 +99,11 @@ const routes: Routes = [
   {
     path: 'users',
     component: SearchUsersComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'templates',
+    component: ListTemplatesComponent,
     canActivate: [AuthGuard],
   },
 ];

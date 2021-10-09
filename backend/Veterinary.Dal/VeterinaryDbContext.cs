@@ -7,6 +7,7 @@ using Veterinary.Domain.Entities.AnimalEntities;
 using Veterinary.Domain.Entities.AppointmentEntities;
 using Veterinary.Domain.Entities.Doctor.HolidayEntities;
 using Veterinary.Domain.Entities.Doctor.TreatmentEntities;
+using Veterinary.Domain.Entities.MedicalRecordEntities;
 using Veterinary.Domain.Entities.MedicationEntities;
 using Veterinary.Domain.Entities.TherapiaEntities;
 using Veterinary.Domain.Entities.Vaccination;
@@ -29,6 +30,8 @@ namespace Veterinary.Dal.Data
         public DbSet<Appointment> Appointments { get; set; }
 
         public DbSet<VaccineRecord> VaccineRecords { get; set; }
+
+        public DbSet<MedicalRecordTextTemplate> MedicalRecordTextTemplates { get; set; }
 
         public VeterinaryDbContext(DbContextOptions options) : base(options)
         {
