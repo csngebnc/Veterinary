@@ -11,7 +11,7 @@ namespace Veterinary.Domain.Entities.MedicationEntities
         public Guid MedicalRecordId { get; set; }
         public MedicalRecord MedicalRecord { get; set; }
 
-        public Guid MedicineId { get; set; }
-        public Medication Medicine { get; set; }
+        public Guid MedicationId { get; set; }
+        public Medication Medication { get; set; }
     }
 }

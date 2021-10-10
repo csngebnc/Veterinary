@@ -1166,6 +1166,440 @@ export class HolidayService {
 }
 
 @Injectable()
+export class MedicalRecordService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getMedicalRecordsForAnimal(animalId: string | undefined, pageData_PageSize: number | undefined, pageData_PageIndex: number | undefined): Observable<PagedListOfMedicalRecordDto> {
+        let url_ = this.baseUrl + "/api/records/details/animal?";
+        if (animalId === null)
+            throw new Error("The parameter 'animalId' cannot be null.");
+        else if (animalId !== undefined)
+            url_ += "AnimalId=" + encodeURIComponent("" + animalId) + "&";
+        if (pageData_PageSize === null)
+            throw new Error("The parameter 'pageData_PageSize' cannot be null.");
+        else if (pageData_PageSize !== undefined)
+            url_ += "PageData.PageSize=" + encodeURIComponent("" + pageData_PageSize) + "&";
+        if (pageData_PageIndex === null)
+            throw new Error("The parameter 'pageData_PageIndex' cannot be null.");
+        else if (pageData_PageIndex !== undefined)
+            url_ += "PageData.PageIndex=" + encodeURIComponent("" + pageData_PageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetMedicalRecordsForAnimal(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetMedicalRecordsForAnimal(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedListOfMedicalRecordDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedListOfMedicalRecordDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetMedicalRecordsForAnimal(response: HttpResponseBase): Observable<PagedListOfMedicalRecordDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <PagedListOfMedicalRecordDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedListOfMedicalRecordDto>(<any>null);
+    }
+
+    getMedicalRecordsForUser(userId: string | undefined, pageData_PageSize: number | undefined, pageData_PageIndex: number | undefined): Observable<PagedListOfMedicalRecordDto> {
+        let url_ = this.baseUrl + "/api/records/details/user?";
+        if (userId === null)
+            throw new Error("The parameter 'userId' cannot be null.");
+        else if (userId !== undefined)
+            url_ += "UserId=" + encodeURIComponent("" + userId) + "&";
+        if (pageData_PageSize === null)
+            throw new Error("The parameter 'pageData_PageSize' cannot be null.");
+        else if (pageData_PageSize !== undefined)
+            url_ += "PageData.PageSize=" + encodeURIComponent("" + pageData_PageSize) + "&";
+        if (pageData_PageIndex === null)
+            throw new Error("The parameter 'pageData_PageIndex' cannot be null.");
+        else if (pageData_PageIndex !== undefined)
+            url_ += "PageData.PageIndex=" + encodeURIComponent("" + pageData_PageIndex) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetMedicalRecordsForUser(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetMedicalRecordsForUser(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedListOfMedicalRecordDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedListOfMedicalRecordDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetMedicalRecordsForUser(response: HttpResponseBase): Observable<PagedListOfMedicalRecordDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <PagedListOfMedicalRecordDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedListOfMedicalRecordDto>(<any>null);
+    }
+
+    getMedicalRecordsDetails(recordId: string | undefined): Observable<MedicalRecordEditDto> {
+        let url_ = this.baseUrl + "/api/records/details?";
+        if (recordId === null)
+            throw new Error("The parameter 'recordId' cannot be null.");
+        else if (recordId !== undefined)
+            url_ += "RecordId=" + encodeURIComponent("" + recordId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetMedicalRecordsDetails(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetMedicalRecordsDetails(<any>response_);
+                } catch (e) {
+                    return <Observable<MedicalRecordEditDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<MedicalRecordEditDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetMedicalRecordsDetails(response: HttpResponseBase): Observable<MedicalRecordEditDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <MedicalRecordEditDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<MedicalRecordEditDto>(<any>null);
+    }
+
+    removePhotoFromRecord(recordId: string | undefined, photoId: string | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/records/photo?";
+        if (recordId === null)
+            throw new Error("The parameter 'recordId' cannot be null.");
+        else if (recordId !== undefined)
+            url_ += "RecordId=" + encodeURIComponent("" + recordId) + "&";
+        if (photoId === null)
+            throw new Error("The parameter 'photoId' cannot be null.");
+        else if (photoId !== undefined)
+            url_ += "PhotoId=" + encodeURIComponent("" + photoId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRemovePhotoFromRecord(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRemovePhotoFromRecord(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRemovePhotoFromRecord(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    getAppointmentDetails(appointmentId: string): Observable<AppointmentForRecordDto> {
+        let url_ = this.baseUrl + "/api/records/appointment-details/{appointmentId}";
+        if (appointmentId === undefined || appointmentId === null)
+            throw new Error("The parameter 'appointmentId' must be defined.");
+        url_ = url_.replace("{appointmentId}", encodeURIComponent("" + appointmentId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAppointmentDetails(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAppointmentDetails(<any>response_);
+                } catch (e) {
+                    return <Observable<AppointmentForRecordDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AppointmentForRecordDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAppointmentDetails(response: HttpResponseBase): Observable<AppointmentForRecordDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <AppointmentForRecordDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AppointmentForRecordDto>(<any>null);
+    }
+
+    createMedicalRecord(command: CreateMedicalRecordCommand): Observable<string> {
+        let url_ = this.baseUrl + "/api/records";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateMedicalRecord(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateMedicalRecord(<any>response_);
+                } catch (e) {
+                    return <Observable<string>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<string>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateMedicalRecord(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <string>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<string>(<any>null);
+    }
+
+    updateMedicalRecord(command: UpdateMedicalRecordCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/records";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateMedicalRecord(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateMedicalRecord(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateMedicalRecord(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    addPhoto(recordId: string, photo: FileParameter | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/records/add-photo/{recordId}";
+        if (recordId === undefined || recordId === null)
+            throw new Error("The parameter 'recordId' must be defined.");
+        url_ = url_.replace("{recordId}", encodeURIComponent("" + recordId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (photo !== null && photo !== undefined)
+            content_.append("photo", photo.data, photo.fileName ? photo.fileName : "photo");
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAddPhoto(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAddPhoto(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processAddPhoto(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
 export class MedicationService {
     private http: HttpClient;
     private baseUrl: string;
@@ -1174,6 +1608,55 @@ export class MedicationService {
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    searchMedication(searchParam: string | null | undefined): Observable<MedicationForSelectDto[]> {
+        let url_ = this.baseUrl + "/api/medications/search?";
+        if (searchParam !== undefined && searchParam !== null)
+            url_ += "searchParam=" + encodeURIComponent("" + searchParam) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSearchMedication(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSearchMedication(<any>response_);
+                } catch (e) {
+                    return <Observable<MedicationForSelectDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<MedicationForSelectDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processSearchMedication(response: HttpResponseBase): Observable<MedicationForSelectDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <MedicationForSelectDto[]>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<MedicationForSelectDto[]>(<any>null);
     }
 
     getMedicationsWithDetails(pageSize: number | undefined, pageIndex: number | undefined): Observable<PagedListOfMedicationDto> {
@@ -1943,6 +2426,55 @@ export class TherapiaService {
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    searchTherapia(searchParam: string | null | undefined): Observable<TherapiaForSelectDto[]> {
+        let url_ = this.baseUrl + "/api/therapias/search?";
+        if (searchParam !== undefined && searchParam !== null)
+            url_ += "searchParam=" + encodeURIComponent("" + searchParam) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSearchTherapia(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSearchTherapia(<any>response_);
+                } catch (e) {
+                    return <Observable<TherapiaForSelectDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TherapiaForSelectDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processSearchTherapia(response: HttpResponseBase): Observable<TherapiaForSelectDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <TherapiaForSelectDto[]>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TherapiaForSelectDto[]>(<any>null);
     }
 
     getTherapias(pageSize: number | undefined, pageIndex: number | undefined): Observable<PagedListOfTherapiaDto> {
@@ -4009,6 +4541,125 @@ export interface UpdateHolidayCommandData {
     endDate?: Date;
 }
 
+export interface PagedListOfMedicalRecordDto {
+    pageIndex?: number;
+    pageSize?: number;
+    totalCount?: number;
+    items?: MedicalRecordDto[] | undefined;
+}
+
+export interface MedicalRecordDto {
+    id?: string;
+    date?: Date;
+    doctorId?: string;
+    doctorName?: string | undefined;
+    animalId?: string | undefined;
+    animalName?: string | undefined;
+    ownerEmail?: string | undefined;
+    ownerId?: string | undefined;
+    ownerName?: string | undefined;
+    htmlContent?: string | undefined;
+    photoUrls?: string[] | undefined;
+    medicationRecords?: MedicationRecordOnRecord[] | undefined;
+    therapiaRecords?: TherapiaRecordOnRecord[] | undefined;
+}
+
+export interface MedicationRecordOnRecord {
+    medicationId?: string;
+    name?: string | undefined;
+    amount?: number;
+    unitName?: string | undefined;
+}
+
+export interface TherapiaRecordOnRecord {
+    therapiaId?: string;
+    name?: string | undefined;
+    amount?: number;
+}
+
+export interface MedicalRecordEditDto {
+    id?: string;
+    date?: Date;
+    doctorId?: string;
+    ownerEmail?: string | undefined;
+    ownerId?: string | undefined;
+    animalId?: string | undefined;
+    htmlContent?: string | undefined;
+    medicationRecords?: MedicationForRecordEditDto[] | undefined;
+    therapiaRecords?: TherapiaForRecordEditDto[] | undefined;
+    photoUrls?: PhotoOnRecord[] | undefined;
+}
+
+export interface MedicationForRecordEditDto {
+    id?: string;
+    name?: string | undefined;
+    amount?: number;
+    unitName?: string | undefined;
+}
+
+export interface TherapiaForRecordEditDto {
+    id?: string;
+    name?: string | undefined;
+    amount?: number;
+}
+
+export interface PhotoOnRecord {
+    id?: string;
+    photoUrl?: string | undefined;
+}
+
+export interface AppointmentForRecordDto {
+    ownerId?: string;
+    ownerEmail?: string | undefined;
+    animalId?: string | undefined;
+    animalName?: string | undefined;
+}
+
+export interface CreateMedicalRecordCommand {
+    data?: CreateMedicalRecordCommandData | undefined;
+    medications?: EditMedicationRecordDto[] | undefined;
+    therapias?: EditTherapiaRecordDto[] | undefined;
+}
+
+export interface CreateMedicalRecordCommandData {
+    date?: Date;
+    ownerEmail?: string | undefined;
+    ownerId?: string | undefined;
+    animalId?: string | undefined;
+    htmlContent?: string | undefined;
+}
+
+export interface EditMedicationRecordDto {
+    id?: string;
+    amount?: number;
+}
+
+export interface EditTherapiaRecordDto {
+    id?: string;
+    amount?: number;
+}
+
+export interface UpdateMedicalRecordCommand {
+    medicalRecordId?: string;
+    data?: UpdateMedicalRecordCommandData | undefined;
+    medications?: EditMedicationRecordDto[] | undefined;
+    therapias?: EditTherapiaRecordDto[] | undefined;
+}
+
+export interface UpdateMedicalRecordCommandData {
+    date?: Date;
+    ownerEmail?: string | undefined;
+    ownerId?: string | undefined;
+    animalId?: string | undefined;
+    htmlContent?: string | undefined;
+}
+
+export interface MedicationForSelectDto {
+    id?: string;
+    name?: string | undefined;
+    unitName?: string | undefined;
+}
+
 export interface PagedListOfMedicationDto {
     pageIndex?: number;
     pageSize?: number;
@@ -4066,6 +4717,11 @@ export interface UpdateMedicalRecordTextTemplateCommand {
     templateId?: string;
     name?: string | undefined;
     htmlContent?: string | undefined;
+}
+
+export interface TherapiaForSelectDto {
+    id?: string;
+    name?: string | undefined;
 }
 
 export interface PagedListOfTherapiaDto {

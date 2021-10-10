@@ -1,12 +1,12 @@
 <form class="content-center">
   <mat-form-field
     appearance="outline"
-    *ngIf="!selectedUser && !preSelectedUserId"
+    *ngIf="(!selectedUser && !preSelectedUserId) || !displaySelectedView"
   >
     <mat-label>{{ title }}</mat-label>
     <input
       type="text"
-      placeholder="(név, email, lakcím)"
+      placeholder="{{ placeholderText }}"
       matInput
       [formControl]="searchParamControl"
       [matAutocomplete]="auto"
@@ -29,15 +29,11 @@
       ><span class="mat-error">{{ validationError }}</span></mat-hint
     >
   </mat-form-field>
-  <div *ngIf="selectedUser" class="user-info-component">
+  <div *ngIf="selectedUser && displaySelectedView" class="user-info-component">
     <div class="card mb-3">
       <div class="row">
         <div class="col-sm-12 col-md-5">
-          <img
-            class="profile-image p-2"
-            src="{{ selectedUser.photoUrl }}"
-            alt=""
-          />
+          <img class="profile-image p-2" src="{{ selectedUser.photoUrl }}" alt="" />
         </div>
         <div class="col-sm-12 col-md-7 mt-2 pt-2 pb-3 ps-3 pe-3">
           <h2 class="card-title m-0">{{ selectedUser.name }}</h2>

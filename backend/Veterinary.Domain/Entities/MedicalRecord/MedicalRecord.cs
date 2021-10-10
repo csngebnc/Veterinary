@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Veterinary.Domain.Entities.AnimalEntities;
+using Veterinary.Domain.Entities.MedicationEntities;
 using Veterinary.Domain.Entities.TherapiaEntities;
 
 namespace Veterinary.Domain.Entities.MedicalRecordEntities
@@ -23,11 +21,10 @@ namespace Veterinary.Domain.Entities.MedicalRecordEntities
         public Guid? AnimalId { get; set; }
         public Animal Animal { get; set; }
 
-        public string Anamnesis { get; set; }
-        public string Symptoma { get; set; }
-        public string Details { get; set; }
+        public string HtmlContent { get; set; }
 
         public ICollection<MedicalRecordPhoto> Photos { get; set; }
+        public ICollection<MedicationRecord> MedicationRecords { get; set; }
         public ICollection<TherapiaRecord> TherapiaRecords { get; set; }
     }
 }

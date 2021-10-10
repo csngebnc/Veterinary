@@ -1,11 +1,7 @@
 <div class="container mt-4" *ngIf="animal">
   <div class="row pb-4">
     <div class="col-3">
-      <img
-        src="{{ animal.photoUrl }}"
-        alt="{{ animal.name }}"
-        class="card-img-top img-thumbnail"
-      />
+      <img src="{{ animal.photoUrl }}" alt="{{ animal.name }}" class="card-img-top img-thumbnail" />
     </div>
     <div class="col-5 pl-0">
       <h1 class="mt-2 mb-1">{{ animal.name }} adatai és kezelési lapjai</h1>
@@ -42,9 +38,15 @@
     </div>
   </div>
 
-  <app-medical-record-displayer
-    [meds]="medicalRecords"
-  ></app-medical-record-displayer>
+  <app-medical-record-displayer [meds]="dataSource.data"></app-medical-record-displayer>
+
+  <mat-paginator
+    [length]="length"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 15]"
+    (page)="pageEvent = pageChanged($event)"
+  >
+  </mat-paginator>
 
   <div class="p-4"></div>
 </div>

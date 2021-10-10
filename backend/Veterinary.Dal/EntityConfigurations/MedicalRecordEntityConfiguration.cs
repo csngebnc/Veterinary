@@ -32,6 +32,10 @@ namespace Veterinary.Dal.EntityConfigurations
                 .WithOne(x => x.MedicalRecord)
                 .HasForeignKey(x => x.MedicalRecordId);
 
+            builder.HasMany(x => x.MedicationRecords)
+                .WithOne(x => x.MedicalRecord)
+                .HasForeignKey(x => x.MedicalRecordId);
+
             builder.HasMany(x => x.TherapiaRecords)
                 .WithOne(x => x.MedicalRecord)
                 .HasForeignKey(x => x.MedicalRecordId);

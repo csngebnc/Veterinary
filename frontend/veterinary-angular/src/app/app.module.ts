@@ -72,6 +72,13 @@ import { ListTemplatesComponent } from './components/text-templates/list-templat
 import { AddTemplateComponent } from './components/text-templates/add-template/add-template.component';
 import { EditTemplateComponent } from './components/text-templates/edit-template/edit-template.component';
 import { ViewTemplateComponent } from './components/text-templates/view-template/view-template.component';
+import { AddMedicalRecordComponent } from './components/medical-records/add-medical-record/add-medical-record.component';
+import { FileUploadModule } from 'ng2-file-upload';
+import { ThumbnailDirective } from './directives/thumbnail.directive';
+import { MedicationPickerComponent } from './components/_partials/medication-picker/medication-picker.component';
+import { TherapiaPickerComponent } from './components/_partials/therapia-picker/therapia-picker.component';
+import { PictureEnlargerComponent } from './components/_partials/picture-enlarger/picture-enlarger.component';
+import { ListUserMedicalRecordsComponent } from './components/medical-records/list-user-medical-records/list-user-medical-records.component';
 
 export function initializeApp(oauthService: OAuthService): any {
   return async () => {
@@ -147,6 +154,12 @@ export function initializeApp(oauthService: OAuthService): any {
     AddTemplateComponent,
     EditTemplateComponent,
     ViewTemplateComponent,
+    AddMedicalRecordComponent,
+    ThumbnailDirective,
+    MedicationPickerComponent,
+    TherapiaPickerComponent,
+    PictureEnlargerComponent,
+    ListUserMedicalRecordsComponent,
   ],
   imports: [
     MaterialDesignModule,
@@ -165,6 +178,7 @@ export function initializeApp(oauthService: OAuthService): any {
     BrowserAnimationsModule,
     NgbModule,
     ImageCropperModule,
+    FileUploadModule,
   ],
   providers: [
     { provide: generated.API_BASE_URL, useValue: apiUrl },
@@ -187,6 +201,7 @@ export function initializeApp(oauthService: OAuthService): any {
     generated.HolidayService,
     generated.AppointmentService,
     generated.TemplateService,
+    generated.MedicalRecordService,
     FixTimeDisplayPipe,
     DatePipe,
   ],

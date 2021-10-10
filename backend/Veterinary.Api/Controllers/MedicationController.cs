@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Veterinary.Api.Common;
 using Veterinary.Api.Common.BaseControllers;
@@ -23,6 +24,16 @@ namespace Veterinary.Api.Controllers
         {
             this.mediator = mediator;
             this.identityService = identityService;
+        }
+
+        [Authorize(Policy = "Doctor")]
+        [HttpGet("search")]
+        public async Task<List<MedicationForSelectDto>> SearchMedication(string searchParam)
+        {
+            return await mediator.Send(new SearchMedicationQuery
+            {
+                SearchParam = searchParam
+            });
         }
 
         [Authorize(Policy = "Doctor")]

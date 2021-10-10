@@ -14,7 +14,7 @@ export class UserData {
 export class TokenService {
   constructor() {}
 
-  private getToken(): string {
+  public getToken(): string {
     return sessionStorage.getItem('access_token');
   }
 

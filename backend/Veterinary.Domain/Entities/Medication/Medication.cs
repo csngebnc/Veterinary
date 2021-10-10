@@ -12,6 +12,6 @@ namespace Veterinary.Domain.Entities.MedicationEntities
         public double PricePerUnit { get; set; }
         public bool IsInactive { get; set; }
 
-        public ICollection<MedicationRecord> MedicineRecords { get; set; }
+        public ICollection<MedicationRecord> MedicationRecords { get; set; }
     }
 }

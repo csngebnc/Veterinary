@@ -1,3 +1,4 @@
+import { AddMedicalRecordComponent } from './components/medical-records/add-medical-record/add-medical-record.component';
 import { ListTemplatesComponent } from './components/text-templates/list-templates/list-templates.component';
 import { SearchUsersComponent } from './components/doctor/search-users/search-users.component';
 import { ListAppointmentsComponent } from './components/appointment/list-appointments/list-appointments.component';
@@ -18,6 +19,7 @@ import { HomeComponent } from './components/home/home.component';
 import { ListVaccinesComponent } from './components/vaccines/list-vaccines/list-vaccines.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ListTreatmentIntervalsComponent } from './components/doctor/treatment-intervals/list-treatment-intervals/list-treatment-intervals.component';
+import { ListUserMedicalRecordsComponent } from './components/medical-records/list-user-medical-records/list-user-medical-records.component';
 
 const routes: Routes = [
   {
@@ -104,6 +106,16 @@ const routes: Routes = [
   {
     path: 'templates',
     component: ListTemplatesComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'medical-records/new',
+    component: AddMedicalRecordComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'medical-records/user-records/:userId',
+    component: ListUserMedicalRecordsComponent,
     canActivate: [AuthGuard],
   },
 ];

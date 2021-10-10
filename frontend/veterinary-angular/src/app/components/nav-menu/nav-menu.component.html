@@ -39,13 +39,15 @@
             <a class="nav-link" [routerLink]="['/']">Időpontjaim</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link" [routerLink]="['/']">Kórlapok</a>
+            <a class="nav-link" [routerLink]="['/medical-records/user-records', getUserId()]"
+              >Kórlapok</a
+            >
           </li>
         </ng-container>
 
         <ng-container *ngIf="getRole() === 'NormalDoctor' || getRole() === 'ManagerDoctor'">
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link" [routerLink]="['/']">Új kórlap</a>
+            <a class="nav-link" [routerLink]="['/medical-records/new']">Új kórlap</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link" (click)="bookingMenu()">Időpont adása</a>
@@ -67,7 +69,9 @@
               <a class="nav-link" [routerLink]="['/appointments/list/user', getUserId()]"
                 >Időpontjaim</a
               >
-              <a class="nav-link" [routerLink]="['/']">Kórlapok</a>
+              <a class="nav-link" [routerLink]="['/medical-records/user-records', getUserId()]"
+                >Kórlapok</a
+              >
             </div>
           </li>
           <li class="nav-item dropdown">

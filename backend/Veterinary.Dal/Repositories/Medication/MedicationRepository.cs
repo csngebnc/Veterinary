@@ -28,8 +28,8 @@ namespace Veterinary.Dal.Repositories.MedicationRepository
 
             var canBeDeleted = await GetAllAsQueryable()
                 .Where(x => x.Id == id)
-                .Include(x => x.MedicineRecords)
-                .Select(x => x.MedicineRecords)
+                .Include(x => x.MedicationRecords)
+                .Select(x => x.MedicationRecords)
                 .SingleAsync();
 
             return canBeDeleted.Count == 0;

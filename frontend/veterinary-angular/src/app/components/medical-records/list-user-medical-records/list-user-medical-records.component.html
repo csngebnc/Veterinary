@@ -1,0 +1,11 @@
+<div class="container p-4">
+  <app-medical-record-displayer [meds]="dataSource.data"></app-medical-record-displayer>
+  <mat-paginator
+    class="mt-4"
+    [length]="length"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 15]"
+    (page)="pageEvent = pageChanged($event)"
+  >
+  </mat-paginator>
+</div>

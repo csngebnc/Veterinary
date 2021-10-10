@@ -19,5 +19,6 @@ namespace Veterinary.Domain.Entities.AppointmentEntities
         Task DeleteAsync(Guid id);
         Task<bool> AnyByIdAsync(Guid id);
         Task<List<Appointment>> GetAppointmentsByDoctorAndDateAsync(Guid doctorId, DateTime appointmentDate);
+        Task<Appointment> GetAppointment(Guid id);
     }
 }

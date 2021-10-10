@@ -1,0 +1,26 @@
+@import '../../../../styles.scss';
+
+.container {
+  background-color: rgba(white, 0.95);
+}
+
+.nv-file-over {
+  border: dotted 3px $text-color;
+}
+
+.medication-select {
+  width: 300px;
+}
+
+.form-row-element {
+  display: inline-block;
+}
+
+.amount-field-width {
+  width: 110px !important;
+}
+
+.right-box {
+  height: 100px;
+  overflow: auto;
+}

@@ -1,0 +1,25 @@
+<form class="content-center">
+  <mat-form-field appearance="outline" class="field-width">
+    <mat-label>{{ title }}</mat-label>
+    <input
+      type="text"
+      placeholder="{{ placeholderText }}"
+      matInput
+      [formControl]="searchParamControl"
+      [matAutocomplete]="auto"
+      name="name"
+      autocomplete="off"
+    />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      [displayWith]="getDisplayText.bind(this)"
+      (optionSelected)="selectOption()"
+    >
+      <mat-option *ngFor="let option of options" [value]="option.id">
+        <h4 class="m-0 p-0">
+          <b>{{ option.name }}</b>
+        </h4>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</form>

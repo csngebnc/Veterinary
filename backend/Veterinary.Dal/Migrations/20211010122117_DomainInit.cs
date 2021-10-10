@@ -308,9 +308,7 @@ namespace Veterinary.Dal.Migrations
                     OwnerEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     AnimalId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Anamnesis = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Symptoma = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Details = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    HtmlContent = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -454,7 +452,7 @@ namespace Veterinary.Dal.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
                     MedicalRecordId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MedicineId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    MedicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -466,8 +464,8 @@ namespace Veterinary.Dal.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MedicationRecord_Medications_MedicineId",
-                        column: x => x.MedicineId,
+                        name: "FK_MedicationRecord_Medications_MedicationId",
+                        column: x => x.MedicationId,
                         principalTable: "Medications",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -599,9 +597,9 @@ namespace Veterinary.Dal.Migrations
                 column: "MedicalRecordId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MedicationRecord_MedicineId",
+                name: "IX_MedicationRecord_MedicationId",
                 table: "MedicationRecord",
-                column: "MedicineId");
+                column: "MedicationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TherapiaRecord_MedicalRecordId",

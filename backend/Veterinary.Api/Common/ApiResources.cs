@@ -52,6 +52,11 @@ namespace Veterinary.Api.Common
             public const string BasePath = ApiResources.BasePath + "/appointments";
         }
 
+        public static class MedicalRecord
+        {
+            public const string BasePath = ApiResources.BasePath + "/records";
+        }
+
         public static class MedicalRecordTextTemplate
         {
             public const string BasePath = ApiResources.BasePath + "/text-templates";

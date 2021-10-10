@@ -8,9 +8,9 @@ namespace Veterinary.Dal.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Medication> builder)
         {
-            builder.HasMany(x => x.MedicineRecords)
-                .WithOne(x => x.Medicine)
-                .HasForeignKey(x => x.MedicineId);
+            builder.HasMany(x => x.MedicationRecords)
+                .WithOne(x => x.Medication)
+                .HasForeignKey(x => x.MedicationId);
         }
     }
 }

@@ -20,6 +20,7 @@ export class ListDoctorAppointmentsDisplayComponent implements OnInit {
   @Input() fromToday: boolean = true;
   @Input() urlPathPrefix: string = './';
   @Input() doctorId: string;
+  @Input() isHomePage: boolean = true;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageEvent: PageEvent;
