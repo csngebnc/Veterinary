@@ -18,5 +18,6 @@ namespace Veterinary.Domain.Entities.MedicalRecordEntities
         IQueryable<MedicalRecord> GetMedicalRecordsByUserIdQueryable(Guid userId);
         IQueryable<MedicalRecord> GetMedicalRecordsByAnimalIdQueryable(Guid animalId);
         Task<MedicalRecord> GetMedicalRecordWithDetailsAsync(Guid recordId);
+        Task<MedicalRecord> GetMedicalRecordForPDFAsync(Guid recordId);
     }
 }

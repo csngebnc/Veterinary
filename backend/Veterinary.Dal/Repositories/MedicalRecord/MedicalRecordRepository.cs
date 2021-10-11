@@ -28,6 +28,21 @@ namespace Veterinary.Dal.Repositories.MedicalRecordRepository
             return record ?? throw new EntityNotFoundException();
         }
 
+        public async Task<MedicalRecord> GetMedicalRecordForPDFAsync(Guid recordId)
+        {
+            var record = await GetAllAsQueryable()
+                .Include(record => record.MedicationRecords)
+                    .ThenInclude(medicationRecord => medicationRecord.Medication)
+                .Include(record => record.TherapiaRecords)
+                    .ThenInclude(therapiaRecord => therapiaRecord.Therapia)
+                .Include(record => record.Owner)
+                .Include(record => record.Animal)
+                    .ThenInclude(animal => animal.Species)
+                .Include(record => record.Photos)
+                .SingleAsync(record => record.Id == recordId);
+            return record ?? throw new EntityNotFoundException();
+        }
+
         public IQueryable<MedicalRecord> GetMedicalRecordsByAnimalIdQueryable(Guid animalId)
         {
             return Table

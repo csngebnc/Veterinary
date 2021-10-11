@@ -10,7 +10,7 @@
           [routerLink]="['../../medical-records/new', { recordId: med.id }]"
           >edit
         </mat-icon>
-        <mat-icon class="noselect" (click)="genPdf(med.id)">picture_as_pdf</mat-icon>
+        <mat-icon class="noselect" (click)="generatePdf(med.id)">picture_as_pdf</mat-icon>
       </mat-panel-description>
     </mat-expansion-panel-header>
     <h5><strong>Kórlap:</strong></h5>

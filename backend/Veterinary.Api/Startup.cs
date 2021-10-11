@@ -159,6 +159,7 @@ namespace Veterinary.Api
             services.AddHttpContextAccessor();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<PdfService>();
 
             services.AddMediatR(Assembly.Load("Veterinary.Application"));
             services.AddFluentValidation(new[] { Assembly.Load("Veterinary.Application") });

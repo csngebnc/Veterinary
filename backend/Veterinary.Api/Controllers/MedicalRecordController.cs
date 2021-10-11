@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Veterinary.Api.Common;
 using Veterinary.Api.Common.BaseControllers;
@@ -10,6 +13,7 @@ using Veterinary.Application.Abstractions;
 using Veterinary.Application.Features.AppointmentFeatures.Queries;
 using Veterinary.Application.Features.MedicalRecordFeatures.Commands;
 using Veterinary.Application.Features.MedicalRecordFeatures.Queries;
+using Veterinary.Application.Services;
 using Veterinary.Application.Shared.Dtos;
 
 namespace Veterinary.Api.Controllers
@@ -18,10 +22,22 @@ namespace Veterinary.Api.Controllers
     public class MedicalRecordController : PublicControllerBase
     {
         private readonly IMediator mediator;
+        private readonly PdfService pdfService;
 
-        public MedicalRecordController(IMediator mediator)
+        public MedicalRecordController(IMediator mediator, PdfService pdfService)
         {
             this.mediator = mediator;
+            this.pdfService = pdfService;
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpGet("pdf/{recordId}")]
+        public async Task<IActionResult> GeneratePDF(Guid recordId)
+        {
+            var bytes = await pdfService.GeneratePDF(recordId);
+            var content = new MemoryStream(bytes);
+            var contentType = "APPLICATION/octet-stream";
+            return File(content, contentType);
         }
 
         [Authorize(Policy = "User")]
