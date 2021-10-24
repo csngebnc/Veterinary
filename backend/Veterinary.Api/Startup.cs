@@ -53,10 +53,15 @@ namespace Veterinary.Api
             {
                 options.AddPolicy("CorsPolicy", builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200")
-                           .AllowAnyMethod()
-                           .AllowAnyHeader()
-                           .AllowCredentials();
+                    builder.WithOrigins(new string[] 
+                    {
+                        "https://veterinary-xgjr1u.azurewebsites.net", 
+                        "https://localhost:4200", 
+                        "http://localhost:4200" 
+                    })
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
                 });
             });
 
@@ -211,6 +216,9 @@ namespace Veterinary.Api
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {

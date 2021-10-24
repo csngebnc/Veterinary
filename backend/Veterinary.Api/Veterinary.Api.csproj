@@ -41,7 +41,11 @@
 		<Exec WorkingDirectory="$(ProjectDir)" EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" Command="$(NSwagExe_Net50) run nswag.json /variables:Configuration=$(Configuration)" />
 
 		<Delete Files="$(ProjectDir)\obj\$(MSBuildProjectFile).NSwag.targets" />
+	</Target>
 
+	<Target Name="PublishRunWebpack" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Release' ">
+		<Exec WorkingDirectory="../../frontend/veterinary-angular" Command="npm install" />
+		<Exec WorkingDirectory="../../frontend/veterinary-angular" Command="npm run build:prod" />
 	</Target>
 
 </Project>

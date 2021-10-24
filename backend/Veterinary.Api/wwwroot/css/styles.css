@@ -1,18 +1,18 @@
 @font-face {
     font-family: "Baloo";
-    src: url("../fonts/Baloo-Regular.ttf") format("truetype");
+    src: url("https://fonts.googleapis.com/css?family=Baloo") format("truetype");
 }
 
 @font-face {
     font-family: "OpenSans";
-    src: url("../fonts/OpenSans-Regular.ttf") format("truetype");
+    src: url("https://drive.google.com/uc?export=view&id=1m4O9SinD6owPQYNVmfTVMFr6UREehsET") format("truetype");
 }
 
 
 body {
     height: 100%;
     margin: 0;
-    background-image: url("../images/background.png");
+    background-image: url("https://drive.google.com/uc?export=view&id=16g_zeHHiNUwBCQmHJe3uZTNCwwrJTMuK");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center bottom;
