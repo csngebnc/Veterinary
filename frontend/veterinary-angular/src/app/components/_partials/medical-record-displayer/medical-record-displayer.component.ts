@@ -4,6 +4,7 @@ import { ModalService } from 'src/app/services/modal.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { PictureEnlargerComponent } from '../picture-enlarger/picture-enlarger.component';
 import { MedicalRecordService } from 'src/app/services/generated-api-code';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-medical-record-displayer',
@@ -32,7 +33,7 @@ export class MedicalRecordDisplayerComponent implements OnInit {
 
   generatePdf(medicalRecordId: string): void {
     this.http
-      .get('https://localhost:5001/api/records/pdf/' + medicalRecordId, { responseType: 'blob' })
+      .get(`${environment.apiUrl}/api/records/pdf/` + medicalRecordId, { responseType: 'blob' })
       .subscribe((response) => {
         var file = new Blob([response], { type: 'application/pdf' });
         var fileURL = URL.createObjectURL(file);

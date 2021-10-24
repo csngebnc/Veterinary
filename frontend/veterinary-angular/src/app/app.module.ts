@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 
 import { environment } from 'src/environments/environment';
 import * as generated from './services/generated-api-code';
-import { apiUrl } from '../assets/configuration.json';
 import { HttpClientModule } from '@angular/common/http';
 import { generate } from 'rxjs';
 import { HomeComponent } from './components/home/home.component';
@@ -84,9 +83,9 @@ export function initializeApp(oauthService: OAuthService): any {
   return async () => {
     oauthService.configure({
       clientId: 'veterinary-angular',
-      issuer: apiUrl,
-      postLogoutRedirectUri: window.location.origin,
-      redirectUri: window.location.origin,
+      issuer: environment.apiUrl,
+      postLogoutRedirectUri: environment.apiUrl,
+      redirectUri: environment.redirectUri,
       requireHttps: true,
       responseType: 'code',
       scope: 'openid api-openid',
@@ -171,7 +170,7 @@ export function initializeApp(oauthService: OAuthService): any {
     AngularEditorModule,
     OAuthModule.forRoot({
       resourceServer: {
-        allowedUrls: [apiUrl],
+        allowedUrls: [environment.apiUrl],
         sendAccessToken: true,
       },
     }),
@@ -181,7 +180,7 @@ export function initializeApp(oauthService: OAuthService): any {
     FileUploadModule,
   ],
   providers: [
-    { provide: generated.API_BASE_URL, useValue: apiUrl },
+    { provide: generated.API_BASE_URL, useValue: environment.apiUrl },
     { provide: MAT_DATE_LOCALE, useValue: 'hu-HU' },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     {
