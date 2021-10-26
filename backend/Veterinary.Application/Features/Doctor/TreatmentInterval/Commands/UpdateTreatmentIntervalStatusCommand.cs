@@ -39,7 +39,7 @@ namespace Veterinary.Application.Features.Doctor.TreatmentIntervalFeatures.Comma
                 throw new ForbiddenException();
             }
 
-            treatmentInterval.IsInactive = treatmentInterval.IsInactive;
+            treatmentInterval.IsInactive = !treatmentInterval.IsInactive;
 
             await treatmentIntervalRepository.UpdateAsync(treatmentInterval);
 

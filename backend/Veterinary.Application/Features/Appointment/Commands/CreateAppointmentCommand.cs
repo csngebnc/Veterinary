@@ -127,12 +127,12 @@ namespace Veterinary.Application.Features.AppointmentFeatures.Commands
 
             if (startDate < DateTime.Now)
             {
-                throw new Exception(""); // TODO: custom 400
+                throw new Exception("Az időpontot nem lehet a jelenlegi időpontra foglalni.");
             }
 
             if ((endDate - startDate).Minutes != treatment.Duration)
             {
-                throw new Exception(""); // TODO: custom 400
+                throw new Exception("Az időponthoz tartozó intervallum hibás.");
             }
 
             var reservedTimes = await appointmentRepository.GetAppointmentsByDoctorAndDateAsync(request.DoctorId, startDate);
@@ -145,13 +145,13 @@ namespace Veterinary.Application.Features.AppointmentFeatures.Commands
 
             if (intersect.Count > 0)
             {
-                throw new Exception(""); // TODO: custom 400
+                throw new Exception("A megadott időpont már foglalt.");
             }
 
             var holidays = await holidayRepository.GetDoctorHolidaysByInterval(request.DoctorId, startDate, 0);
             if (holidays.Count > 0)
             {
-                throw new Exception(""); // TODO: custom 400
+                throw new Exception("A megadott időpontban az orvos szabadságon van.");
             }
 
             #endregion

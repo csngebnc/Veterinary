@@ -3,6 +3,8 @@ using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Veterinary.Application.Services;
+using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Domain.Entities.TherapiaEntities;
 
 namespace Veterinary.Application.Features.TherapiaFeatures.Commands
@@ -22,14 +24,21 @@ namespace Veterinary.Application.Features.TherapiaFeatures.Commands
     public class UpdateTherapiaCommandHandler : IRequestHandler<UpdateTherapiaCommand, Unit>
     {
         private readonly ITherapiaRepository therapiaRepository;
+        private readonly IIdentityService identityService;
 
-        public UpdateTherapiaCommandHandler(ITherapiaRepository therapiaRepository)
+        public UpdateTherapiaCommandHandler(ITherapiaRepository therapiaRepository, IIdentityService identityService)
         {
             this.therapiaRepository = therapiaRepository;
+            this.identityService = identityService;
         }
 
         public async Task<Unit> Handle(UpdateTherapiaCommand request, CancellationToken cancellationToken)
         {
+            if (!await identityService.IsInRoleAsync("ManagerDoctor"))
+            {
+                throw new ForbiddenException();
+            }
+
             var therapia = await therapiaRepository.FindAsync(request.Data.Id);
 
             therapia.Name = request.Data.Name;

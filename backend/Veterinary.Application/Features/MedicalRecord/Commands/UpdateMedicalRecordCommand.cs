@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Veterinary.Application.Services;
+using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Domain.Entities.MedicalRecordEntities;
 using Veterinary.Domain.Entities.MedicationEntities;
 using Veterinary.Domain.Entities.TherapiaEntities;
@@ -39,17 +41,24 @@ namespace Veterinary.Application.Features.MedicalRecordFeatures.Commands
         public double Amount { get; set; }
     }
 
-    public class UpdateMedicalRecordDtoCommandHandler : IRequestHandler<UpdateMedicalRecordCommand, Unit>
+    public class UpdateMedicalRecordCommandHandler : IRequestHandler<UpdateMedicalRecordCommand, Unit>
     {
         private readonly IMedicalRecordRepository medicalRecordRepository;
+        private readonly IIdentityService identityService;
 
-        public UpdateMedicalRecordDtoCommandHandler(IMedicalRecordRepository medicalRecordRepository)
+        public UpdateMedicalRecordCommandHandler(IMedicalRecordRepository medicalRecordRepository, IIdentityService identityService)
         {
             this.medicalRecordRepository = medicalRecordRepository;
+            this.identityService = identityService;
         }
 
         public async Task<Unit> Handle(UpdateMedicalRecordCommand request, CancellationToken cancellationToken)
         {
+            if (await identityService.IsInRoleAsync("User"))
+            {
+                throw new ForbiddenException();
+            }
+
             var record = await medicalRecordRepository.GetMedicalRecordWithDetailsAsync(request.MedicalRecordId);
             record.Date = request.Data.Date.ToLocalTime();
             record.OwnerEmail = request.Data.OwnerEmail;
@@ -62,24 +71,30 @@ namespace Veterinary.Application.Features.MedicalRecordFeatures.Commands
 
             await medicalRecordRepository.UpdateAsync(record);
 
-            foreach (var medication in request.Medications)
+            if(request.Medications != null)
             {
-                record.MedicationRecords.Add(new MedicationRecord
+                foreach (var medication in request.Medications)
                 {
-                    MedicalRecordId = record.Id,
-                    Amount = medication.Amount,
-                    MedicationId = medication.Id
-                });
+                    record.MedicationRecords.Add(new MedicationRecord
+                    {
+                        MedicalRecordId = record.Id,
+                        Amount = medication.Amount,
+                        MedicationId = medication.Id
+                    });
+                }
             }
 
-            foreach (var therapia in request.Therapias)
+            if(request.Therapias != null)
             {
-                record.TherapiaRecords.Add(new TherapiaRecord
+                foreach (var therapia in request.Therapias)
                 {
-                    MedicalRecordId = record.Id,
-                    Amount = therapia.Amount,
-                    TherapiaId = therapia.Id
-                });
+                    record.TherapiaRecords.Add(new TherapiaRecord
+                    {
+                        MedicalRecordId = record.Id,
+                        Amount = therapia.Amount,
+                        TherapiaId = therapia.Id
+                    });
+                }
             }
 
             await medicalRecordRepository.UpdateAsync(record);
@@ -88,9 +103,9 @@ namespace Veterinary.Application.Features.MedicalRecordFeatures.Commands
         }
     }
 
-    public class UpdateMedicalRecordDtoCommandValidator : AbstractValidator<UpdateMedicalRecordCommandData>
+    public class UpdateMedicalRecordCommandValidator : AbstractValidator<UpdateMedicalRecordCommandData>
     {
-        public UpdateMedicalRecordDtoCommandValidator()
+        public UpdateMedicalRecordCommandValidator()
         {
             RuleFor(x => x.Date)
                 .NotEmpty()

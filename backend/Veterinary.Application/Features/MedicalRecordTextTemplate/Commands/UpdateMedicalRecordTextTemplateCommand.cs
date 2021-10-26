@@ -3,6 +3,8 @@ using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Veterinary.Application.Services;
+using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Domain.Entities.MedicalRecordEntities;
 
 namespace Veterinary.Application.Features.MedicalRecordTextTemplateFeatures.Commands
@@ -17,14 +19,21 @@ namespace Veterinary.Application.Features.MedicalRecordTextTemplateFeatures.Comm
     public class UpdateMedicalRecordTextTemplateCommandHandler : IRequestHandler<UpdateMedicalRecordTextTemplateCommand, Unit>
     {
         private readonly IMedicalRecordTextTemplateRepository medicalRecordTextTemplateRepository;
+        private readonly IIdentityService identityService;
 
-        public UpdateMedicalRecordTextTemplateCommandHandler(IMedicalRecordTextTemplateRepository medicalRecordTextTemplateRepository)
+        public UpdateMedicalRecordTextTemplateCommandHandler(IMedicalRecordTextTemplateRepository medicalRecordTextTemplateRepository, IIdentityService identityService)
         {
             this.medicalRecordTextTemplateRepository = medicalRecordTextTemplateRepository;
+            this.identityService = identityService;
         }
 
         public async Task<Unit> Handle(UpdateMedicalRecordTextTemplateCommand request, CancellationToken cancellationToken)
         {
+            if (!await identityService.IsInRoleAsync("ManagerDoctor"))
+            {
+                throw new ForbiddenException();
+            }
+
             var template = await medicalRecordTextTemplateRepository.FindAsync(request.TemplateId);
 
             template.Name = request.Name;

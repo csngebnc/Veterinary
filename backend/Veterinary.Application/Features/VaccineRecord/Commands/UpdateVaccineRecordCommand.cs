@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Veterinary.Application.Services;
+using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Domain.Entities.AnimalRepository;
 using Veterinary.Domain.Entities.Vaccination;
 
@@ -25,15 +26,28 @@ namespace Veterinary.Application.Features.VaccineRecordFeatures.Commands
     public class UpdateVaccineRecordCommandHandler : IRequestHandler<UpdateVaccineRecordCommand, Unit>
     {
         private readonly IVaccineRecordRepository vaccineRecordRepository;
+        private readonly IAnimalRepository animalRepository;
+        private readonly IIdentityService identityService;
 
-        public UpdateVaccineRecordCommandHandler(IVaccineRecordRepository vaccineRecordRepository)
+        public UpdateVaccineRecordCommandHandler(
+            IVaccineRecordRepository vaccineRecordRepository,
+            IAnimalRepository animalRepository,
+            IIdentityService identityService)
         {
             this.vaccineRecordRepository = vaccineRecordRepository;
+            this.animalRepository = animalRepository;
+            this.identityService = identityService;
         }
 
-        public async Task<Unit> Handle(UpdateVaccineRecordCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateVaccineRecordCommand request, CancellationToken cancellationToken)
         {
             var record = await vaccineRecordRepository.FindAsync(request.Data.Id);
+            var animal = await animalRepository.FindAsync(record.AnimalId);
+
+            if (animal.OwnerId != identityService.GetCurrentUserId() && await identityService.IsInRoleAsync("User"))
+            {
+                throw new ForbiddenException();
+            }
 
             record.Date = request.Data.Date;
             record.AnimalId = request.Data.AnimalId;
@@ -56,13 +70,7 @@ namespace Veterinary.Application.Features.VaccineRecordFeatures.Commands
                 .LessThanOrEqualTo(DateTime.Today)
                 .WithMessage("A beadás időpontja nem lehet jövőbeli dátum.");
             RuleFor(x => x.AnimalId).NotNull()
-                .WithMessage("Állat kiválasztása kötelező.")
-                .MustAsync(async (animalId, cancellationToken) =>
-                {
-                    var animal = await animalRepository.FindAsync(animalId);
-                    return animal.OwnerId == identityService.GetCurrentUserId() || !(await identityService.IsInRoleAsync("User"));
-                })
-                .WithMessage("Nincs jogosultsága a művelet végrehajtásához.");
+                .WithMessage("Állat kiválasztása kötelező.");
     }
 }
 }

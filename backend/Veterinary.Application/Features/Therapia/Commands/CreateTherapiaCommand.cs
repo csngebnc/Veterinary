@@ -2,7 +2,9 @@
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using Veterinary.Application.Services;
 using Veterinary.Application.Shared.Dtos;
+using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Domain.Entities.TherapiaEntities;
 
 namespace Veterinary.Application.Features.TherapiaFeatures.Commands
@@ -21,14 +23,21 @@ namespace Veterinary.Application.Features.TherapiaFeatures.Commands
     public class CreateTherapiaCommandHandler : IRequestHandler<CreateTherapiaCommand, TherapiaDto>
     {
         private readonly ITherapiaRepository therapiaRepository;
+        private readonly IIdentityService identityService;
 
-        public CreateTherapiaCommandHandler(ITherapiaRepository therapiaRepository)
+        public CreateTherapiaCommandHandler(ITherapiaRepository therapiaRepository, IIdentityService identityService)
         {
             this.therapiaRepository = therapiaRepository;
+            this.identityService = identityService;
         }
 
         public async Task<TherapiaDto> Handle(CreateTherapiaCommand request, CancellationToken cancellationToken)
         {
+            if (!await identityService.IsInRoleAsync("ManagerDoctor"))
+            {
+                throw new ForbiddenException();
+            }
+
             var therapia = await therapiaRepository.InsertAsync(new Therapia
             {
                 Name = request.Data.Name,

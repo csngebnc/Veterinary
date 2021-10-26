@@ -2,7 +2,9 @@
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using Veterinary.Application.Services;
 using Veterinary.Application.Shared.Dtos;
+using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Domain.Entities.AnimalSpeciesRepository;
 using Veterinary.Domain.Entities.Vaccination;
 
@@ -16,14 +18,21 @@ namespace Veterinary.Application.Features.VaccineFeatures.Commands
     public class CreateVaccineCommandHandler : IRequestHandler<CreateVaccineCommand, VaccineDto>
     {
         private readonly IVaccineRepository vaccineRepository;
+        private readonly IIdentityService identityService;
 
-        public CreateVaccineCommandHandler(IVaccineRepository vaccineRepository)
+        public CreateVaccineCommandHandler(IVaccineRepository vaccineRepository, IIdentityService identityService)
         {
             this.vaccineRepository = vaccineRepository;
+            this.identityService = identityService;
         }
 
         public async Task<VaccineDto> Handle(CreateVaccineCommand request, CancellationToken cancellationToken)
         {
+            if (!await identityService.IsInRoleAsync("ManagerDoctor"))
+            {
+                throw new ForbiddenException();
+            }
+
             var vaccine = await vaccineRepository.InsertAsync(new Vaccine
             {
                 Name = request.Name,

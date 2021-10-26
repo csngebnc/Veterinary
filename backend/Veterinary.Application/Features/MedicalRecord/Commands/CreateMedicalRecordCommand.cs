@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Veterinary.Domain.Entities.MedicationEntities;
 using Veterinary.Domain.Entities.TherapiaEntities;
+using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 
 namespace Veterinary.Application.Features.MedicalRecordFeatures.Commands
 {
@@ -56,6 +57,11 @@ namespace Veterinary.Application.Features.MedicalRecordFeatures.Commands
 
         public async Task<Guid> Handle(CreateMedicalRecordCommand request, CancellationToken cancellationToken)
         {
+            if(await identityService.IsInRoleAsync("User"))
+            {
+                throw new ForbiddenException();
+            }
+
             var medicalRecord = new MedicalRecord
             {
                 Date = request.Data.Date.ToLocalTime(),
@@ -68,14 +74,14 @@ namespace Veterinary.Application.Features.MedicalRecordFeatures.Commands
 
             await medicalRecordRepository.InsertAsync(medicalRecord);
 
-            medicalRecord.MedicationRecords = request.Medications.Select(medication => new MedicationRecord
+            medicalRecord.MedicationRecords = request.Medications?.Select(medication => new MedicationRecord
             {
                 MedicalRecordId = medicalRecord.Id,
                 Amount = medication.Amount,
                 MedicationId = medication.Id
             }).ToList();
 
-            medicalRecord.TherapiaRecords = request.Therapias.Select(therapia => new TherapiaRecord
+            medicalRecord.TherapiaRecords = request.Therapias?.Select(therapia => new TherapiaRecord
             {
                 MedicalRecordId = medicalRecord.Id,
                 Amount = therapia.Amount,

@@ -2,6 +2,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Veterinary.Application.Services;
 using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Domain.Entities.AnimalSpeciesRepository;
 
@@ -15,15 +16,22 @@ namespace Veterinary.Application.Features.AnimalSpeciesFeatures.Commands
     public class DeleteAnimalSpeciesCommandHandler : IRequestHandler<DeleteAnimalSpeciesCommand, Unit>
     {
         private readonly IAnimalSpeciesRepository animalSpeciesRepository;
+        private readonly IIdentityService identityService;
 
-        public DeleteAnimalSpeciesCommandHandler(IAnimalSpeciesRepository animalSpeciesRepository)
+        public DeleteAnimalSpeciesCommandHandler(IAnimalSpeciesRepository animalSpeciesRepository, IIdentityService identityService)
         {
             this.animalSpeciesRepository = animalSpeciesRepository;
+            this.identityService = identityService;
         }
 
         public async Task<Unit> Handle(DeleteAnimalSpeciesCommand request, CancellationToken cancellationToken)
         {
-            if(!(await animalSpeciesRepository.CanBeDeleted(request.SpeciesId)))
+            if (!await identityService.IsInRoleAsync("ManagerDoctor"))
+            {
+                throw new ForbiddenException();
+            }
+
+            if (!(await animalSpeciesRepository.CanBeDeleted(request.SpeciesId)))
             {
                 throw new MethodNotAllowedException("Az állatfaj nem törölhető, mert már regisztráltak vele állatot.");
             }

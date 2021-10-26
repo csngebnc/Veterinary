@@ -2,7 +2,9 @@
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using Veterinary.Application.Services;
 using Veterinary.Application.Shared.Dtos;
+using Veterinary.Application.Validation.ProblemDetails.Exceptions;
 using Veterinary.Domain.Entities.AnimalEntities;
 using Veterinary.Domain.Entities.AnimalSpeciesRepository;
 
@@ -16,14 +18,21 @@ namespace Veterinary.Application.Features.AnimalSpeciesFeatures.Commands
     public class CreateAnimalSpeciesCommandHandler : IRequestHandler<CreateAnimalSpeciesCommand, AnimalSpeciesDto>
     {
         private readonly IAnimalSpeciesRepository animalSpeciesRepository;
+        private readonly IIdentityService identityService;
 
-        public CreateAnimalSpeciesCommandHandler(IAnimalSpeciesRepository animalSpeciesRepository)
+        public CreateAnimalSpeciesCommandHandler(IAnimalSpeciesRepository animalSpeciesRepository, IIdentityService identityService)
         {
             this.animalSpeciesRepository = animalSpeciesRepository;
+            this.identityService = identityService;
         }
 
         public async Task<AnimalSpeciesDto> Handle(CreateAnimalSpeciesCommand request, CancellationToken cancellationToken)
         {
+            if(!await identityService.IsInRoleAsync("ManagerDoctor"))
+            {
+                throw new ForbiddenException();
+            }
+
             var species = await animalSpeciesRepository.InsertAsync(new AnimalSpecies
             {
                 Name = request.Name,
