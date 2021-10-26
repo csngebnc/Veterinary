@@ -22,11 +22,14 @@ jobs:
           dotnet-version: '5.0.x'
           include-prerelease: true
 
+      - name: Run tests
+        run: dotnet test backend/Veterinary.Tests/Veterinary.Tests.csproj
+
       - name: Build with dotnet
-        run: dotnet build backend/Veterinary.sln --configuration Release
+        run: dotnet build backend/Veterinary.Api/Veterinary.Api.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish backend/Veterinary.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish backend/Veterinary.Api/Veterinary.Api.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
