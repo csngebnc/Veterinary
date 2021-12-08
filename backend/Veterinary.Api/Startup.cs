@@ -65,9 +65,7 @@ namespace Veterinary.Api
                 });
             });
 
-            services.AddDbContext<VeterinaryDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            ConfigureDatabase(services);
 
             services.AddDefaultIdentity<VeterinaryUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole<Guid>>()
@@ -95,17 +93,7 @@ namespace Veterinary.Api
                 .AddProfileService<ProfileService>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = Configuration.GetValue<string>("Authentication:Authority");
-                    options.Audience = Configuration.GetValue<string>("Authentication:Audience");
-                    options.RequireHttpsMetadata = false;
-                }
-            );
+            ConfigureAuthentication(services);
 
             services.AddAuthorization(options =>
             {
@@ -171,8 +159,35 @@ namespace Veterinary.Api
 
             services.AddProblemDetails(ConfigureProblemDetails);
             services.AddRazorPages();
-            services.AddControllers();
+            ConfigureControllers(services);
 
+        }
+
+        public virtual void ConfigureDatabase(IServiceCollection services)
+        {
+            services.AddDbContext<VeterinaryDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+        }
+
+        public virtual void ConfigureAuthentication(IServiceCollection services)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = Configuration.GetValue<string>("Authentication:Authority");
+                    options.Audience = Configuration.GetValue<string>("Authentication:Audience");
+                    options.RequireHttpsMetadata = false;
+                }
+            );
+        }
+
+        public virtual void ConfigureControllers(IServiceCollection services)
+        {
+            services.AddControllers();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -253,7 +268,7 @@ namespace Veterinary.Api
               (ctx, ex) =>
               {
                   var pd = StatusCodeProblemDetails.Create(StatusCodes.Status404NotFound);
-                  pd.Title = "A megadott azonosítóval nem található rögzített elem.";
+                  pd.Title = "A megadott azonosï¿½tï¿½val nem talï¿½lhatï¿½ rï¿½gzï¿½tett elem.";
                   return pd;
               }
             );
@@ -262,7 +277,7 @@ namespace Veterinary.Api
               (ctx, ex) =>
               {
                   var pd = new InputValidationErrors(ex.Errors);
-                  pd.Title = "Sikertelen mentés, mivel validációs hibák vannak.";
+                  pd.Title = "Sikertelen mentï¿½s, mivel validï¿½ciï¿½s hibï¿½k vannak.";
                   pd.Status = 400;
                   return pd;
               }

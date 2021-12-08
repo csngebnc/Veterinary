@@ -2017,16 +2017,18 @@ export class SpeciesService {
         return _observableOf<AnimalSpeciesDto[]>(<any>null);
     }
 
-    createAnimalSpecies(name: string | null | undefined): Observable<AnimalSpeciesDto> {
-        let url_ = this.baseUrl + "/api/species?";
-        if (name !== undefined && name !== null)
-            url_ += "name=" + encodeURIComponent("" + name) + "&";
+    createAnimalSpecies(command: CreateAnimalSpeciesCommand): Observable<AnimalSpeciesDto> {
+        let url_ = this.baseUrl + "/api/species";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(command);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };
@@ -4744,6 +4746,10 @@ export interface AnimalSpeciesDto {
     id?: string;
     name?: string | undefined;
     isInactive?: boolean;
+}
+
+export interface CreateAnimalSpeciesCommand {
+    name?: string | undefined;
 }
 
 export interface UpdateAnimalSpeciesCommand {

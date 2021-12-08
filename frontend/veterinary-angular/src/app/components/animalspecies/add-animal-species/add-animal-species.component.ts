@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  AnimalSpeciesDto,
-  SpeciesService,
-} from 'src/app/services/generated-api-code';
+import { AnimalSpeciesDto, SpeciesService } from 'src/app/services/generated-api-code';
 
 @Component({
   selector: 'app-add-animal-species',
@@ -29,7 +26,7 @@ export class AddAnimalSpeciesComponent implements OnInit {
 
   add(): void {
     this.speciesService
-      .createAnimalSpecies(this.addSpeciesForm.get('name').value)
+      .createAnimalSpecies({ name: this.addSpeciesForm.get('name').value })
       .subscribe(
         (species: AnimalSpeciesDto) => {
           this.ngbModal.close(species);

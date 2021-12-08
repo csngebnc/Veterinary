@@ -31,12 +31,9 @@ namespace Veterinary.Api.Controllers
 
         [Authorize(Policy = "Manager")]
         [HttpPost]
-        public async Task<AnimalSpeciesDto> CreateAnimalSpecies(string name)
+        public async Task<AnimalSpeciesDto> CreateAnimalSpecies(CreateAnimalSpeciesCommand command)
         {
-            return await mediator.Send(new CreateAnimalSpeciesCommand
-            {
-                Name = name
-            });
+            return await mediator.Send(command);
         }
 
         [Authorize(Policy = "Manager")]
