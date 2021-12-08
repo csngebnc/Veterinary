@@ -12,6 +12,7 @@
       [matAutocomplete]="auto"
       name="name"
       autocomplete="off"
+      data-cy="userSearchInput"
     />
     <mat-autocomplete
       #auto="matAutocomplete"
@@ -19,7 +20,7 @@
       (optionSelected)="selectOption($event)"
     >
       <mat-option *ngFor="let option of options" [value]="option.id">
-        <h4 class="m-0 p-0">
+        <h4 class="m-0 p-0" id="user-{{ option.name }}">
           <b>{{ option.name }}</b>
         </h4>
         <h5 class="m-0 p-0">{{ option.email }}</h5>

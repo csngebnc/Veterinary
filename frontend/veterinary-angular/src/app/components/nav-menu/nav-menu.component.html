@@ -50,7 +50,7 @@
             <a class="nav-link" [routerLink]="['/medical-records/new']">Új kórlap</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link" (click)="bookingMenu()">Időpont adása</a>
+            <a class="nav-link" (click)="bookingMenu()" data-cy="startBooking">Időpont adása</a>
           </li>
           <li class="nav-item dropdown">
             <a
@@ -101,14 +101,17 @@
               id="navbarDropdown"
               role="button"
               data-bs-toggle="dropdown"
+              data-cy="settingsButton"
             >
               Beállítások
             </a>
             <div class="dropdown-menu">
               <a class="nav-link" [routerLink]="['/templates']">Kórlap sablonok</a>
               <a class="nav-link" [routerLink]="['/doctors']">Orvosok</a>
-              <a class="nav-link" [routerLink]="['/species']">Állatfajták</a>
-              <a class="nav-link" [routerLink]="['/vaccines']">Oltások</a>
+              <a class="nav-link" [routerLink]="['/species']" data-cy="speciesButton"
+                >Állatfajták</a
+              >
+              <a class="nav-link" [routerLink]="['/vaccines']" data-cy="vaccinesButton">Oltások</a>
               <a class="nav-link" [routerLink]="['/medications']">Gyógyszerek</a>
               <a class="nav-link" [routerLink]="['/therapias']">Szolgáltatások</a>
             </div>

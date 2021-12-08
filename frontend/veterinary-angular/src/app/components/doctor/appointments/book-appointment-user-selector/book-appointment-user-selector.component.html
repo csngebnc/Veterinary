@@ -12,6 +12,7 @@
       [disabled]="!selectedUserId"
       (click)="close()"
       [routerLink]="['/appointments/create', selectedUserId]"
+      data-cy="startBookingAppointmentButton"
     >
       Időpont foglalása
     </button>

@@ -12,10 +12,8 @@
     <hr />
     <mat-form-field class="full-width">
       <mat-label>Állatfaj neve:</mat-label>
-      <input matInput formControlName="name" required />
-      <mat-error *ngIf="addSpeciesForm.get('name').invalid"
-        >A mező nem lehet üres.</mat-error
-      >
+      <input matInput formControlName="name" required data-cy="speciesInput" />
+      <mat-error *ngIf="addSpeciesForm.get('name').invalid">A mező nem lehet üres.</mat-error>
     </mat-form-field>
 
     <div class="content-center form-group text-center">
@@ -24,13 +22,12 @@
         [disabled]="!addSpeciesForm.valid"
         class="mt-3 me-2"
         type="submit"
+        data-cy="saveAddSpeciesButton"
       >
         Mentés
       </button>
 
-      <button type="button" mat-button class="mt-3" (click)="close()">
-        Mégsem
-      </button>
+      <button type="button" mat-button class="mt-3" (click)="close()">Mégsem</button>
     </div>
   </form>
 </div>

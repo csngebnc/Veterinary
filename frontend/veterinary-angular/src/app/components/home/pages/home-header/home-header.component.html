@@ -36,6 +36,7 @@
       <mat-form-field appearance="outline" class="notes-box">
         <mat-label>Jegyzeteim (böngésző)</mat-label>
         <textarea
+          data-cy="note-area"
           matInput
           rows="6"
           cols="75"
@@ -43,7 +44,13 @@
           [formControl]="notesFormControl"
         ></textarea>
         <div class="content-end">
-          <button mat-flat-button color="primary" class="mt-3" (click)="saveNotes()">
+          <button
+            mat-flat-button
+            color="primary"
+            class="mt-3"
+            (click)="saveNotes()"
+            data-cy="saveNoteButton"
+          >
             Frissítés
           </button>
         </div>
